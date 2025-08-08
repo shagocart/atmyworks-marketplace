@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Gig - AtMyWorks</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="/index.html" class="logo">AtMyWorks</a>
+                <ul class="nav-links">
+                    <li><a href="/browse.html">Find Work</a></li>
+                    <li><a href="/blog.html">Blog</a></li>
+                    <li><a href="#">How It Works</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline logout-btn">Logout</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Create Gig Form -->
+    <section style="padding: 2rem 0;">
+        <div class="container">
+            <div style="max-width: 800px; margin: 0 auto; background: white; padding: 2rem; border-radius: 0.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <h2 style="margin-bottom: 1.5rem; text-align: center;">Create New Service</h2>
+                <p style="text-align: center; margin-bottom: 2rem;">List your skills and attract clients</p>
+
+                <form id="createGigForm">
+                    <div class="form-group">
+                        <label for="gigTitle" class="form-label">Gig Title <span style="color: var(--danger-500;">*</span></label>
+                        <input type="text" id="gigTitle" name="title" class="form-control" placeholder="I will..." required>
+                        <div class="form-text">Briefly describe what you are offering.</div>
+                    </div>
+
+                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                        <div class="form-group">
+                            <label for="gigCategory" class="form-label">Category <span style="color: var(--danger-500;">*</span></label>
+                            <select id="gigCategory" name="category" class="form-control" required>
+                                <option value="">Select Category</option>
+                                <option value="graphics-design">Graphics & Design</option>
+                                <option value="digital-marketing">Digital Marketing</option>
+                                <option value="programming-tech">Programming & Tech</option>
+                                <option value="video-animation">Video & Animation</option>
+                                <option value="writing-translation">Writing & Translation</option>
+                                <option value="music-audio">Music & Audio</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="gigDeliveryTime" class="form-label">Delivery Time (days) <span style="color: var(--danger-500;">*</span></label>
+                            <select id="gigDeliveryTime" name="deliveryTime" class="form-control" required>
+                                <option value="">Select Time</option>
+                                <option value="1">1 day</option>
+                                <option value="2">2 days</option>
+                                <option value="3">3 days</option>
+                                <option value="5">5 days</option>
+                                <option value="7">7 days</option>
+                                <option value="10">10 days</option>
+                                <option value="14">14 days</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gigDescription" class="form-label">Description <span style="color: var(--danger-500;">*</span></label>
+                        <textarea id="gigDescription" name="description" rows="6" class="form-control" placeholder="Describe your service in detail..." required></textarea>
+                        <div class="form-text">Explain what you will do, the process, and what the buyer can expect.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Gig Images</label>
+                        <div id="imageUploadArea" style="border: 2px dashed #cbd5e1; border-radius: 0.5rem; padding: 2rem; text-align: center; cursor: pointer; transition: border-color 0.3s;">
+                            <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #94a3b8; margin-bottom: 1rem;"></i>
+                            <p>Click to upload images</p>
+                            <p style="font-size: 0.875rem; color: #94a3b8;">Recommended size: 800x600px (JPG, PNG, GIF)</p>
+                            <input type="file" id="imageUpload" name="images" accept="image/*" multiple style="display: none;">
+                        </div>
+                        <div id="imagePreviewContainer" style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem;">
+                            <!-- Image previews will be added here -->
+                        </div>
+                    </div>
+
+                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                        <div class="form-group">
+                            <label for="gigPrice" class="form-label">Starting Price ($) <span style="color: var(--danger-500;">*</span></label>
+                            <input type="number" id="gigPrice" name="price" min="5" step="5" class="form-control" placeholder="20" required>
+                        </div>
+
+                        <div class="form-group">
+                            &nbsp; <!-- Spacer for grid alignment -->
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gigTags" class="form-label">Tags (Optional)</label>
+                        <input type="text" id="gigTags" name="tags" class="form-control" placeholder="e.g., logo, branding, design">
+                        <div class="form-text">Comma-separated keywords to help clients find your gig.</div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem;">Create Gig</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>AtMyWorks</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="/blog.html">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Help & Support</a></li>
+                        <li><a href="#">Trust & Safety</a></li>
+                        <li><a href="#">Selling on AtMyWorks</a></li>
+                        <li><a href="#">Buying on AtMyWorks</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Copyright Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 AtMyWorks. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+             // Check if firebaseApp is available
+             if (typeof window.firebaseApp !== 'undefined') {
+                window.auth = window.firebaseApp.auth;
+                window.db = window.firebaseApp.db;
+                window.storage = window.firebaseApp.storage;
+                console.log("Firebase services available in create-gig.html");
+            } else {
+                console.warn("Firebase not initialized in create-gig.html.");
+                // Optionally disable form or show error message
+            }
+
+            const imageUpload = document.getElementById('imageUpload');
+            const imageUploadArea = document.getElementById('imageUploadArea');
+            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+
+            if (imageUploadArea) {
+                imageUploadArea.addEventListener('click', () => {
+                    if (imageUpload) imageUpload.click();
+                });
+            }
+
+            if (imageUpload) {
+                imageUpload.addEventListener('change', function(e) {
+                    imagePreviewContainer.innerHTML = ''; // Clear previous previews
+                    const files = e.target.files;
+                    if (files) {
+                        for (let i = 0; i < files.length; i++) {
+                            const file = files[i];
+                            if (file && file.type.startsWith('image/')) {
+                                const reader = new FileReader();
+                                reader.onload = function(event) {
+                                    const imgContainer = document.createElement('div');
+                                    imgContainer.style.position = 'relative';
+                                    imgContainer.style.width = '100px';
+                                    imgContainer.style.height = '100px';
+
+                                    const img = document.createElement('img');
+                                    img.src = event.target.result;
+                                    img.alt = file.name;
+                                    img.style.width = '100%';
+                                    img.style.height = '100%';
+                                    img.style.objectFit = 'cover';
+                                    img.style.borderRadius = '0.5rem';
+
+                                    imgContainer.appendChild(img);
+                                    imagePreviewContainer.appendChild(imgContainer);
+                                };
+                                reader.readAsDataURL(file);
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Handle form submission
+            const createGigForm = document.getElementById('createGigForm');
+            if (createGigForm) {
+                createGigForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    console.log("Create Gig form submitted");
+
+                    const user = window.auth ? window.auth.currentUser : null;
+                    if (!user) {
+                        alert('You must be logged in to create a gig.');
+                        window.location.href = '/signup-jobseeker.html';
+                        return;
+                    }
+
+                    const formData = new FormData(this);
+                    const gigData = {
+                        title: formData.get('title'),
+                        category: formData.get('category'),
+                        description: formData.get('description'),
+                        deliveryTime: parseInt(formData.get('deliveryTime')),
+                        price: parseFloat(formData.get('price')),
+                        tags: formData.get('tags') ? formData.get('tags').split(',').map(tag => tag.trim()).filter(tag => tag) : [],
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        status: 'active', // Default status
+                        freelancerId: user.uid,
+                        freelancerName: user.displayName || 'Freelancer' // This would ideally come from user profile
+                    };
+
+                    console.log("Gig data to save:", gigData);
+                    // alert('Gig creation logic would happen here. Check console for data.');
+
+                    // In a full implementation:
+                    try {
+                         // 1. Upload images to Firebase Storage
+                        const imageFiles = formData.getAll('images');
+                        const imageUrls = [];
+                        if (imageFiles && imageFiles.length > 0) {
+                            for (const file of imageFiles) {
+                                if (file && file.size > 0) {
+                                    const storageRef = window.storage.ref();
+                                    const imageRef = storageRef.child(`gigs/${user.uid}/${Date.now()}_${file.name}`);
+                                    const snapshot = await imageRef.put(file);
+                                    const downloadURL = await snapshot.ref.getDownloadURL();
+                                    imageUrls.push(downloadURL);
+                                }
+                            }
+                        }
+                        gigData.imageUrls = imageUrls;
+
+                        // 2. Save gig data to Firestore
+                        const docRef = await window.db.collection('gigs').add(gigData);
+                        console.log("Gig created with ID:", docRef.id);
+                        alert('Gig created successfully!');
+                        // 3. Redirect to freelancer dashboard or the new gig page
+                        window.location.href = '/dashboard-freelancer.html';
+                    } catch (error) {
+                        console.error("Error creating gig:", error);
+                        alert('Error creating gig. Please try again.');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

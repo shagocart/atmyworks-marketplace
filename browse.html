@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Services - AtMyWorks</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="/index.html" class="logo">AtMyWorks</a>
+                <ul class="nav-links">
+                    <li><a href="/browse.html">Find Work</a></li>
+                    <li><a href="/blog.html">Blog</a></li>
+                    <li><a href="#">How It Works</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline" id="loginBtn">Log In</button>
+                    <button class="btn btn-primary" id="signupBtn">Sign Up</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Search and Filters -->
+    <section style="padding: 2rem 0; background-color: var(--white);">
+        <div class="container">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <form id="searchForm" style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+                    <input type="text" id="searchQuery" placeholder="Search for services..." style="flex: 1; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 0.375rem;">
+                    <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+                </form>
+
+                <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+                    <select id="categoryFilter" style="padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 0.375rem;">
+                        <option value="">All Categories</option>
+                        <option value="graphics-design">Graphics & Design</option>
+                        <option value="digital-marketing">Digital Marketing</option>
+                        <option value="programming-tech">Programming & Tech</option>
+                        <option value="video-animation">Video & Animation</option>
+                        <option value="writing-translation">Writing & Translation</option>
+                        <option value="music-audio">Music & Audio</option>
+                    </select>
+
+                    <select id="priceFilter" style="padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 0.375rem;">
+                        <option value="">Any Price</option>
+                        <option value="0-50">Under $50</option>
+                        <option value="50-100">$50 - $100</option>
+                        <option value="100-500">$100 - $500</option>
+                        <option value="500+">Over $500</option>
+                    </select>
+
+                    <select id="sortFilter" style="padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 0.375rem;">
+                        <option value="best-selling">Best Selling</option>
+                        <option value="newest">Newest</option>
+                        <option value="price-low-high">Price: Low to High</option>
+                        <option value="price-high-low">Price: High to Low</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Grid -->
+    <section class="gigs-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Available Services</h2>
+                <div>
+                    <span id="resultsCount">Showing 6 services</span>
+                </div>
+            </div>
+            <div class="gigs-grid" id="gigsContainer">
+                <!-- Gig cards will be populated here by JavaScript -->
+                <!-- For now, we'll add static placeholders -->
+                <!-- Gig Card 1 -->
+                <div class="gig-card">
+                    <div class="gig-image">
+                        <img src="https://placehold.co/300x200/3b82f6/white?text=Logo+Design" alt="Professional Logo Design">
+                    </div>
+                    <div class="gig-content">
+                        <div class="gig-seller">
+                            <div class="gig-seller-avatar">AJ</div>
+                            <span class="gig-seller-name">Alex Johnson</span>
+                        </div>
+                        <h3 class="gig-title card-title">I will design a professional logo for your business</h3>
+                        <div class="gig-rating">
+                            <i class="fas fa-star gig-rating-icon"></i>
+                            <span class="gig-rating-value">4.9</span>
+                            <span>(128)</span>
+                        </div>
+                        <div class="gig-price">From $50</div>
+                        <a href="/gig-detail.html" class="btn btn-primary mt-3">View Details</a>
+                    </div>
+                </div>
+
+                <!-- Gig Card 2 -->
+                <div class="gig-card">
+                    <div class="gig-image">
+                        <img src="https://placehold.co/300x200/ef4444/white?text=Website+Dev" alt="Website Development">
+                    </div>
+                    <div class="gig-content">
+                        <div class="gig-seller">
+                            <div class="gig-seller-avatar">TS</div>
+                            <span class="gig-seller-name">Tech Solutions</span>
+                        </div>
+                        <h3 class="gig-title card-title">I will build a responsive website for your business</h3>
+                        <div class="gig-rating">
+                            <i class="fas fa-star gig-rating-icon"></i>
+                            <span class="gig-rating-value">4.8</span>
+                            <span>(86)</span>
+                        </div>
+                        <div class="gig-price">From $200</div>
+                        <a href="/gig-detail.html" class="btn btn-primary mt-3">View Details</a>
+                    </div>
+                </div>
+
+                <!-- Gig Card 3 -->
+                <div class="gig-card">
+                    <div class="gig-image">
+                        <img src="https://placehold.co/300x200/10b981/white?text=Social+Media" alt="Social Media Marketing">
+                    </div>
+                    <div class="gig-content">
+                        <div class="gig-seller">
+                            <div class="gig-seller-avatar">MP</div>
+                            <span class="gig-seller-name">Marketing Pro</span>
+                        </div>
+                        <h3 class="gig-title card-title">I will create a social media marketing strategy</h3>
+                        <div class="gig-rating">
+                            <i class="fas fa-star gig-rating-icon"></i>
+                            <span class="gig-rating-value">4.7</span>
+                            <span>(42)</span>
+                        </div>
+                        <div class="gig-price">From $100</div>
+                        <a href="/gig-detail.html" class="btn btn-primary mt-3">View Details</a>
+                    </div>
+                </div>
+
+                 <!-- Gig Card 4 -->
+                 <div class="gig-card">
+                    <div class="gig-image">
+                        <img src="https://placehold.co/300x200/f97316/white?text=Content+Writing" alt="Content Writing">
+                    </div>
+                    <div class="gig-content">
+                        <div class="gig-seller">
+                            <div class="gig-seller-avatar">CW</div>
+                            <span class="gig-seller-name">Content Writer</span>
+                        </div>
+                        <h3 class="gig-title card-title">I will write SEO-friendly blog posts for your website</h3>
+                        <div class="gig-rating">
+                            <i class="fas fa-star gig-rating-icon"></i>
+                            <span class="gig-rating-value">4.9</span>
+                            <span>(95)</span>
+                        </div>
+                        <div class="gig-price">From $30</div>
+                        <a href="/gig-detail.html" class="btn btn-primary mt-3">View Details</a>
+                    </div>
+                </div>
+
+                <!-- Gig Card 5 -->
+                <div class="gig-card">
+                    <div class="gig-image">
+                        <img src="https://placehold.co/300x200/8b5cf6/white?text=Video+Editing" alt="Video Editing">
+                    </div>
+                    <div class="gig-content">
+                        <div class="gig-seller">
+                            <div class="gig-seller-avatar">VE</div>
+                            <span class="gig-seller-name">Video Editor</span>
+                        </div>
+                        <h3 class="gig-title card-title">I will edit and produce your promotional video</h3>
+                        <div class="gig-rating">
+                            <i class="fas fa-star gig-rating-icon"></i>
+                            <span class="gig-rating-value">4.6</span>
+                            <span>(67)</span>
+                        </div>
+                        <div class="gig-price">From $150</div>
+                        <a href="/gig-detail.html" class="btn btn-primary mt-3">View Details</a>
+                    </div>
+                </div>
+
+                <!-- Gig Card 6 -->
+                <div class="gig-card">
+                    <div class="gig-image">
+                        <img src="https://placehold.co/300x200/ec4899/white?text=Music+Production" alt="Music Production">
+                    </div>
+                    <div class="gig-content">
+                        <div class="gig-seller">
+                            <div class="gig-seller-avatar">MP</div>
+                            <span class="gig-seller-name">Music Producer</span>
+                        </div>
+                        <h3 class="gig-title card-title">I will produce a custom jingle for your brand</h3>
+                        <div class="gig-rating">
+                            <i class="fas fa-star gig-rating-icon"></i>
+                            <span class="gig-rating-value">5.0</span>
+                            <span>(34)</span>
+                        </div>
+                        <div class="gig-price">From $75</div>
+                        <a href="/gig-detail.html" class="btn btn-primary mt-3">View Details</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination (Placeholder) -->
+            <div style="display: flex; justify-content: center; margin-top: var(--spacing-8);">
+                <nav aria-label="Page navigation">
+                    <ul style="display: flex; list-style: none; gap: var(--spacing-2);">
+                        <li><a class="btn btn-outline" href="#" aria-label="Previous"><i class="fas fa-chevron-left"></i></a></li>
+                        <li><a class="btn btn-primary" href="#" aria-label="Page 1">1</a></li>
+                        <li><a class="btn btn-outline" href="#" aria-label="Page 2">2</a></li>
+                        <li><a class="btn btn-outline" href="#" aria-label="Page 3">3</a></li>
+                        <li><a class="btn btn-outline" href="#" aria-label="Next"><i class="fas fa-chevron-right"></i></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>AtMyWorks</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="/blog.html">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Help & Support</a></li>
+                        <li><a href="#">Trust & Safety</a></li>
+                        <li><a href="#">Selling on AtMyWorks</a></li>
+                        <li><a href="#">Buying on AtMyWorks</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Copyright Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 AtMyWorks. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <!-- <script src="js/browse.js"></script> --> <!-- Optional dedicated JS file -->
+    <script>
+        // Simple client-side filtering logic (placeholder)
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchForm = document.getElementById('searchForm');
+            const searchQuery = document.getElementById('searchQuery');
+            const categoryFilter = document.getElementById('categoryFilter');
+            const priceFilter = document.getElementById('priceFilter');
+            const sortFilter = document.getElementById('sortFilter');
+            const gigsContainer = document.getElementById('gigsContainer');
+            const resultsCount = document.getElementById('resultsCount');
+
+            // In a real app, this data would come from Firestore
+            const allGigs = [
+                // ... (data for gig cards)
+                // This is just a placeholder, actual filtering would happen on the server/backend
+            ];
+
+            function filterGigs() {
+                const query = searchQuery.value.toLowerCase();
+                const category = categoryFilter.value;
+                const priceRange = priceFilter.value;
+                const sort = sortFilter.value;
+
+                console.log("Filtering with:", { query, category, priceRange, sort });
+                // Placeholder: In a real app, you would re-fetch data from Firestore
+                // based on these filters and update the DOM.
+                // For now, we just log the filters.
+                resultsCount.textContent = `Showing 6 services (filtered by: ${query || 'all'}, ${category || 'all categories'})`;
+            }
+
+            if (searchForm) searchForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                filterGigs();
+            });
+            if (categoryFilter) categoryFilter.addEventListener('change', filterGigs);
+            if (priceFilter) priceFilter.addEventListener('change', filterGigs);
+            if (sortFilter) sortFilter.addEventListener('change', filterGigs);
+
+        });
+    </script>
+</body>
+</html>

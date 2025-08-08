@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - AtMyWorks</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="/index.html" class="logo">AtMyWorks</a>
+                <ul class="nav-links">
+                    <li><a href="/browse.html">Services</a></li>
+                    <li><a href="/blog.html">Blog</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline logout-btn">Logout</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Admin Dashboard Content -->
+    <section class="dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <h1>Admin Dashboard</h1>
+                <p>Manage your platform settings and users</p>
+            </div>
+
+            <!-- Metrics -->
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-card-value" id="totalUsersCount">1,248</div>
+                    <div class="stat-card-label">Total Users</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="stat-card-value" id="totalGigsCount">856</div>
+                    <div class="stat-card-label">Total Services</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="stat-card-value" id="totalOrdersCount">2,103</div>
+                    <div class="stat-card-label">Total Orders</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-card-value" id="totalRevenueAmount">$42,560</div>
+                    <div class="stat-card-label">Platform Revenue</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-6); margin-bottom: var(--spacing-6);">
+                <!-- Manage Categories -->
+                <div style="background: white; border-radius: var(--border-radius-lg); padding: var(--spacing-6); box-shadow: var(--shadow-md);">
+                    <h3 style="margin-bottom: var(--spacing-4);">Manage Categories</h3>
+                    <div style="margin-bottom: var(--spacing-4); display: flex;">
+                        <input type="text" id="newCategoryName" placeholder="New Category Name" style="flex: 1; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; margin-right: 0.5rem;">
+                        <button class="btn btn-primary" id="addCategoryBtn">Add</button>
+                    </div>
+                    <ul id="categoriesList" style="list-style: none; padding: 0;">
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                            <span><i class="fas fa-paint-brush"></i> Graphics & Design</span>
+                            <div>
+                                <button class="btn btn-outline btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; margin-right: 0.25rem;">Edit</button>
+                                <button class="btn btn-danger btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Delete</button>
+                            </div>
+                        </li>
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                            <span><i class="fas fa-bullhorn"></i> Digital Marketing</span>
+                            <div>
+                                <button class="btn btn-outline btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; margin-right: 0.25rem;">Edit</button>
+                                <button class="btn btn-danger btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Delete</button>
+                            </div>
+                        </li>
+                        <li style="padding: 0.5rem 0; display: flex; justify-content: space-between; align-items: center;">
+                            <span><i class="fas fa-laptop-code"></i> Programming & Tech</span>
+                            <div>
+                                <button class="btn btn-outline btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; margin-right: 0.25rem;">Edit</button>
+                                <button class="btn btn-danger btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Delete</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Commission Settings -->
+                <div style="background: white; border-radius: var(--border-radius-lg); padding: var(--spacing-6); box-shadow: var(--shadow-md);">
+                    <h3 style="margin-bottom: var(--spacing-4);">Commission Settings</h3>
+                    <div style="margin-bottom: var(--spacing-4);">
+                        <label for="commissionPercentage" style="display: block; margin-bottom: 0.5rem;">Commission Percentage (%)</label>
+                        <input type="number" id="commissionPercentage" value="10" min="0" max="100" step="0.1" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px;">
+                    </div>
+                    <div style="margin-bottom: var(--spacing-4);">
+                        <label for="fixedFee" style="display: block; margin-bottom: 0.5rem;">Fixed Fee ($)</label>
+                        <input type="number" id="fixedFee" value="2.50" min="0" step="0.01" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px;">
+                    </div>
+                    <button class="btn btn-primary" id="saveCommissionBtn" style="width: 100%;">Save Settings</button>
+                </div>
+            </div>
+
+            <!-- Recent Users -->
+            <div style="background: white; border-radius: var(--border-radius-lg); padding: var(--spacing-6); box-shadow: var(--shadow-md); margin-bottom: var(--spacing-6);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-4);">
+                    <h2>Recent Users</h2>
+                    <a href="#" class="btn btn-outline btn-sm">View All</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div><strong>Alex Johnson</strong></div>
+                                    <div style="font-size: 0.8rem; color: var(--gray-500);">alex@example.com</div>
+                                </td>
+                                <td>Freelancer</td>
+                                <td><span class="badge badge-success">Active</span></td>
+                                <td>2023-10-15</td>
+                                <td>
+                                    <button class="btn btn-outline btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; margin-right: 0.25rem;">View</button>
+                                    <button class="btn btn-danger btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Suspend</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div><strong>Tech Solutions Inc</strong></div>
+                                    <div style="font-size: 0.8rem; color: var(--gray-500);">contact@techsolutions.com</div>
+                                </td>
+                                <td>Client</td>
+                                <td><span class="badge badge-success">Active</span></td>
+                                <td>2023-10-10</td>
+                                <td>
+                                    <button class="btn btn-outline btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; margin-right: 0.25rem;">View</button>
+                                    <button class="btn btn-danger btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Suspend</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div><strong>Sarah Williams</strong></div>
+                                    <div style="font-size: 0.8rem; color: var(--gray-500);">sarah@example.com</div>
+                                </td>
+                                <td>Freelancer</td>
+                                <td><span class="badge badge-warning">Pending KYC</span></td>
+                                <td>2023-10-25</td>
+                                <td>
+                                    <button class="btn btn-outline btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; margin-right: 0.25rem;">View</button>
+                                    <button class="btn btn-danger btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Suspend</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pending Withdrawals -->
+            <div style="background: white; border-radius: var(--border-radius-lg); padding: var(--spacing-6); box-shadow: var(--shadow-md);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-4);">
+                    <h2>Pending Withdrawals</h2>
+                    <a href="#" class="btn btn-outline btn-sm">View All</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Amount</th>
+                                <th>Method</th>
+                                <th>Requested</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Alex Johnson</td>
+                                <td>$250.00</td>
+                                <td>PayPal</td>
+                                <td>2023-10-26</td>
+                                <td><span class="badge badge-warning">Pending</span></td>
+                                <td>
+                                    <button class="btn btn-success btn-sm approve-payment-btn" data-payment-id="PAY-001" style="margin-right: 0.25rem;">Approve</button>
+                                    <button class="btn btn-danger btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Reject</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Marketing Pro</td>
+                                <td>$180.50</td>
+                                <td>GCash</td>
+                                <td>2023-10-25</td>
+                                <td><span class="badge badge-warning">Pending</span></td>
+                                <td>
+                                    <button class="btn btn-success btn-sm approve-payment-btn" data-payment-id="PAY-002" style="margin-right: 0.25rem;">Approve</button>
+                                    <button class="btn btn-danger btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Reject</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>AtMyWorks</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="/blog.html">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Help & Support</a></li>
+                        <li><a href="#">Trust & Safety</a></li>
+                        <li><a href="#">Selling on AtMyWorks</a></li>
+                        <li><a href="#">Buying on AtMyWorks</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Copyright Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 AtMyWorks. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Check if firebaseApp is available
+            // ... (similar auth check)
+
+            // Handle Add Category
+            const addCategoryBtn = document.getElementById('addCategoryBtn');
+            if (addCategoryBtn) {
+                addCategoryBtn.addEventListener('click', function() {
+                    const categoryNameInput = document.getElementById('newCategoryName');
+                    const categoryName = categoryNameInput.value.trim();
+                    if (categoryName) {
+                        console.log("Adding category:", categoryName);
+                        alert(`Category '${categoryName}' would be added. (Integration with Firestore needed)`);
+                        categoryNameInput.value = ''; // Clear input
+                        // In a real app: Add to Firestore 'categories' collection
+                    } else {
+                        alert("Please enter a category name.");
+                    }
+                });
+            }
+
+            // Handle Save Commission Settings
+            const saveCommissionBtn = document.getElementById('saveCommissionBtn');
+            if (saveCommissionBtn) {
+                saveCommissionBtn.addEventListener('click', function() {
+                    const percentage = document.getElementById('commissionPercentage').value;
+                    const fixedFee = document.getElementById('fixedFee').value;
+                    console.log("Saving commission settings:", { percentage, fixedFee });
+                    alert(`Commission settings ( ${percentage}% + $${fixedFee} ) saved. (Integration with Firestore needed)`);
+                    // In a real app: Update Firestore 'settings' document
+                });
+            }
+
+            // Handle Approve Payment (Escrow Release)
+            // The generic button handler in dashboard.js will catch this
+            // based on the 'approve-payment-btn' class.
+            // You can add specific logic here if needed.
+        });
+    </script>
+</body>
+</html>

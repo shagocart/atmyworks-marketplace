@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freelancer Dashboard - AtMyWorks</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="/index.html" class="logo">AtMyWorks</a>
+                <ul class="nav-links">
+                    <li><a href="/browse.html">Find Work</a></li>
+                    <li><a href="/blog.html">Blog</a></li>
+                    <li><a href="#">How It Works</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline logout-btn">Logout</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Dashboard Content -->
+    <section class="dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <h1>Freelancer Dashboard</h1>
+                <a href="/create-gig.html" class="btn btn-primary">Create New Service</a>
+            </div>
+
+            <!-- Stats -->
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="stat-card-value" id="activeOrdersCount">5</div>
+                    <div class="stat-card-label">Active Orders</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="stat-card-value" id="totalEarningsAmount">$1,250</div>
+                    <div class="stat-card-label">Total Earnings</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-card-value" id="completedOrdersCount">24</div>
+                    <div class="stat-card-label">Completed Orders</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-card-value" id="yourRatingValue">4.8</div>
+                    <div class="stat-card-label">Your Rating</div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div style="display: flex; border-bottom: 1px solid var(--border-color); margin-bottom: var(--spacing-6);">
+                <button class="tab active" data-tab="gigs" style="padding: 1rem 1.5rem; cursor: pointer; border-bottom: 3px solid transparent; background: none; border: none; font-weight: 500;">My Services</button>
+                <button class="tab" data-tab="orders" style="padding: 1rem 1.5rem; cursor: pointer; border-bottom: 3px solid transparent; background: none; border: none; font-weight: 500;">Orders</button>
+                <button class="tab" data-tab="messages" style="padding: 1rem 1.5rem; cursor: pointer; border-bottom: 3px solid transparent; background: none; border: none; font-weight: 500;">Messages</button>
+                <button class="tab" data-tab="earnings" style="padding: 1rem 1.5rem; cursor: pointer; border-bottom: 3px solid transparent; background: none; border: none; font-weight: 500;">Earnings</button>
+            </div>
+
+            <!-- Tab Content: My Services -->
+            <div class="tab-content" id="gigs" style="display: block;">
+                <div style="background: white; border-radius: var(--border-radius-lg); padding: var(--spacing-6); box-shadow: var(--shadow-md); margin-bottom: var(--spacing-6);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-4);">
+                        <h2>My Services</h2>
+                        <a href="/create-gig.html" class="btn btn-outline"><i class="fas fa-plus"></i> Add New</a>
+                    </div>
+
+                    <div class="gigs-grid">
+                        <!-- Gig Card 1 -->
+                        <div class="gig-card">
+                            <div class="gig-image">
+                                <img src="https://placehold.co/300x200/3b82f6/white?text=Logo+Design" alt="Professional Logo Design">
+                            </div>
+                            <div class="gig-content">
+                                <h3 class="gig-title card-title">Professional Logo Design</h3>
+                                <div class="gig-rating">
+                                    <i class="fas fa-star gig-rating-icon"></i>
+                                    <span class="gig-rating-value">4.9</span>
+                                    <span>(32)</span>
+                                </div>
+                                <div class="gig-price">$50 - $200</div>
+                                <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                    <button class="btn btn-outline" style="flex: 1;">Edit</button>
+                                    <button class="btn btn-primary" style="flex: 1;">View Stats</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Gig Card 2 -->
+                        <div class="gig-card">
+                            <div class="gig-image">
+                                <img src="https://placehold.co/300x200/ef4444/white?text=Website+Dev" alt="Website Development">
+                            </div>
+                            <div class="gig-content">
+                                <h3 class="gig-title card-title">Website Development</h3>
+                                <div class="gig-rating">
+                                    <i class="fas fa-star gig-rating-icon"></i>
+                                    <span class="gig-rating-value">4.7</span>
+                                    <span>(18)</span>
+                                </div>
+                                <div class="gig-price">$200 - $1000</div>
+                                <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                    <button class="btn btn-outline" style="flex: 1;">Edit</button>
+                                    <button class="btn btn-primary" style="flex: 1;">View Stats</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Orders (Placeholder) -->
+            <div class="tab-content" id="orders" style="display: none;">
+                <div style="background: white; border-radius: var(--border-radius-lg); padding: var(--spacing-6); box-shadow: var(--shadow-md); margin-bottom: var(--spacing-6);">
+                    <h2 style="margin-bottom: var(--spacing-4);">My Orders</h2>
+                    <p>Orders for your services will appear here.</p>
+                    <!-- In a real app, this would list orders assigned to the freelancer -->
+                     <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Service</th>
+                                    <th>Client</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>ORD-12345</td>
+                                    <td>Professional Logo Design</td>
+                                    <td>Client A</td>
+                                    <td>May 15, 2023</td>
+                                    <td>$100</td>
+                                    <td><span class="badge badge-warning">In Progress</span></td>
+                                    <td>
+                                        <button class="btn btn-outline btn-sm message-btn" data-client="Client A" style="margin-right: 0.5rem;">Message</button>
+                                        <button class="btn btn-primary btn-sm view-details-btn" data-order-id="ORD-12345">View</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>ORD-12348</td>
+                                    <td>Website Development</td>
+                                    <td>Client B</td>
+                                    <td>May 18, 2023</td>
+                                    <td>$500</td>
+                                    <td><span class="badge badge-info">Pending</span></td>
+                                    <td>
+                                         <button class="btn btn-primary btn-sm view-details-btn" data-order-id="ORD-12348">View</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Messages (Placeholder) -->
+            <div class="tab-content" id="messages" style="display: none;">
+                <div style="background: white; border-radius: var(--border-radius-lg); padding: var(--spacing-6); box-shadow: var(--shadow-md); margin-bottom: var(--spacing-6);">
+                    <h2 style="margin-bottom: var(--spacing-4);">Messages</h2>
+                    <p>Your conversations with clients will appear here.</p>
+                    <!-- In a real app, this would list chat threads -->
+                </div>
+            </div>
+
+             <!-- Tab Content: Earnings (Placeholder) -->
+             <div class="tab-content" id="earnings" style="display: none;">
+                 <div style="background: white; border-radius: var(--border-radius-lg); padding: var(--spacing-6); box-shadow: var(--shadow-md); margin-bottom: var(--spacing-6);">
+                    <h2 style="margin-bottom: var(--spacing-4);">Earnings</h2>
+                    <p>Your financial summary and withdrawal options will appear here.</p>
+                    <!-- In a real app, this would show charts, transaction history, etc. -->
+                    <div class="dashboard-stats">
+                        <div class="stat-card">
+                            <div class="stat-card-icon">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <div class="stat-card-value">$250</div>
+                            <div class="stat-card-label">Available for Withdrawal</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-icon">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <div class="stat-card-value">$150</div>
+                            <div class="stat-card-label">In Escrow</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>AtMyWorks</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="/blog.html">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Help & Support</a></li>
+                        <li><a href="#">Trust & Safety</a></li>
+                        <li><a href="#">Selling on AtMyWorks</a></li>
+                        <li><a href="#">Buying on AtMyWorks</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Copyright Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 AtMyWorks. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script>
+         // Simple tab switching logic (same as client dashboard)
+         document.addEventListener('DOMContentLoaded', function () {
+            // Check if firebaseApp is available
+            // ... (similar auth check)
+
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function () {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+
+                    tabContents.forEach(content => content.style.display = 'none');
+
+                    const targetContentId = this.getAttribute('data-tab');
+                    const targetContent = document.getElementById(targetContentId);
+                    if (targetContent) {
+                        targetContent.style.display = 'block';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
