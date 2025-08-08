@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Dashboard - AtMyWorks</title>
+    <link rel="stylesheet" href="css/styles.css"> <!-- Make sure this path is correct -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- We'll replace this with the component later -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">AtMyWorks</a>
+                <ul class="nav-links">
+                    <li><a href="browse.html">Find Work</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="#">How It Works</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline">My Profile</button>
+                    <button class="btn btn-primary">Logout</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Dashboard Content -->
+    <main style="padding: 2rem 0;">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h1>Client Dashboard</h1>
+                <a href="browse.html" class="btn btn-primary">Find Services</a>
+            </div>
+
+            <!-- Stats Overview -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;">
+                    <div style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;">Active Orders</div>
+                    <div style="font-size: 1.8rem; font-weight: bold; color: #2563eb;">2</div>
+                </div>
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;">
+                    <div style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;">Total Spent</div>
+                    <div style="font-size: 1.8rem; font-weight: bold; color: #2563eb;">$320</div>
+                </div>
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;">
+                    <div style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;">Completed Orders</div>
+                    <div style="font-size: 1.8rem; font-weight: bold; color: #2563eb;">8</div>
+                </div>
+            </div>
+
+            <!-- Recent Activity / Orders -->
+            <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h2 style="margin-bottom: 1.5rem;">Recent Orders</h2>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <th style="text-align: left; padding: 0.75rem;">Service</th>
+                                <th style="text-align: left; padding: 0.75rem;">Seller</th>
+                                <th style="text-align: left; padding: 0.75rem;">Date</th>
+                                <th style="text-align: left; padding: 0.75rem;">Amount</th>
+                                <th style="text-align: left; padding: 0.75rem;">Status</th>
+                                <th style="text-align: left; padding: 0.75rem;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 0.75rem;">Professional Logo Design</td>
+                                <td style="padding: 0.75rem;">Alex Designer</td>
+                                <td style="padding: 0.75rem;">2023-10-26</td>
+                                <td style="padding: 0.75rem;">$100</td>
+                                <td style="padding: 0.75rem;"><span style="background-color: #fef3c7; color: #92400e; padding: 0.25rem 0.5rem; border-radius: 9999px; font-size: 0.75rem;">In Progress</span></td>
+                                <td style="padding: 0.75rem;"><button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Message</button></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.75rem;">Social Media Marketing Package</td>
+                                <td style="padding: 0.75rem;">Marketing Pro</td>
+                                <td style="padding: 0.75rem;">2023-10-20</td>
+                                <td style="padding: 0.75rem;">$220</td>
+                                <td style="padding: 0.75rem;"><span style="background-color: #d1fae5; color: #065f46; padding: 0.25rem 0.5rem; border-radius: 9999px; font-size: 0.75rem;">Completed</span></td>
+                                <td style="padding: 0.75rem;"><button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Review</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- We'll replace this with the component later -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>AtMyWorks</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Help & Support</a></li>
+                        <li><a href="#">Trust & Safety</a></li>
+                        <li><a href="#">Buying on AtMyWorks</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 AtMyWorks. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

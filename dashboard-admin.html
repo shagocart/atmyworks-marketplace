@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - AtMyWorks</title>
+    <link rel="stylesheet" href="css/styles.css"> <!-- Make sure this path is correct -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- We'll replace this with the component later -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">AtMyWorks</a>
+                <ul class="nav-links">
+                    <li><a href="browse.html">Services</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline">My Profile</button>
+                    <button class="btn btn-primary">Logout</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Admin Dashboard Content -->
+    <main style="padding: 2rem 0;">
+        <div class="container">
+            <h1 style="margin-bottom: 2rem;">Admin Dashboard</h1>
+
+            <!-- Stats Overview -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;">
+                    <div style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;">Total Users</div>
+                    <div style="font-size: 1.8rem; font-weight: bold; color: #2563eb;">1,248</div>
+                </div>
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;">
+                    <div style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;">Total Services</div>
+                    <div style="font-size: 1.8rem; font-weight: bold; color: #2563eb;">856</div>
+                </div>
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;">
+                    <div style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;">Total Orders</div>
+                    <div style="font-size: 1.8rem; font-weight: bold; color: #2563eb;">2,103</div>
+                </div>
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;">
+                    <div style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;">Platform Revenue</div>
+                    <div style="font-size: 1.8rem; font-weight: bold; color: #2563eb;">$42,560</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                <!-- Manage Categories -->
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <h3 style="margin-bottom: 1rem;">Manage Categories</h3>
+                    <div style="margin-bottom: 1rem;">
+                        <input type="text" placeholder="New Category Name" style="width: 60%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                        <button class="btn btn-primary" style="padding: 0.5rem 1rem; margin-left: 0.5rem;">Add</button>
+                    </div>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;">
+                            <span>Graphics & Design</span>
+                            <div>
+                                <button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; margin-right: 0.25rem;">Edit</button>
+                                <button class="btn btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Delete</button>
+                            </div>
+                        </li>
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;">
+                            <span>Digital Marketing</span>
+                            <div>
+                                <button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; margin-right: 0.25rem;">Edit</button>
+                                <button class="btn btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Delete</button>
+                            </div>
+                        </li>
+                        <li style="padding: 0.5rem 0; display: flex; justify-content: space-between;">
+                            <span>Writing & Translation</span>
+                            <div>
+                                <button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; margin-right: 0.25rem;">Edit</button>
+                                <button class="btn btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Delete</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Commission Settings -->
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <h3 style="margin-bottom: 1rem;">Commission Settings</h3>
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem;">Commission Percentage (%)</label>
+                        <input type="number" value="10" min="0" max="100" step="0.1" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem;">Fixed Fee ($)</label>
+                        <input type="number" value="2.50" min="0" step="0.01" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%;">Save Settings</button>
+                </div>
+            </div>
+
+            <!-- Recent Users -->
+            <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h2 style="margin-bottom: 1.5rem;">Recent Users</h2>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <th style="text-align: left; padding: 0.75rem;">User</th>
+                                <th style="text-align: left; padding: 0.75rem;">Role</th>
+                                <th style="text-align: left; padding: 0.75rem;">Status</th>
+                                <th style="text-align: left; padding: 0.75rem;">Joined</th>
+                                <th style="text-align: left; padding: 0.75rem;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 0.75rem;">
+                                    <div><strong>Alex Johnson</strong></div>
+                                    <div style="font-size: 0.8rem; color: #666;">alex@example.com</div>
+                                </td>
+                                <td style="padding: 0.75rem;">Freelancer</td>
+                                <td style="padding: 0.75rem;"><span style="background-color: #d1fae5; color: #065f46; padding: 0.25rem 0.5rem; border-radius: 9999px; font-size: 0.75rem;">Active</span></td>
+                                <td style="padding: 0.75rem;">2023-10-15</td>
+                                <td style="padding: 0.75rem;"><button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">View</button></td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 0.75rem;">
+                                    <div><strong>Tech Solutions Inc</strong></div>
+                                    <div style="font-size: 0.8rem; color: #666;">contact@techsolutions.com</div>
+                                </td>
+                                <td style="padding: 0.75rem;">Client</td>
+                                <td style="padding: 0.75rem;"><span style="background-color: #d1fae5; color: #065f46; padding: 0.25rem 0.5rem; border-radius: 9999px; font-size: 0.75rem;">Active</span></td>
+                                <td style="padding: 0.75rem;">2023-10-10</td>
+                                <td style="padding: 0.75rem;"><button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">View</button></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.75rem;">
+                                    <div><strong>Sarah Williams</strong></div>
+                                    <div style="font-size: 0.8rem; color: #666;">sarah@example.com</div>
+                                </td>
+                                <td style="padding: 0.75rem;">Freelancer</td>
+                                <td style="padding: 0.75rem;"><span style="background-color: #fef3c7; color: #92400e; padding: 0.25rem 0.5rem; border-radius: 9999px; font-size: 0.75rem;">Pending KYC</span></td>
+                                <td style="padding: 0.75rem;">2023-10-25</td>
+                                <td style="padding: 0.75rem;"><button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">View</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- We'll replace this with the component later -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>AtMyWorks</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Help & Support</a></li>
+                        <li><a href="#">Trust & Safety</a></li>
+                        <li><a href="#">Buying on AtMyWorks</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 AtMyWorks. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
