@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Title - AtMyWorks</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="/index.html" class="logo">AtMyWorks</a>
+                <ul class="nav-links">
+                    <li><a href="/browse.html">Find Work</a></li>
+                    <li><a href="/blog.html">Blog</a></li>
+                    <li><a href="#">How It Works</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline" id="loginBtn">Log In</button>
+                    <button class="btn btn-primary" id="signupBtn">Sign Up</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Job Detail Content -->
+    <main style="padding: 2rem 0;">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+                <!-- Left Column: Job Details -->
+                <div style="background: white; border-radius: 0.5rem; padding: 2rem; box-shadow: var(--shadow-md);">
+                    <h1 style="margin-bottom: 1rem;">Senior Web Developer Needed for E-commerce Project</h1>
+                    
+                    <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+                        <div>
+                            <div style="font-size: var(--font-size-sm); color: var(--gray-500);">Company</div>
+                            <div style="font-weight: var(--font-weight-semibold);">Tech Innovations Inc.</div>
+                        </div>
+                        <div>
+                            <div style="font-size: var(--font-size-sm); color: var(--gray-500);">Location</div>
+                            <div style="font-weight: var(--font-weight-semibold);">Remote</div>
+                        </div>
+                        <div>
+                            <div style="font-size: var(--font-size-sm); color: var(--gray-500);">Job Type</div>
+                            <div style="font-weight: var(--font-weight-semibold);">Contract</div>
+                        </div>
+                        <div>
+                            <div style="font-size: var(--font-size-sm); color: var(--gray-500);">Salary</div>
+                            <div style="font-weight: var(--font-weight-semibold); color: var(--primary-600);">$50 - $70 / hr</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 2rem;">
+                        <h2 style="margin-bottom: 1rem;">Job Description</h2>
+                        <p>We are looking for an experienced Senior Web Developer to join our team on a contract basis. You will be responsible for developing and maintaining our e-commerce platform.</p>
+                        <p>Key Responsibilities:</p>
+                        <ul>
+                            <li>Develop new features and functionality for our web applications</li>
+                            <li>Maintain and improve existing codebases</li>
+                            <li>Collaborate with designers and other developers</li>
+                            <li>Optimize applications for maximum speed and scalability</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 2rem;">
+                        <h2 style="margin-bottom: 1rem;">Requirements</h2>
+                        <ul>
+                            <li>5+ years of experience in web development</li>
+                            <li>Proficiency in JavaScript, HTML, CSS</li>
+                            <li>Experience with React or Vue.js</li>
+                            <li>Familiarity with RESTful APIs</li>
+                            <li>Strong problem-solving skills</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h2 style="margin-bottom: 1rem;">Benefits</h2>
+                        <ul>
+                            <li>Flexible working hours</li>
+                            <li>Competitive hourly rate</li>
+                            <li>Opportunity to work on cutting-edge projects</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Right Column: Apply Box -->
+                <div style="background: white; border-radius: 0.5rem; padding: 2rem; box-shadow: var(--shadow-md); position: sticky; top: 2rem; align-self: flex-start;">
+                    <h2 style="margin-bottom: 1.5rem;">Apply for this Job</h2>
+                    <p style="margin-bottom: 1.5rem;">Interested in this position? Submit your application now.</p>
+                    
+                    <form id="jobApplicationForm">
+                        <div class="form-group">
+                            <label for="applicantName" class="form-label">Full Name</label>
+                            <input type="text" id="applicantName" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="applicantEmail" class="form-label">Email Address</label>
+                            <input type="email" id="applicantEmail" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="applicantCoverLetter" class="form-label">Cover Letter</label>
+                            <textarea id="applicantCoverLetter" class="form-control" rows="5" placeholder="Tell us why you're a great fit for this role..." required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="applicantResume" class="form-label">Upload Resume (PDF, DOC, DOCX)</label>
+                            <input type="file" id="applicantResume" class="form-control" accept=".pdf,.doc,.docx">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Application</button>
+                    </form>
+                    
+                    <div id="applicationSuccessMessage" style="display: none; text-align: center; margin-top: 1.5rem; color: var(--success-500);">
+                        <i class="fas fa-check-circle" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                        <p>Application submitted successfully!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>AtMyWorks</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="/blog.html">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Help & Support</a></li>
+                        <li><a href="#">Trust & Safety</a></li>
+                        <li><a href="#">Selling on AtMyWorks</a></li>
+                        <li><a href="#">Buying on AtMyWorks</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Copyright Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 AtMyWorks. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.getElementById('jobApplicationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // In a real app, this would submit the application to Firestore
+            document.getElementById('jobApplicationForm').style.display = 'none';
+            document.getElementById('applicationSuccessMessage').style.display = 'block';
+        });
+    </script>
+</body>
+</html>

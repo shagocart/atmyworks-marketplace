@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post a Job - AtMyWorks</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="/index.html" class="logo">AtMyWorks</a>
+                <ul class="nav-links">
+                    <li><a href="/browse.html">Find Work</a></li>
+                    <li><a href="/blog.html">Blog</a></li>
+                    <li><a href="#">How It Works</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline logout-btn">Logout</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main style="padding: 2rem 0;">
+        <div class="container">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <div style="background: white; border-radius: 0.5rem; padding: 2rem; box-shadow: var(--shadow-md); margin-bottom: 2rem;">
+                    <h1 style="margin-bottom: 1.5rem; text-align: center;">Post a New Job</h1>
+                    <p style="text-align: center; margin-bottom: 2rem; color: var(--gray-600);">Describe your project or position to find the perfect freelancer or employee.</p>
+
+                    <!-- Subscription Check -->
+                    <div id="subscriptionCheck" style="margin-bottom: 2rem; padding: 1.5rem; border-radius: 0.5rem; background-color: var(--warning-50); border: 1px solid var(--warning-300); display: none;">
+                        <div style="display: flex; align-items: flex-start;">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 1.5rem; color: var(--warning-500); margin-right: 1rem; flex-shrink: 0;"></i>
+                            <div>
+                                <h3 style="margin-bottom: 0.5rem; color: var(--warning-800);">Subscription Required</h3>
+                                <p style="margin-bottom: 1rem; color: var(--warning-700);">To post jobs and access applications, you need an active subscription.</p>
+                                <a href="/subscription-plans.html" class="btn btn-warning">Upgrade Your Plan</a>
+                                <button class="btn btn-outline" style="margin-left: 0.5rem;" onclick="checkAuthAndLoadForm()">Check Again</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Job Post Form (Initially Hidden) -->
+                    <form id="jobPostForm" style="display: none;">
+                        <div class="form-group">
+                            <label for="jobTitle" class="form-label">Job Title *</label>
+                            <input type="text" id="jobTitle" name="title" class="form-control" placeholder="e.g., Senior Web Developer, Logo Designer, Content Writer" required>
+                        </div>
+
+                        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                            <div class="form-group">
+                                <label for="jobCategory" class="form-label">Category *</label>
+                                <select id="jobCategory" name="category" class="form-control" required>
+                                    <option value="">Select Category</option>
+                                    <option value="graphics-design">Graphics & Design</option>
+                                    <option value="digital-marketing">Digital Marketing</option>
+                                    <option value="programming-tech">Programming & Tech</option>
+                                    <option value="video-animation">Video & Animation</option>
+                                    <option value="writing-translation">Writing & Translation</option>
+                                    <option value="music-audio">Music & Audio</option>
+                                    <option value="business">Business</option>
+                                    <option value="lifestyle">Lifestyle</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="jobType" class="form-label">Job Type *</label>
+                                <select id="jobType" name="type" class="form-control" required>
+                                    <option value="">Select Type</option>
+                                    <option value="freelance">Freelance</option>
+                                    <option value="part-time">Part-Time</option>
+                                    <option value="full-time">Full-Time</option>
+                                    <option value="contract">Contract</option>
+                                    <option value="internship">Internship</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="jobDescription" class="form-label">Job Description *</label>
+                            <textarea id="jobDescription" name="description" rows="8" class="form-control" placeholder="Provide a detailed description of the job responsibilities, requirements, and expectations..." required></textarea>
+                            <div class="form-text">Clearly outline what the candidate will be doing and what skills/experience are required.</div>
+                        </div>
+
+                        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                            <div class="form-group">
+                                <label for="jobBudget" class="form-label">Estimated Budget ($) *</label>
+                                <input type="number" id="jobBudget" name="budget" class="form-control" placeholder="2000" min="0" step="1" required>
+                                <div class="form-text">Enter the estimated total budget for the project or annual/monthly salary.</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="jobDuration" class="form-label">Estimated Duration *</label>
+                                <select id="jobDuration" name="duration" class="form-control" required>
+                                    <option value="">Select Duration</option>
+                                    <option value="less-than-1-week">Less than 1 week</option>
+                                    <option value="1-to-4-weeks">1 to 4 weeks</option>
+                                    <option value="1-to-3-months">1 to 3 months</option>
+                                    <option value="3-to-6-months">3 to 6 months</option>
+                                    <option value="more-than-6-months">More than 6 months</option>
+                                    <option value="ongoing">Ongoing</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="jobExperience" class="form-label">Required Experience Level</label>
+                            <select id="jobExperience" name="experience" class="form-control">
+                                <option value="">Select Experience Level</option>
+                                <option value="entry">Entry Level</option>
+                                <option value="intermediate">Intermediate</option>
+                                <option value="expert">Expert</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="jobSkills" class="form-label">Preferred Skills (Optional)</label>
+                            <input type="text" id="jobSkills" name="skills" class="form-control" placeholder="e.g., JavaScript, React, Adobe Photoshop, SEO">
+                            <div class="form-text">List preferred skills separated by commas.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Application Method</label>
+                            <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 0.5rem;">
+                                <label style="display: flex; align-items: center; cursor: pointer;">
+                                    <input type="radio" name="applicationMethod" value="platform" checked style="margin-right: 0.5rem;">
+                                    Apply through AtMyWorks platform
+                                </label>
+                                <label style="display: flex; align-items: center; cursor: pointer;">
+                                    <input type="radio" name="applicationMethod" value="external" style="margin-right: 0.5rem;">
+                                    External link/application
+                                </label>
+                            </div>
+                            <div id="externalLinkField" style="margin-top: 1rem; display: none;">
+                                <label for="externalLink" class="form-label">External Application Link</label>
+                                <input type="url" id="externalLink" name="externalLink" class="form-control" placeholder="https://yourcompany.com/careers/apply">
+                                <div class="form-text">Provide a direct link to your company's career page or application form.</div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem; margin-top: 1rem;">Post Job</button>
+                    </form>
+
+                    <!-- Success Message (Initially Hidden) -->
+                    <div id="postSuccessMessage" style="display: none; text-align: center; padding: 2rem;">
+                        <div style="font-size: 3rem; color: var(--success-500); margin-bottom: 1rem;">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h2 style="margin-bottom: 1rem;">Job Posted Successfully!</h2>
+                        <p style="margin-bottom: 1.5rem;">Your job listing is now live. Qualified candidates can apply directly through the platform.</p>
+                        <a href="/dashboard-client.html" class="btn btn-primary">Go to My Dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>AtMyWorks</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="/blog.html">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Help & Support</a></li>
+                        <li><a href="#">Trust & Safety</a></li>
+                        <li><a href="#">Selling on AtMyWorks</a></li>
+                        <li><a href="#">Buying on AtMyWorks</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Copyright Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 AtMyWorks. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/payments.js"></script> <!-- Ensure checkUserSubscription is available -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log("DOM loaded for create-job-post.html");
+
+            // Check if firebaseApp is available (from firebase-config.js)
+            if (typeof window.firebaseApp !== 'undefined') {
+                window.auth = window.firebaseApp.auth;
+                window.db = window.firebaseApp.db;
+                console.log("Firebase services available in create-job-post.html");
+            } else {
+                console.warn("Firebase not initialized in create-job-post.html.");
+                alert("Unable to connect to the database. Please try refreshing the page.");
+                return;
+            }
+
+            // Handle radio button change for application method
+            const applicationMethodRadios = document.querySelectorAll('input[name="applicationMethod"]');
+            const externalLinkField = document.getElementById('externalLinkField');
+
+            if (applicationMethodRadios.length > 0 && externalLinkField) {
+                applicationMethodRadios.forEach(radio => {
+                    radio.addEventListener('change', function () {
+                        if (this.value === 'external') {
+                            externalLinkField.style.display = 'block';
+                        } else {
+                            externalLinkField.style.display = 'none';
+                            // Clear the external link input if switching back
+                            const externalLinkInput = document.getElementById('externalLink');
+                            if (externalLinkInput) {
+                                externalLinkInput.value = '';
+                            }
+                        }
+                    });
+                });
+            } else {
+                console.warn("Application method radios or external link field not found.");
+            }
+
+            // Check authentication and subscription status on page load
+            checkAuthAndLoadForm();
+
+            // Handle form submission
+            const jobPostForm = document.getElementById('jobPostForm');
+            if (jobPostForm) {
+                jobPostForm.addEventListener('submit', async function (e) {
+                    e.preventDefault();
+                    console.log("Job post form submitted");
+
+                    const user = window.auth.currentUser;
+                    if (!user) {
+                        alert('You must be logged in to post a job.');
+                        window.location.href = '/signup-employer.html';
+                        return;
+                    }
+
+                    // --- USE THE REAL SUBSCRIPTION CHECK FROM js/payments.js ---
+                    const hasActiveSubscription = await window.checkUserSubscription(user.uid);
+                    if (!hasActiveSubscription) {
+                        alert('You need an active subscription to post jobs.');
+                        window.location.href = '/subscription-plans.html';
+                        return;
+                    }
+                    // --- END REAL SUBSCRIPTION CHECK ---
+
+                    const formData = new FormData(this);
+                    const jobData = {
+                        title: formData.get('title').trim(),
+                        category: formData.get('category'),
+                        type: formData.get('type'),
+                        description: formData.get('description').trim(),
+                        budget: parseFloat(formData.get('budget')),
+                        duration: formData.get('duration'),
+                        experience: formData.get('experience') || '',
+                        skills: formData.get('skills') ? formData.get('skills').split(',').map(skill => skill.trim()).filter(skill => skill) : [],
+                        applicationMethod: formData.get('applicationMethod'),
+                        externalLink: formData.get('externalLink') ? formData.get('externalLink').trim() : '',
+                        postedById: user.uid,
+                        postedByEmail: user.email || '', // Store email for reference
+                        status: 'active',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    };
+
+                    // Validation
+                    if (!jobData.title || !jobData.category || !jobData.type || !jobData.description || isNaN(jobData.budget) || jobData.budget <= 0 || !jobData.duration) {
+                        alert('Please fill in all required fields correctly.');
+                        return;
+                    }
+
+                    if (jobData.applicationMethod === 'external' && !jobData.externalLink) {
+                        alert('Please provide an external application link.');
+                        return;
+                    }
+
+                    console.log("Job data to save:", jobData);
+
+                    try {
+                        // Save job post to Firestore
+                        const docRef = await window.db.collection('job_posts').add(jobData);
+                        console.log("Job post created with ID:", docRef.id);
+
+                        // Hide form and show success message
+                        jobPostForm.style.display = 'none';
+                        document.getElementById('postSuccessMessage').style.display = 'block';
+
+                        // Optional: Send notification to admin or relevant parties
+                        // await sendNotification('new_job_post', { jobId: docRef.id, ...jobData });
+
+                    } catch (error) {
+                        console.error("Error creating job post:", error);
+                        alert('Failed to create job post. Please try again.');
+                    }
+                });
+            } else {
+                 console.warn("Job post form element not found.");
+            }
+        });
+
+        // Function to check authentication and load form if user is subscribed
+        async function checkAuthAndLoadForm() {
+            const user = window.auth.currentUser;
+            const subscriptionCheck = document.getElementById('subscriptionCheck');
+            const jobPostForm = document.getElementById('jobPostForm');
+
+            if (!user) {
+                alert('Please log in to post a job.');
+                window.location.href = '/signup-employer.html';
+                return;
+            }
+
+            // Show loading state
+            subscriptionCheck.style.display = 'block';
+            subscriptionCheck.innerHTML = `
+                <div style="display: flex; justify-content: center; align-items: center;">
+                    <div class="spinner" style="width: 2rem; height: 2rem; border: 4px solid rgba(0, 0, 0, 0.1); border-left-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                    <span style="margin-left: 1rem;">Checking subscription status...</span>
+                </div>
+            `;
+            jobPostForm.style.display = 'none';
+
+            try {
+                // --- USE THE REAL SUBSCRIPTION CHECK FROM js/payments.js ---
+                const hasActiveSubscription = await window.checkUserSubscription(user.uid);
+                // --- END REAL SUBSCRIPTION CHECK ---
+
+                if (hasActiveSubscription) {
+                    // User has an active subscription
+                    subscriptionCheck.style.display = 'none';
+                    jobPostForm.style.display = 'block';
+                } else {
+                    // User does not have an active subscription
+                    subscriptionCheck.innerHTML = `
+                        <div style="display: flex; align-items: flex-start;">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 1.5rem; color: var(--warning-500); margin-right: 1rem; flex-shrink: 0;"></i>
+                            <div>
+                                <h3 style="margin-bottom: 0.5rem; color: var(--warning-800);">Subscription Required</h3>
+                                <p style="margin-bottom: 1rem; color: var(--warning-700);">To post jobs and access applications, you need an active subscription.</p>
+                                <a href="/subscription-plans.html" class="btn btn-warning">Upgrade Your Plan</a>
+                                <button class="btn btn-outline" style="margin-left: 0.5rem;" onclick="checkAuthAndLoadForm()">Check Again</button>
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error("Error checking subscription:", error);
+                subscriptionCheck.innerHTML = `
+                    <div style="display: flex; align-items: flex-start; color: var(--danger-500);">
+                        <i class="fas fa-exclamation-circle" style="font-size: 1.5rem; margin-right: 1rem; flex-shrink: 0;"></i>
+                        <div>
+                            <h3 style="margin-bottom: 0.5rem;">Error Checking Status</h3>
+                            <p>An error occurred while checking your subscription status. Please try again later.</p>
+                            <button class="btn btn-outline" onclick="checkAuthAndLoadForm()">Retry</button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Add spinner animation
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes spin {
+                to { transform: rotate(360deg); }
+            }
+            .spinner {
+                 animation: spin 1s linear infinite;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - AtMyWorks</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="/index.html" class="logo">AtMyWorks</a>
+                <ul class="nav-links">
+                    <li><a href="/browse.html">Find Work</a></li>
+                    <li><a href="/blog.html">Blog</a></li>
+                    <li><a href="#">How It Works</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline logout-btn">Logout</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Profile Content -->
+    <main style="padding: 2rem 0;">
+        <div class="container">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <div style="background: white; border-radius: 0.5rem; padding: 2rem; box-shadow: var(--shadow-md); margin-bottom: 2rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h1 style="margin: 0;">My Profile</h1>
+                        <button id="editProfileBtn" class="btn btn-outline"><i class="fas fa-edit"></i> Edit Profile</button>
+                    </div>
+
+                    <!-- Profile View Mode -->
+                    <div id="profileView" style="display: block;">
+                        <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 2rem;">
+                            <div id="profileAvatarContainer" style="width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-100), var(--secondary-100)); display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: bold; color: var(--primary-800); margin-bottom: 1rem; box-shadow: var(--shadow-md); border: 3px solid var(--white); position: relative;">
+                                <span id="profileAvatarText">U</span>
+                                <div id="onlineIndicator" style="position: absolute; bottom: 5px; right: 5px; width: 20px; height: 20px; border-radius: 50%; background-color: var(--success-500); border: 2px solid var(--white); display: none;"></div>
+                            </div>
+                            <h2 id="profileName" style="margin: 0.5rem 0;">User Name</h2>
+                            <p id="profileEmail" style="color: var(--gray-500); margin: 0;"></p>
+                            <div id="profileRole" style="margin-top: 0.5rem;">
+                                <span class="badge badge-info">Role: <span id="roleText">User</span></span>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 2rem;">
+                            <h3 style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">Personal Information</h3>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                                <div>
+                                    <div style="font-weight: var(--font-weight-semibold); color: var(--gray-500); font-size: var(--font-size-sm); margin-bottom: 0.25rem;">Full Name</div>
+                                    <div id="profileFullName" style="font-size: var(--font-size-base);">-</div>
+                                </div>
+                                <div>
+                                    <div style="font-weight: var(--font-weight-semibold); color: var(--gray-500); font-size: var(--font-size-sm); margin-bottom: 0.25rem;">Username</div>
+                                    <div id="profileUsername" style="font-size: var(--font-size-base);">-</div>
+                                </div>
+                                <div>
+                                    <div style="font-weight: var(--font-weight-semibold); color: var(--gray-500); font-size: var(--font-size-sm); margin-bottom: 0.25rem;">Member Since</div>
+                                    <div id="profileMemberSince" style="font-size: var(--font-size-base);">-</div>
+                                </div>
+                                <div>
+                                    <div style="font-weight: var(--font-weight-semibold); color: var(--gray-500); font-size: var(--font-size-sm); margin-bottom: 0.25rem;">Last Seen</div>
+                                    <div id="profileLastSeen" style="font-size: var(--font-size-base);">-</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 2rem;">
+                            <h3 style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">Contact Information</h3>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                                <div>
+                                    <div style="font-weight: var(--font-weight-semibold); color: var(--gray-500); font-size: var(--font-size-sm); margin-bottom: 0.25rem;">Phone Number</div>
+                                    <div id="profilePhone" style="font-size: var(--font-size-base);">-</div>
+                                </div>
+                                <div>
+                                    <div style="font-weight: var(--font-weight-semibold); color: var(--gray-500); font-size: var(--font-size-sm); margin-bottom: 0.25rem;">Location</div>
+                                    <div id="profileLocation" style="font-size: var(--font-size-base);">-</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">Bio</h3>
+                            <div id="profileBio" style="font-size: var(--font-size-base); white-space: pre-wrap;">-</div>
+                        </div>
+                    </div>
+
+                    <!-- Profile Edit Mode (Initially Hidden) -->
+                    <div id="profileEdit" style="display: none;">
+                        <form id="profileEditForm">
+                            <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 2rem;">
+                                <div id="editAvatarContainer" style="width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-100), var(--secondary-100)); display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: bold; color: var(--primary-800); margin-bottom: 1rem; box-shadow: var(--shadow-md); border: 3px solid var(--white); position: relative; cursor: pointer;">
+                                    <span id="editAvatarText">U</span>
+                                    <div style="position: absolute; bottom: 0; right: 0; background: var(--primary-500); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-camera"></i>
+                                    </div>
+                                    <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+                                </div>
+                                <p style="font-size: var(--font-size-sm); color: var(--gray-500);">Click avatar to change</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="editFullName" class="form-label">Full Name</label>
+                                <input type="text" id="editFullName" name="fullName" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="editUsername" class="form-label">Username</label>
+                                <input type="text" id="editUsername" name="username" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="editEmail" class="form-label">Email Address</label>
+                                <input type="email" id="editEmail" name="email" class="form-control" readonly>
+                                <div class="form-text">Email cannot be changed.</div>
+                            </div>
+
+                            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                                <div class="form-group">
+                                    <label for="editPhone" class="form-label">Phone Number</label>
+                                    <input type="tel" id="editPhone" name="phone" class="form-control">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="editLocation" class="form-label">Location</label>
+                                    <input type="text" id="editLocation" name="location" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="editBio" class="form-label">Bio</label>
+                                <textarea id="editBio" name="bio" rows="4" class="form-control" placeholder="Tell us a little about yourself..."></textarea>
+                            </div>
+
+                            <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;">
+                                <button type="button" id="cancelEditBtn" class="btn btn-outline">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>AtMyWorks</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="/blog.html">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Help & Support</a></li>
+                        <li><a href="#">Trust & Safety</a></li>
+                        <li><a href="#">Selling on AtMyWorks</a></li>
+                        <li><a href="#">Buying on AtMyWorks</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Copyright Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 AtMyWorks. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log("Profile page loaded");
+
+            // Check if firebaseApp is available
+            if (typeof window.firebaseApp !== 'undefined') {
+                window.auth = window.firebaseApp.auth;
+                window.db = window.firebaseApp.db;
+                window.storage = window.firebaseApp.storage;
+                console.log("Firebase services available in profile.html");
+            } else {
+                console.warn("Firebase not initialized in profile.html.");
+                alert("Unable to connect to the database. Please try refreshing the page.");
+                return;
+            }
+
+            // DOM Elements
+            const profileView = document.getElementById('profileView');
+            const profileEdit = document.getElementById('profileEdit');
+            const editProfileBtn = document.getElementById('editProfileBtn');
+            const cancelEditBtn = document.getElementById('cancelEditBtn');
+            const profileEditForm = document.getElementById('profileEditForm');
+            const avatarUpload = document.getElementById('avatarUpload');
+            const editAvatarContainer = document.getElementById('editAvatarContainer');
+
+            // Load user profile data
+            loadUserProfile();
+
+            // Event Listeners
+            if (editProfileBtn) {
+                editProfileBtn.addEventListener('click', function() {
+                    profileView.style.display = 'none';
+                    profileEdit.style.display = 'block';
+                });
+            }
+
+            if (cancelEditBtn) {
+                cancelEditBtn.addEventListener('click', function() {
+                    // Reload profile data to revert changes
+                    loadUserProfile();
+                    profileEdit.style.display = 'none';
+                    profileView.style.display = 'block';
+                });
+            }
+
+            if (profileEditForm) {
+                profileEditForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    saveProfileChanges();
+                });
+            }
+
+            if (editAvatarContainer) {
+                editAvatarContainer.addEventListener('click', function() {
+                    if (avatarUpload) avatarUpload.click();
+                });
+            }
+
+            if (avatarUpload) {
+                avatarUpload.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            const avatarTextElement = document.getElementById('editAvatarText');
+                            if (avatarTextElement) {
+                                // Hide the text and show the image preview
+                                avatarTextElement.style.display = 'none';
+                                // In a full implementation, you would upload the image to Firebase Storage
+                                // and update the user's profile with the image URL.
+                                // For now, we'll just show a preview.
+                                editAvatarContainer.style.backgroundImage = `url(${event.target.result})`;
+                                editAvatarContainer.style.backgroundSize = 'cover';
+                                editAvatarContainer.style.backgroundPosition = 'center';
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            // --- PROFILE LOGIC ---
+            async function loadUserProfile() {
+                const user = window.auth.currentUser;
+                if (!user) {
+                    console.warn("No user logged in.");
+                    window.location.href = '/signup-employer.html';
+                    return;
+                }
+
+                try {
+                    // Show loading state in view mode
+                    document.getElementById('profileName').textContent = 'Loading...';
+                    document.getElementById('profileEmail').textContent = user.email || '';
+                    document.getElementById('profileFullName').textContent = '...';
+                    document.getElementById('profileUsername').textContent = '...';
+                    document.getElementById('profileMemberSince').textContent = '...';
+                    document.getElementById('profileLastSeen').textContent = '...';
+                    document.getElementById('profilePhone').textContent = '...';
+                    document.getElementById('profileLocation').textContent = '...';
+                    document.getElementById('profileBio').textContent = 'Loading profile information...';
+
+                    // Get user document from Firestore
+                    const userDoc = await window.db.collection('users').doc(user.uid).get();
+
+                    if (userDoc.exists) {
+                        const userData = userDoc.data();
+                        console.log("User data loaded:", userData);
+
+                        // Update view mode
+                        updateProfileView(userData, user);
+                        // Populate edit form
+                        populateEditForm(userData);
+                    } else {
+                        console.log("No user data found in Firestore, using default.");
+                        // Handle case where user doc doesn't exist yet
+                        const defaultData = {
+                            uid: user.uid,
+                            email: user.email || '',
+                            fullName: 'New User',
+                            username: user.email ? user.email.split('@')[0] : 'user',
+                            role: 'client', // Default role
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            lastSeen: firebase.firestore.FieldValue.serverTimestamp()
+                        };
+                        updateProfileView(defaultData, user);
+                        populateEditForm(defaultData);
+                        
+                        // Optionally, create the user document
+                        // await window.db.collection('users').doc(user.uid).set(defaultData);
+                    }
+
+                } catch (error) {
+                    console.error("Error loading user profile:", error);
+                    alert('Failed to load profile. Please try again.');
+                }
+            }
+
+            function updateProfileView(userData, user) {
+                const initials = (userData.fullName || userData.username || 'U').charAt(0).toUpperCase();
+                document.getElementById('profileAvatarText').textContent = initials;
+                document.getElementById('profileName').textContent = userData.fullName || userData.username || 'User';
+                document.getElementById('profileEmail').textContent = userData.email || user.email || '';
+                
+                const roleText = document.getElementById('roleText');
+                if (roleText) {
+                    const role = userData.role || 'client';
+                    roleText.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+                }
+
+                document.getElementById('profileFullName').textContent = userData.fullName || '-';
+                document.getElementById('profileUsername').textContent = userData.username || '-';
+                
+                const createdAt = userData.createdAt ? userData.createdAt.toDate().toLocaleDateString() : 'N/A';
+                document.getElementById('profileMemberSince').textContent = createdAt;
+                
+                // Last seen is usually updated on login/activity
+                const lastSeen = userData.lastSeen ? userData.lastSeen.toDate().toLocaleString() : 'Recently';
+                document.getElementById('profileLastSeen').textContent = lastSeen;
+
+                document.getElementById('profilePhone').textContent = userData.phone || '-';
+                document.getElementById('profileLocation').textContent = userData.location || '-';
+                document.getElementById('profileBio').textContent = userData.bio || 'No bio available.';
+            }
+
+            function populateEditForm(userData) {
+                document.getElementById('editFullName').value = userData.fullName || '';
+                document.getElementById('editUsername').value = userData.username || '';
+                document.getElementById('editEmail').value = userData.email || '';
+                document.getElementById('editPhone').value = userData.phone || '';
+                document.getElementById('editLocation').value = userData.location || '';
+                document.getElementById('editBio').value = userData.bio || '';
+                
+                const initials = (userData.fullName || userData.username || 'U').charAt(0).toUpperCase();
+                document.getElementById('editAvatarText').textContent = initials;
+            }
+
+            async function saveProfileChanges() {
+                const user = window.auth.currentUser;
+                if (!user) {
+                    alert('You must be logged in to save changes.');
+                    return;
+                }
+
+                const formData = new FormData(profileEditForm);
+                const updatedData = {
+                    fullName: formData.get('fullName').trim(),
+                    username: formData.get('username').trim(),
+                    phone: formData.get('phone').trim(),
+                    location: formData.get('location').trim(),
+                    bio: formData.get('bio').trim(),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+
+                // Simple validation
+                if (!updatedData.fullName) {
+                    alert('Full Name is required.');
+                    return;
+                }
+
+                if (!updatedData.username) {
+                    alert('Username is required.');
+                    return;
+                }
+
+                try {
+                    // Update user document in Firestore
+                    await window.db.collection('users').doc(user.uid).update(updatedData);
+                    console.log("Profile updated successfully");
+
+                    // Update view mode with new data
+                    // Reload the profile view to show updated data
+                    loadUserProfile();
+
+                    // Switch back to view mode
+                    profileEdit.style.display = 'none';
+                    profileView.style.display = 'block';
+
+                    alert('Profile updated successfully!');
+
+                } catch (error) {
+                    console.error("Error updating profile:", error);
+                    alert('Failed to update profile. Please try again.');
+                }
+            }
+            // --- END PROFILE LOGIC ---
+        });
+    </script>
+</body>
+</html>
