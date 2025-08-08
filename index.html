@@ -1,24 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AtMyWorks - Hire Top Freelancers & Find Jobs</title>
+    <meta name="description" content="Find the perfect freelance services for your business or get hired for your skills on AtMyWorks, the world's largest freelance marketplace.">
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- ========== FIREBASE SDK ========== -->
+    <!-- Load Firebase SDK scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+    <script>
+      // Your web app's Firebase configuration (from Firebase Console)
+      const firebaseConfig = {
+        apiKey: "AIzaSyCNRX6gKVVp9UbqSFHrNC4TvPUflBvEAl8",
+        authDomain: "atmyworks-cd97c.firebaseapp.com",
+        projectId: "atmyworks-cd97c",
+        storageBucket: "atmyworks-cd97c.firebasestorage.app",
+        messagingSenderId: "477860893271",
+        appId: "1:477860893271:web:c19737c9343c11538b8912"
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+
+      // Make auth and firestore references easily accessible in your JS files
+      const auth = firebase.auth();
+      const db = firebase.firestore();
+
+      // Optional: Log to console to confirm initialization
+      console.log("Firebase initialized for index.html");
+    </script>
+    <!-- ========== END FIREBASE SDK ========== -->
+</head>
+<body>
+
+    <!-- Header - Updated from components/header.html -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="/index.html" class="logo">
+                    <!-- <i class="fas fa-briefcase logo-icon"></i> --> <!-- Optional icon -->
+                    AtMyWorks
+                </a>
+                <ul class="nav-links">
+                    <li><a href="/browse.html">Find Talent</a></li>
+                    <li><a href="/browse.html">Find Work</a></li>
+                    <li><a href="/blog.html">Resources</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline" id="loginBtn">Log In</button>
+                    <button class="btn btn-primary" id="signupBtn">Sign Up</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
     <!-- Hero Section (Enhanced with better search and feature highlights) -->
     <section class="hero">
         <div class="container">
             <div class="hero-content">
-                <h1>Find the perfect freelance services for your business</h1>
-                <p>Millions of people use Atmyworks to turn their ideas into reality</p>
-                
+                <h1>Find the perfect <span class="text-primary">freelance services</span> for your business</h1>
+                <p>Millions of people use AtMyWorks to turn their ideas into reality. Connect with skilled freelancers for any job, any time.</p>
+
                 <!-- Enhanced Search Form -->
                 <div class="search-form">
-                    <input type="text" id="heroSearchInput" placeholder="E.g. logo design, web development, social media marketing">
-                    <button id="heroSearchButton"><i class="fas fa-search"></i> Search</button>
+                    <input type="text" id="heroSearchInput" placeholder="Try 'logo design', 'web developer', 'content writer'">
+                    <button id="heroSearchButton"><i class="fas fa-search"></i> Find Services</button>
                 </div>
 
                 <!-- Popular Categories Quick Links (Subtle Tabs) -->
                 <div class="hero-tabs">
                     <h3 class="hero-tabs-title">Popular:</h3>
                     <div class="hero-tab-list">
-                        <a href="/browse.html?category=graphics-design" class="hero-tab-link">Graphics & Design</a>
-                        <a href="/browse.html?category=digital-marketing" class="hero-tab-link">Digital Marketing</a>
-                        <a href="/browse.html?category=writing-translation" class="hero-tab-link">Writing & Translation</a>
-                        <a href="/browse.html?category=video-animation" class="hero-tab-link">Video & Animation</a>
+                        <a href="/browse.html?category=graphics-design" class="hero-tab-link">Logo Design</a>
+                        <a href="/browse.html?category=programming-tech" class="hero-tab-link">Web Development</a>
+                        <a href="/browse.html?category=digital-marketing" class="hero-tab-link">Social Media</a>
+                        <a href="/browse.html?category=video-animation" class="hero-tab-link">Video Editing</a>
                         <a href="/browse.html" class="hero-tab-link hero-tab-link-more">Explore More <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
@@ -26,71 +89,119 @@
         </div>
     </section>
 
-    <!-- Trust Indicators / Stats Bar (Optional but effective) -->
-    <section class="section section-gray py-4">
+    <!-- Trust Indicators / Stats Bar -->
+    <section class="section section-gray py-5">
         <div class="container">
             <div class="trust-stats">
                 <div class="trust-stat">
-                    <span class="trust-stat-number">500K+</span>
-                    <span class="trust-stat-label">Services</span>
+                    <span class="trust-stat-number">1M+</span>
+                    <span class="trust-stat-label">Projects Completed</span>
                 </div>
                 <div class="trust-stat">
-                    <span class="trust-stat-number">100K+</span>
-                    <span class="trust-stat-label">Happy Clients</span>
+                    <span class="trust-stat-number">500K+</span>
+                    <span class="trust-stat-label">Expert Freelancers</span>
+                </div>
+                <div class="trust-stat">
+                    <span class="trust-stat-number">$250M+</span>
+                    <span class="trust-stat-label">Paid to Freelancers</span>
                 </div>
                 <div class="trust-stat">
                     <span class="trust-stat-number">24/7</span>
-                    <span class="trust-stat-label">Support</span>
+                    <span class="trust-stat-label">Customer Support</span>
                 </div>
             </div>
         </div>
     </section>
-    <!-- (Don't forget to add corresponding styles for .trust-stats, .trust-stat, .trust-stat-number, .trust-stat-label to your css/styles.css) -->
+
+    <!-- How It Works Section -->
+    <section class="section section-light">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2>Get Work Done in 3 Easy Steps</h2>
+                <p class="text-muted">Simple process to connect with talent or find work.</p>
+            </div>
+            <div class="how-it-works-steps">
+                <div class="hiw-step">
+                    <div class="hiw-step-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3 class="hiw-step-title">1. Find Talent or Work</h3>
+                    <p class="hiw-step-desc">Browse our vast marketplace of skilled freelancers or explore job opportunities that match your skills.</p>
+                </div>
+                <div class="hiw-step">
+                    <div class="hiw-step-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3 class="hiw-step-title">2. Collaborate & Pay</h3>
+                    <p class="hiw-step-desc">Use our platform to communicate, share files, and securely pay for work through our protection program.</p>
+                </div>
+                <div class="hiw-step">
+                    <div class="hiw-step-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3 class="hiw-step-title">3. Approve & Review</h3>
+                    <p class="hiw-step-desc">Get your work delivered, approve the results, and leave a review to help build the freelancer's reputation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Categories Section -->
-    <section class="categories section-light">
+    <section class="categories section-gray">
         <div class="container">
             <div class="section-header text-center">
                 <h2>Browse Top Categories</h2>
                 <p class="text-muted">Find the right talent for your next project</p>
             </div>
             <div class="categories-grid">
-                <div class="category-card">
-                    <div class="category-icon">
-                        <i class="fas fa-paint-brush"></i>
+                <a href="/browse.html?category=graphics-design" class="category-card-link">
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-paint-brush"></i>
+                        </div>
+                        <h3 class="category-name">Graphics & Design</h3>
                     </div>
-                    <h3 class="category-name">Graphics & Design</h3>
-                </div>
-                <div class="category-card">
-                    <div class="category-icon">
-                        <i class="fas fa-bullhorn"></i>
+                </a>
+                <a href="/browse.html?category=digital-marketing" class="category-card-link">
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                        <h3 class="category-name">Digital Marketing</h3>
                     </div>
-                    <h3 class="category-name">Digital Marketing</h3>
-                </div>
-                <div class="category-card">
-                    <div class="category-icon">
-                        <i class="fas fa-laptop-code"></i>
+                </a>
+                <a href="/browse.html?category=programming-tech" class="category-card-link">
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <h3 class="category-name">Programming & Tech</h3>
                     </div>
-                    <h3 class="category-name">Programming & Tech</h3>
-                </div>
-                <div class="category-card">
-                    <div class="category-icon">
-                        <i class="fas fa-video"></i>
+                </a>
+                <a href="/browse.html?category=video-animation" class="category-card-link">
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h3 class="category-name">Video & Animation</h3>
                     </div>
-                    <h3 class="category-name">Video & Animation</h3>
-                </div>
-                <div class="category-card">
-                    <div class="category-icon">
-                        <i class="fas fa-edit"></i>
+                </a>
+                <a href="/browse.html?category=writing-translation" class="category-card-link">
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <h3 class="category-name">Writing & Translation</h3>
                     </div>
-                    <h3 class="category-name">Writing & Translation</h3>
-                </div>
-                <div class="category-card">
-                    <div class="category-icon">
-                        <i class="fas fa-music"></i>
+                </a>
+                <a href="/browse.html?category=music-audio" class="category-card-link">
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <h3 class="category-name">Music & Audio</h3>
                     </div>
-                    <h3 class="category-name">Music & Audio</h3>
-                </div>
+                </a>
             </div>
             <div class="text-center mt-8">
                 <a href="/browse.html" class="btn btn-outline">View All Categories</a>
@@ -112,65 +223,139 @@
                 <!-- Gig Card 1 -->
                 <div class="gig-card">
                     <div class="gig-image">
-                        <img src="https://placehold.co/300x200/3b82f6/white?text=Logo+Design" alt="Professional Logo Design">
+                        <img src="https://placehold.co/600x400/3b82f6/white?text=Brand+Logo+Design" alt="Professional Brand Logo Design">
                     </div>
                     <div class="gig-content">
                         <div class="gig-seller">
                             <div class="gig-seller-avatar">AJ</div>
                             <span class="gig-seller-name">Alex Johnson</span>
                         </div>
-                        <h3 class="gig-title card-title">I will design a professional logo for your business</h3>
+                        <h3 class="gig-title card-title">I will design a professional brand logo for your business</h3>
                         <div class="gig-rating">
                             <i class="fas fa-star gig-rating-icon"></i>
                             <span class="gig-rating-value">4.9</span>
                             <span>(128)</span>
                         </div>
                         <div class="gig-price">From $50</div>
-                        <a href="#" class="btn btn-primary mt-3">View Details</a>
+                        <a href="/gig-detail.html" class="btn btn-primary mt-3">View Details</a>
                     </div>
                 </div>
 
                 <!-- Gig Card 2 -->
                 <div class="gig-card">
                     <div class="gig-image">
-                        <img src="https://placehold.co/300x200/ef4444/white?text=Website+Dev" alt="Website Development">
+                        <img src="https://placehold.co/600x400/ef4444/white?text=Responsive+Website" alt="Build a Responsive Website">
                     </div>
                     <div class="gig-content">
                         <div class="gig-seller">
                             <div class="gig-seller-avatar">TS</div>
                             <span class="gig-seller-name">Tech Solutions</span>
                         </div>
-                        <h3 class="gig-title card-title">I will build a responsive website for your business</h3>
+                        <h3 class="gig-title card-title">I will build a fully responsive website for your business</h3>
                         <div class="gig-rating">
                             <i class="fas fa-star gig-rating-icon"></i>
                             <span class="gig-rating-value">4.8</span>
                             <span>(86)</span>
                         </div>
-                        <div class="gig-price">From $200</div>
-                        <a href="#" class="btn btn-primary mt-3">View Details</a>
+                        <div class="gig-price">From $250</div>
+                        <a href="/gig-detail.html" class="btn btn-primary mt-3">View Details</a>
                     </div>
                 </div>
 
                 <!-- Gig Card 3 -->
                 <div class="gig-card">
                     <div class="gig-image">
-                        <img src="https://placehold.co/300x200/10b981/white?text=Social+Media" alt="Social Media Marketing">
+                        <img src="https://placehold.co/600x400/10b981/white?text=Social+Media+Strategy" alt="Social Media Marketing Strategy">
                     </div>
                     <div class="gig-content">
                         <div class="gig-seller">
                             <div class="gig-seller-avatar">MP</div>
                             <span class="gig-seller-name">Marketing Pro</span>
                         </div>
-                        <h3 class="gig-title card-title">I will create a social media marketing strategy</h3>
+                        <h3 class="gig-title card-title">I will create a 30-day social media marketing strategy</h3>
                         <div class="gig-rating">
                             <i class="fas fa-star gig-rating-icon"></i>
                             <span class="gig-rating-value">4.7</span>
                             <span>(42)</span>
                         </div>
-                        <div class="gig-price">From $100</div>
-                        <a href="#" class="btn btn-primary mt-3">View Details</a>
+                        <div class="gig-price">From $150</div>
+                        <a href="/gig-detail.html" class="btn btn-primary mt-3">View Details</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- CTA Section -->
+    <section class="section section-primary text-center">
+        <div class="container">
+            <h2>Get Started Today!</h2>
+            <p class="mb-6">Join millions of businesses and freelancers already on AtMyWorks.</p>
+            <div class="cta-buttons">
+                <a href="/signup-employer.html" class="btn btn-secondary btn-lg me-3 mb-3">Hire Talent</a>
+                <a href="/signup-jobseeker.html" class="btn btn-outline btn-lg mb-3">Find Work</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer - Updated -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>AtMyWorks</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="/blog.html">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Help & Support</a></li>
+                        <li><a href="#">Trust & Safety</a></li>
+                        <li><a href="#">Selling on AtMyWorks</a></li>
+                        <li><a href="#">Buying on AtMyWorks</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Copyright Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Stay Connected</h3>
+                    <p class="mb-3">Subscribe to our newsletter for the latest updates and offers.</p>
+                    <form class="newsletter-form mb-4">
+                        <div class="form-group">
+                            <label for="footerNewsletterEmail" class="sr-only">Email Address</label>
+                            <input type="email" id="footerNewsletterEmail" class="form-control" placeholder="Your email address" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Subscribe</button>
+                    </form>
+                    <div class="social-links">
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 AtMyWorks. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Link to JavaScript files -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/blog.js"></script> <!-- For newsletter form if used here -->
+</body>
+</html>
