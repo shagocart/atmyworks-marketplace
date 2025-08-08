@@ -1,89 +1,176 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atmyworks - Find Freelancers & Get Work Done</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <nav class="navbar">
-                <a href="index.html" class="logo">Atmyworks</a>
-                <ul class="nav-links">
-                    <li><a href="browse.html">Find Work</a></li>
-                    <li><a href="#">How It Works</a></li>
-                    <li><a href="#">Success Stories</a></li>
-                </ul>
-                <div class="auth-buttons">
-                    <button class="btn btn-outline">Login</button>
-                    <button class="btn btn-primary">Sign Up</button>
-                </div>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
+    <!-- Hero Section (Enhanced with better search and feature highlights) -->
     <section class="hero">
         <div class="container">
-            <h1>Find the perfect freelance services for your business</h1>
-            <p>Millions of people use Atmyworks to turn their ideas into reality</p>
-            <div class="search-bar">
-                <input type="text" placeholder="What service are you looking for?">
-                <button><i class="fas fa-search"></i></button>
+            <div class="hero-content">
+                <h1>Find the perfect freelance services for your business</h1>
+                <p>Millions of people use Atmyworks to turn their ideas into reality</p>
+                
+                <!-- Enhanced Search Form -->
+                <div class="search-form">
+                    <input type="text" id="heroSearchInput" placeholder="E.g. logo design, web development, social media marketing">
+                    <button id="heroSearchButton"><i class="fas fa-search"></i> Search</button>
+                </div>
+
+                <!-- Popular Categories Quick Links (Subtle Tabs) -->
+                <div class="hero-tabs">
+                    <h3 class="hero-tabs-title">Popular:</h3>
+                    <div class="hero-tab-list">
+                        <a href="/browse.html?category=graphics-design" class="hero-tab-link">Graphics & Design</a>
+                        <a href="/browse.html?category=digital-marketing" class="hero-tab-link">Digital Marketing</a>
+                        <a href="/browse.html?category=writing-translation" class="hero-tab-link">Writing & Translation</a>
+                        <a href="/browse.html?category=video-animation" class="hero-tab-link">Video & Animation</a>
+                        <a href="/browse.html" class="hero-tab-link hero-tab-link-more">Explore More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
+    <!-- Trust Indicators / Stats Bar (Optional but effective) -->
+    <section class="section section-gray py-4">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>Atmyworks</h3>
-                    <ul>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Careers</a></li>
-                        <li><a href="#">Press</a></li>
-                        <li><a href="#">Blog</a></li>
-                    </ul>
+            <div class="trust-stats">
+                <div class="trust-stat">
+                    <span class="trust-stat-number">500K+</span>
+                    <span class="trust-stat-label">Services</span>
                 </div>
-                <div class="footer-column">
-                    <h3>Resources</h3>
-                    <ul>
-                        <li><a href="#">Help & Support</a></li>
-                        <li><a href="#">Trust & Safety</a></li>
-                        <li><a href="#">Selling on Atmyworks</a></li>
-                        <li><a href="#">Buying on Atmyworks</a></li>
-                    </ul>
+                <div class="trust-stat">
+                    <span class="trust-stat-number">100K+</span>
+                    <span class="trust-stat-label">Happy Clients</span>
                 </div>
-                <div class="footer-column">
-                    <h3>Community</h3>
-                    <ul>
-                        <li><a href="#">Events</a></li>
-                        <li><a href="#">Forum</a></li>
-                        <li><a href="#">Community Standards</a></li>
-                        <li><a href="#">Podcast</a></li>
-                    </ul>
+                <div class="trust-stat">
+                    <span class="trust-stat-number">24/7</span>
+                    <span class="trust-stat-label">Support</span>
                 </div>
-                <div class="footer-column">
-                    <h3>Legal</h3>
-                    <ul>
-                        <li><a href="#">Terms of Service</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Cookie Policy</a></li>
-                        <li><a href="#">Copyright Policy</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2023 Atmyworks. All rights reserved.</p>
             </div>
         </div>
-    </footer>
-</body>
-</html>
+    </section>
+    <!-- (Don't forget to add corresponding styles for .trust-stats, .trust-stat, .trust-stat-number, .trust-stat-label to your css/styles.css) -->
+
+    <!-- Categories Section -->
+    <section class="categories section-light">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2>Browse Top Categories</h2>
+                <p class="text-muted">Find the right talent for your next project</p>
+            </div>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3 class="category-name">Graphics & Design</h3>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <h3 class="category-name">Digital Marketing</h3>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3 class="category-name">Programming & Tech</h3>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3 class="category-name">Video & Animation</h3>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                    <h3 class="category-name">Writing & Translation</h3>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <h3 class="category-name">Music & Audio</h3>
+                </div>
+            </div>
+            <div class="text-center mt-8">
+                <a href="/browse.html" class="btn btn-outline">View All Categories</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Services Section -->
+    <section class="gigs-section">
+        <div class="container">
+            <div class="section-header">
+                <div>
+                    <h2>Featured Services</h2>
+                    <p class="text-muted">Handpicked top-rated services</p>
+                </div>
+                <a href="/browse.html" class="btn btn-outline">View All Services</a>
+            </div>
+            <div class="gigs-grid">
+                <!-- Gig Card 1 -->
+                <div class="gig-card">
+                    <div class="gig-image">
+                        <img src="https://placehold.co/300x200/3b82f6/white?text=Logo+Design" alt="Professional Logo Design">
+                    </div>
+                    <div class="gig-content">
+                        <div class="gig-seller">
+                            <div class="gig-seller-avatar">AJ</div>
+                            <span class="gig-seller-name">Alex Johnson</span>
+                        </div>
+                        <h3 class="gig-title card-title">I will design a professional logo for your business</h3>
+                        <div class="gig-rating">
+                            <i class="fas fa-star gig-rating-icon"></i>
+                            <span class="gig-rating-value">4.9</span>
+                            <span>(128)</span>
+                        </div>
+                        <div class="gig-price">From $50</div>
+                        <a href="#" class="btn btn-primary mt-3">View Details</a>
+                    </div>
+                </div>
+
+                <!-- Gig Card 2 -->
+                <div class="gig-card">
+                    <div class="gig-image">
+                        <img src="https://placehold.co/300x200/ef4444/white?text=Website+Dev" alt="Website Development">
+                    </div>
+                    <div class="gig-content">
+                        <div class="gig-seller">
+                            <div class="gig-seller-avatar">TS</div>
+                            <span class="gig-seller-name">Tech Solutions</span>
+                        </div>
+                        <h3 class="gig-title card-title">I will build a responsive website for your business</h3>
+                        <div class="gig-rating">
+                            <i class="fas fa-star gig-rating-icon"></i>
+                            <span class="gig-rating-value">4.8</span>
+                            <span>(86)</span>
+                        </div>
+                        <div class="gig-price">From $200</div>
+                        <a href="#" class="btn btn-primary mt-3">View Details</a>
+                    </div>
+                </div>
+
+                <!-- Gig Card 3 -->
+                <div class="gig-card">
+                    <div class="gig-image">
+                        <img src="https://placehold.co/300x200/10b981/white?text=Social+Media" alt="Social Media Marketing">
+                    </div>
+                    <div class="gig-content">
+                        <div class="gig-seller">
+                            <div class="gig-seller-avatar">MP</div>
+                            <span class="gig-seller-name">Marketing Pro</span>
+                        </div>
+                        <h3 class="gig-title card-title">I will create a social media marketing strategy</h3>
+                        <div class="gig-rating">
+                            <i class="fas fa-star gig-rating-icon"></i>
+                            <span class="gig-rating-value">4.7</span>
+                            <span>(42)</span>
+                        </div>
+                        <div class="gig-price">From $100</div>
+                        <a href="#" class="btn btn-primary mt-3">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
