@@ -7,12 +7,6 @@
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-    <script src="js/firebase-config.js"></script>
 </head>
 <body>
     <!-- Header -->
@@ -42,7 +36,8 @@
                     <p style="color: var(--gray-600);">Find work and build your freelance career</p>
                 </div>
 
-                <form id="jobseekerSignupForm">
+                <form id="jobseekerSignupForm"> <!-- ID is important for JS -->
+                     <input type="hidden" name="role" value="jobseeker"> <!-- Explicitly set role -->
                     <div class="form-group">
                         <label for="username" class="form-label">Username (Unique) *</label>
                         <input type="text" id="username" name="username" class="form-control" placeholder="your_unique_username" required>
@@ -101,7 +96,8 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="container">
+        <!-- ... (footer content - same as before) ... -->
+         <div class="container">
             <div class="footer-content">
                 <div class="footer-column">
                     <h3>AtMyWorks</h3>
@@ -137,135 +133,30 @@
         </div>
     </footer>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <!-- Your custom Firebase configuration -->
+    <script src="js/firebase-config.js"></script>
+
     <!-- JavaScript Files -->
     <script src="js/main.js"></script>
-    <script src="js/auth.js"></script>
+    <script src="js/auth.js"></script> <!-- This will now use window.firebaseApp -->
+
     <script>
          document.addEventListener('DOMContentLoaded', function () {
-             // Check if firebaseApp is available (from firebase-config.js)
-            if (typeof window.firebaseApp !== 'undefined') {
-                window.auth = window.firebaseApp.auth;
-                window.db = window.firebaseApp.db;
-                console.log("Firebase services available in signup-jobseeker.html");
-            } else {
-                console.warn("Firebase not initialized in signup-jobseeker.html.");
-                 // Optionally disable form or show error message
-                 const form = document.getElementById('jobseekerSignupForm');
-                 if (form) {
-                     form.innerHTML = '<p style="text-align: center; color: red;">Unable to connect to authentication service. Please try again later.</p>';
-                 }
-                 return;
-            }
+             console.log("Jobseeker Signup Page DOM loaded");
 
-            // Handle navigation buttons
-            const loginBtnNav = document.getElementById('loginBtnNav');
-            const signupBtnNav = document.getElementById('signupBtnNav');
-            const loginLink = document.getElementById('loginLink');
+             // Handle navigation buttons
+             document.getElementById('loginBtnNav')?.addEventListener('click', () => window.location.href = '/login.html');
+             document.getElementById('signupBtnNav')?.addEventListener('click', () => window.location.href = '/signup-employer.html'); // Or stay
+             document.getElementById('loginLink')?.addEventListener('click', (e) => { e.preventDefault(); window.location.href = '/login.html'; });
 
-            if (loginBtnNav) {
-                loginBtnNav.addEventListener('click', function() {
-                    window.location.href = '/login.html';
-                });
-            }
-
-            if (signupBtnNav) {
-                signupBtnNav.addEventListener('click', function() {
-                    // Already on signup page, could show a dropdown or do nothing
-                    // For now, let's redirect to employer signup as an example
-                    window.location.href = '/signup-employer.html';
-                });
-            }
-
-            if (loginLink) {
-                loginLink.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    window.location.href = '/login.html';
-                });
-            }
-
-            // Handle form submission
-            const jobseekerSignupForm = document.getElementById('jobseekerSignupForm');
-            if (jobseekerSignupForm) {
-                jobseekerSignupForm.addEventListener('submit', async function(e) {
-                    e.preventDefault();
-                    console.log("Jobseeker signup form submitted");
-
-                    const formData = new FormData(this);
-                    const username = formData.get('username').trim();
-                    const fullName = formData.get('fullName').trim();
-                    const email = formData.get('email').trim();
-                    const password = formData.get('password');
-                    const confirmPassword = formData.get('confirmPassword');
-                    const phoneNumber = formData.get('phoneNumber').trim();
-                    const portfolioLink = formData.get('portfolioLink').trim();
-
-                    // Basic Validation
-                    if (!username || !fullName || !email || !password) {
-                        alert("Please fill in all required fields.");
-                        return;
-                    }
-
-                    if (password !== confirmPassword) {
-                        alert("Passwords do not match.");
-                        return;
-                    }
-
-                    if (password.length < 6) {
-                        alert("Password must be at least 6 characters long.");
-                        return;
-                    }
-
-                     // Email validation regex (basic)
-                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!emailRegex.test(email)) {
-                        alert("Please enter a valid email address.");
-                        return;
-                    }
-
-                    const userData = {
-                        email: email,
-                        password: password,
-                        username: username,
-                        fullName: fullName,
-                        phoneNumber: phoneNumber || '',
-                        portfolioLink: portfolioLink || '',
-                        role: 'jobseeker' // Assign role
-                    };
-
-                    console.log("Jobseeker signup attempt with:", userData);
-
-                    // Call the signup function from auth.js
-                    // Make sure auth.js is loaded and the function is globally available
-                    if (typeof window.handleFirebaseSignup === 'function') {
-                         // Disable submit button to prevent double submission
-                        const submitButton = this.querySelector('button[type="submit"]');
-                        const originalButtonText = submitButton.innerHTML;
-                        submitButton.disabled = true;
-                        submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating Account...';
-
-                        try {
-                            await window.handleFirebaseSignup(userData);
-                             // If successful, handleFirebaseSignup might redirect or show a success message
-                            // If it doesn't redirect, you might want to do something here
-                            console.log("Jobseeker signup process completed (or redirected)");
-                        } catch (error) {
-                            // Re-enable button on error
-                            submitButton.disabled = false;
-                            submitButton.innerHTML = originalButtonText;
-                            // Error should be handled inside handleFirebaseSignup, but log it anyway
-                            console.error("Jobseeker signup error caught in form handler:", error);
-                        }
-                    } else {
-                        console.error("handleFirebaseSignup function not found. Is auth.js loaded correctly?");
-                        alert("Signup functionality is not available. Please try refreshing the page.");
-                         // Re-enable button
-                        const submitButton = this.querySelector('button[type="submit"]');
-                        submitButton.disabled = false;
-                        submitButton.innerHTML = 'Create Jobseeker Account';
-                    }
-                });
-            }
-        });
+             // The form submission is now handled by the global listener in auth.js
+             // because #jobseekerSignupForm exists, the listener will be attached.
+             // We can add specific logic here if needed, but the global handler should suffice.
+         });
     </script>
 </body>
 </html>

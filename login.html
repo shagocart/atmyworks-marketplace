@@ -7,16 +7,12 @@
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-    <script src="js/firebase-config.js"></script>
 </head>
 <body>
     <!-- Header -->
     <header class="header">
-        <div class="container">
+        <!-- ... (header content - same as before) ... -->
+         <div class="container">
             <nav class="navbar">
                 <a href="/index.html" class="logo">AtMyWorks</a>
                 <ul class="nav-links">
@@ -41,7 +37,7 @@
                     <p style="color: var(--gray-600);">Log in to your AtMyWorks account</p>
                 </div>
 
-                <form id="loginForm">
+                <form id="loginForm"> <!-- ID is important for JS -->
                     <div class="form-group">
                         <label for="email" class="form-label">Email Address *</label>
                         <input type="email" id="email" name="email" class="form-control" placeholder="your.email@example.com" required>
@@ -89,7 +85,8 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="container">
+        <!-- ... (footer content - same as before) ... -->
+         <div class="container">
             <div class="footer-content">
                 <div class="footer-column">
                     <h3>AtMyWorks</h3>
@@ -125,127 +122,47 @@
         </div>
     </footer>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <!-- Your custom Firebase configuration -->
+    <script src="js/firebase-config.js"></script>
+
     <!-- JavaScript Files -->
     <script src="js/main.js"></script>
-    <script src="js/auth.js"></script>
+    <script src="js/auth.js"></script> <!-- This will now use window.firebaseApp -->
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-             // Check if firebaseApp is available (from firebase-config.js)
-            if (typeof window.firebaseApp !== 'undefined') {
-                window.auth = window.firebaseApp.auth;
-                console.log("Firebase services available in login.html");
-            } else {
-                console.warn("Firebase not initialized in login.html.");
-                 // Optionally disable form or show error message
-                 const form = document.getElementById('loginForm');
-                 if (form) {
-                     form.innerHTML = '<p style="text-align: center; color: red;">Unable to connect to authentication service. Please try again later.</p>';
-                 }
-                 return;
-            }
+            console.log("Login Page DOM loaded");
 
             // Handle navigation buttons
-            const loginBtnNav = document.getElementById('loginBtnNav');
-            const signupBtnNav = document.getElementById('signupBtnNav');
-            const signupRedirectLink = document.getElementById('signupRedirectLink');
-            const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+            document.getElementById('loginBtnNav')?.addEventListener('click', () => console.log("Already on login page"));
+            document.getElementById('signupBtnNav')?.addEventListener('click', () => window.location.href = '/signup-jobseeker.html'); // Default or show options
 
-            if (loginBtnNav) {
-                loginBtnNav.addEventListener('click', function() {
-                    // Already on login page
-                    console.log("Already on login page");
-                });
-            }
+            // Handle links
+            document.getElementById('signupRedirectLink')?.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = '/signup-jobseeker.html'; // Default or show options
+            });
 
-            if (signupBtnNav) {
-                signupBtnNav.addEventListener('click', function() {
-                    // Show options or redirect to a default signup page
-                    // For now, redirect to jobseeker signup
-                    window.location.href = '/signup-jobseeker.html';
-                });
-            }
+            document.getElementById('forgotPasswordLink')?.addEventListener('click', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('email')?.value?.trim();
+                if (!email) {
+                    alert("Please enter your email address first.");
+                    return;
+                }
+                // In a real app, you would call Firebase's sendPasswordResetEmail
+                // For now, simulate
+                alert(`Password reset link would be sent to ${email}. (Simulation)`);
+                console.log("Password reset requested for:", email);
+            });
 
-            if (signupRedirectLink) {
-                signupRedirectLink.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    // Show options or redirect to a default signup page
-                    // For now, redirect to jobseeker signup
-                    window.location.href = '/signup-jobseeker.html';
-                });
-            }
-
-            if (forgotPasswordLink) {
-                forgotPasswordLink.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const email = document.getElementById('email').value.trim();
-                    if (!email) {
-                        alert("Please enter your email address first.");
-                        return;
-                    }
-                    // In a real app, you would call Firebase's sendPasswordResetEmail
-                    // For now, simulate
-                    alert(`Password reset link would be sent to ${email}. (Simulation)`);
-                    console.log("Password reset requested for:", email);
-                });
-            }
-
-            // Handle form submission
-            const loginForm = document.getElementById('loginForm');
-            if (loginForm) {
-                loginForm.addEventListener('submit', async function(e) {
-                    e.preventDefault();
-                    console.log("Login form submitted");
-
-                    const formData = new FormData(this);
-                    const email = formData.get('email').trim();
-                    const password = formData.get('password');
-                    const rememberMe = document.getElementById('rememberMeCheckbox').checked;
-
-                    // Basic Validation
-                    if (!email || !password) {
-                        alert("Please fill in all fields.");
-                        return;
-                    }
-
-                     // Email validation regex (basic)
-                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!emailRegex.test(email)) {
-                        alert("Please enter a valid email address.");
-                        return;
-                    }
-
-                    console.log("Login attempt with:", { email, password, rememberMe });
-
-                    // Call the login function from auth.js
-                    // Make sure auth.js is loaded and the function is globally available
-                    if (typeof window.handleFirebaseLogin === 'function') {
-                         // Disable submit button to prevent double submission
-                        const submitButton = this.querySelector('button[type="submit"]');
-                        const originalButtonText = submitButton.innerHTML;
-                        submitButton.disabled = true;
-                        submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Logging In...';
-
-                        try {
-                            await window.handleFirebaseLogin(email, password);
-                             // If successful, handleFirebaseLogin might redirect
-                            console.log("Login process completed (or redirected)");
-                        } catch (error) {
-                            // Re-enable button on error
-                            submitButton.disabled = false;
-                            submitButton.innerHTML = originalButtonText;
-                            // Error should be handled inside handleFirebaseLogin, but log it anyway
-                            console.error("Login error caught in form handler:", error);
-                        }
-                    } else {
-                        console.error("handleFirebaseLogin function not found. Is auth.js loaded correctly?");
-                        alert("Login functionality is not available. Please try refreshing the page.");
-                         // Re-enable button
-                        const submitButton = this.querySelector('button[type="submit"]');
-                        submitButton.disabled = false;
-                        submitButton.innerHTML = 'Log In';
-                    }
-                });
-            }
+            // The form submission is now handled by the global listener in auth.js
+            // because #loginForm exists, the listener will be attached.
+            // We can add specific logic here if needed, but the global handler should suffice.
         });
     </script>
 </body>
