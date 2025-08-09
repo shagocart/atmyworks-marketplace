@@ -470,6 +470,54 @@
         </div>
     </main>
 
+<!-- Inside the Platform Settings section in dashboard-admin.html -->
+<div style="background: white; border-radius: var(--border-radius-lg); padding: 1.5rem; box-shadow: var(--shadow-md); margin-bottom: 2rem;">
+    <h3 style="margin-bottom: 1rem;">Currency Settings</h3>
+    
+    <!-- Primary Currency Selector -->
+    <div class="form-group" style="margin-bottom: 1.5rem;">
+        <label for="primaryCurrencySelect" class="form-label">Primary Currency *</label>
+        <select id="primaryCurrencySelect" class="form-control" required>
+            <option value="">Select Primary Currency</option>
+            <option value="USD">USD - US Dollar</option>
+            <option value="EUR">EUR - Euro</option>
+            <option value="PHP">PHP - Philippine Peso</option>
+            <option value="NGN">NGN - Nigerian Naira</option>
+            <option value="SGD">SGD - Singapore Dollar</option>
+            <option value="AUD">AUD - Australian Dollar</option>
+            <option value="INR">INR - Indian Rupee</option>
+        </select>
+        <div class="form-text">This is the default currency displayed throughout the platform.</div>
+    </div>
+
+    <!-- Supported Currencies Multi-Select -->
+    <div class="form-group" style="margin-bottom: 1.5rem;">
+        <label for="supportedCurrenciesSelect" class="form-label">Supported Currencies</label>
+        <select id="supportedCurrenciesSelect" class="form-control" multiple size="7">
+            <option value="USD">USD - US Dollar</option>
+            <option value="EUR">EUR - Euro</option>
+            <option value="PHP">PHP - Philippine Peso</option>
+            <option value="NGN">NGN - Nigerian Naira</option>
+            <option value="SGD">SGD - Singapore Dollar</option>
+            <option value="AUD">AUD - Australian Dollar</option>
+            <option value="INR">INR - Indian Rupee</option>
+        </select>
+        <div class="form-text">Hold Ctrl (Cmd on Mac) to select multiple currencies. These will be available for users to choose from.</div>
+    </div>
+
+    <!-- Exchange Rates (Placeholder for now) -->
+    <div class="form-group" style="margin-bottom: 1.5rem;">
+        <label class="form-label">Exchange Rates</label>
+        <p class="form-text">Exchange rates are currently managed manually in Firestore. For dynamic updates, integrate with a currency API service.</p>
+        <div id="exchangeRatesDisplay" style="background: var(--gray-50); padding: 1rem; border-radius: var(--border-radius-md); font-family: monospace; font-size: var(--font-size-sm);">
+            Loading exchange rates...
+        </div>
+    </div>
+
+    <button type="button" id="saveCurrencySettingsBtn" class="btn btn-primary">Save Currency Settings</button>
+    <button type="button" id="resetCurrencySettingsBtn" class="btn btn-outline" style="margin-left: 0.5rem;">Reset</button>
+</div>
+
     <!-- Modals -->
     <!-- User Modal -->
     <div id="userModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">

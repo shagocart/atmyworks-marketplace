@@ -4,19 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>How to Build a Successful Freelance Career - AtMyWorks Blog</title>
+    <meta name="description" content="Discover essential strategies to build a thriving freelance career in today's competitive market. Learn how to find clients, set your rates, and manage your workload effectively.">
     <link rel="stylesheet" href="../css/styles.css"> <!-- Note the ../ path -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="How to Build a Successful Freelance Career - AtMyWorks Blog">
+    <meta property="og:description" content="Discover essential strategies to build a thriving freelance career in today's competitive market. Learn how to find clients, set your rates, and manage your workload effectively.">
+    <meta property="og:image" content="https://placehold.co/1200x630?text=Freelance+Career+Tips">
+    <meta property="og:url" content="https://shagocart.github.io/atmyworks-marketplace/blog-posts/first-post.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="AtMyWorks Blog">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="How to Build a Successful Freelance Career - AtMyWorks Blog">
+    <meta name="twitter:description" content="Discover essential strategies to build a thriving freelance career in today's competitive market.">
+    <meta name="twitter:image" content="https://placehold.co/1200x630?text=Freelance+Career+Tips">
+    <meta name="twitter:site" content="@AtMyWorks">
 </head>
-<body>
+<body data-page="blog-post">
     <!-- Header -->
     <header class="header">
         <div class="container">
             <nav class="navbar">
-                <a href="../index.html" class="logo">AtMyWorks</a> <!-- Note the ../ path -->
+                <a href="/index.html" class="logo">AtMyWorks</a>
                 <ul class="nav-links">
-                    <li><a href="../browse.html">Find Work</a></li> <!-- Note the ../ path -->
-                    <li><a href="../blog.html">Blog</a></li> <!-- Note the ../ path -->
+                    <li><a href="/browse.html">Find Work</a></li>
+                    <li><a href="/blog.html">Blog</a></li>
                     <li><a href="#">How It Works</a></li>
                 </ul>
                 <div class="auth-buttons">
@@ -30,49 +46,199 @@
     <!-- Blog Post Content -->
     <article style="padding: 2rem 0;">
         <div class="container">
-            <div style="max-width: 800px; margin: 0 auto;">
-                <header style="margin-bottom: 2rem; text-align: center;">
-                    <h1>How to Build a Successful Freelance Career</h1>
-                    <div style="color: #666; margin-top: 0.5rem;">
-                        <span><i class="far fa-calendar"></i> June 15, 2023</span>
-                        <span style="margin: 0 1rem;">|</span>
-                        <span><i class="far fa-user"></i> Admin</span>
-                        <span style="margin: 0 1rem;">|</span>
-                        <span><i class="far fa-folder"></i> Freelancing Tips</span>
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+                <!-- Main Post Content -->
+                <div style="background: white; border-radius: 0.5rem; padding: 2rem; box-shadow: var(--shadow-md);">
+                    <header style="margin-bottom: 2rem; text-align: center;">
+                        <h1>How to Build a Successful Freelance Career</h1>
+                        <div style="color: var(--gray-500); margin-top: 0.5rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; font-size: var(--font-size-sm);">
+                            <span><i class="far fa-calendar"></i> June 15, 2023</span>
+                            <span><i class="far fa-user"></i> Admin</span>
+                            <span><i class="far fa-folder"></i> Freelancing Tips</span>
+                            <span><i class="far fa-clock"></i> 8 min read</span>
+                        </div>
+                    </header>
+
+                    <img src="https://placehold.co/800x400?text=Freelance+Career" alt="Freelance Career" style="width: 100%; border-radius: 0.5rem; margin-bottom: 2rem; box-shadow: var(--shadow-sm);">
+
+                    <div style="margin-bottom: 2rem;">
+                        <p style="margin-bottom: 1rem; font-size: var(--font-size-lg);">The freelance economy is booming, offering unprecedented flexibility and opportunities for skilled professionals. However, building a sustainable and successful freelance career requires more than just talent. It demands strategic planning, consistent effort, and a clear understanding of the market.</p>
+                        
+                        <!-- Table of Contents -->
+                        <div style="background: var(--gray-50); border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 2rem; border: 1px solid var(--border-color);">
+                            <h3 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                                <i class="fas fa-list" style="margin-right: 0.5rem;"></i> Table of Contents
+                            </h3>
+                            <ul style="list-style: none; padding: 0; margin: 0;">
+                                <li style="margin-bottom: 0.75rem;"><a href="#define-niche" style="text-decoration: none; color: var(--primary-600); display: flex; align-items: center;"><i class="fas fa-chevron-right" style="font-size: 0.75rem; margin-right: 0.5rem;"></i> 1. Define Your Niche</a></li>
+                                <li style="margin-bottom: 0.75rem;"><a href="#build-presence" style="text-decoration: none; color: var(--primary-600); display: flex; align-items: center;"><i class="fas fa-chevron-right" style="font-size: 0.75rem; margin-right: 0.5rem;"></i> 2. Build a Strong Online Presence</a></li>
+                                <li style="margin-bottom: 0.75rem;"><a href="#set-rates" style="text-decoration: none; color: var(--primary-600); display: flex; align-items: center;"><i class="fas fa-chevron-right" style="font-size: 0.75rem; margin-right: 0.5rem;"></i> 3. Set Clear Rates and Boundaries</a></li>
+                                <li style="margin-bottom: 0.75rem;"><a href="#deliver-value" style="text-decoration: none; color: var(--primary-600); display: flex; align-items: center;"><i class="fas fa-chevron-right" style="font-size: 0.75rem; margin-right: 0.5rem;"></i> 4. Deliver Exceptional Value</a></li>
+                                <li style="margin-bottom: 0.75rem;"><a href="#invest-yourself" style="text-decoration: none; color: var(--primary-600); display: flex; align-items: center;"><i class="fas fa-chevron-right" style="font-size: 0.75rem; margin-right: 0.5rem;"></i> 5. Invest in Yourself</a></li>
+                                <li><a href="#conclusion" style="text-decoration: none; color: var(--primary-600); display: flex; align-items: center;"><i class="fas fa-chevron-right" style="font-size: 0.75rem; margin-right: 0.5rem;"></i> Conclusion</a></li>
+                            </ul>
+                        </div>
                     </div>
-                </header>
 
-                <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 2rem;">
-                    <img src="https://placehold.co/800x400?text=Freelance+Career" alt="Freelance Career" style="width: 100%; border-radius: 4px; margin-bottom: 2rem;">
+                    <div id="define-niche">
+                        <h2 style="margin: 2rem 0 1rem 0;">1. Define Your Niche</h2>
+                        <p style="margin-bottom: 1rem;">While it might be tempting to offer a broad range of services, specializing in a specific niche can make you more attractive to clients and command higher rates. Identify your core skills and passions, and research market demand within those areas.</p>
+                        <blockquote style="border-left: 4px solid var(--primary-500); padding-left: 1.5rem; margin: 2rem 0; color: var(--gray-700); font-style: italic;">
+                            <p>"Specialization is the key to success in any field." - William Crawford</p>
+                        </blockquote>
+                    </div>
 
-                    <p style="margin-bottom: 1rem;">The freelance economy is booming, offering unprecedented flexibility and opportunities for skilled professionals. However, building a sustainable and successful freelance career requires more than just talent. It demands strategic planning, consistent effort, and a clear understanding of the market.</p>
+                    <div id="build-presence">
+                        <h2 style="margin: 2rem 0 1rem 0;">2. Build a Strong Online Presence</h2>
+                        <p style="margin-bottom: 1rem;">Your online presence is often the first impression potential clients have of you. This includes:</p>
+                        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+                            <li style="margin-bottom: 0.5rem;"><strong>Professional Website/Portfolio:</strong> Showcase your best work and clearly articulate your value proposition.</li>
+                            <li style="margin-bottom: 0.5rem;"><strong>LinkedIn Profile:</strong> Engage with industry professionals and share insights.</li>
+                            <li style="margin-bottom: 0.5rem;"><strong>Social Media:</strong> Use platforms relevant to your niche to share content and connect with your audience.</li>
+                        </ul>
+                        <img src="https://placehold.co/800x300?text=Online+Presence" alt="Building Online Presence" style="width: 100%; border-radius: 0.5rem; margin: 1.5rem 0; box-shadow: var(--shadow-sm);">
+                    </div>
 
-                    <h2 style="margin: 2rem 0 1rem 0;">1. Define Your Niche</h2>
-                    <p style="margin-bottom: 1rem;">While it might be tempting to offer a broad range of services, specializing in a specific niche can make you more attractive to clients and command higher rates. Identify your core skills and passions, and research market demand within those areas.</p>
+                    <div id="set-rates">
+                        <h2 style="margin: 2rem 0 1rem 0;">3. Set Clear Rates and Boundaries</h2>
+                        <p style="margin-bottom: 1rem;">Undervaluing your work is a common pitfall. Research industry standards for your skills and experience level. Create clear contracts outlining project scope, deliverables, timelines, and payment terms. Don't be afraid to say no to projects that don't align with your goals or pay fairly.</p>
+                        <div style="background: var(--warning-50); border-radius: 0.5rem; padding: 1.5rem; margin: 1.5rem 0; border: 1px solid var(--warning-300);">
+                            <h4 style="margin-bottom: 0.5rem; color: var(--warning-800); display: flex; align-items: center;">
+                                <i class="fas fa-lightbulb" style="margin-right: 0.5rem;"></i> Pro Tip
+                            </h4>
+                            <p style="margin: 0; color: var(--warning-700);">Consider offering package deals or retainer agreements to provide predictable income and encourage long-term client relationships.</p>
+                        </div>
+                    </div>
 
-                    <h2 style="margin: 2rem 0 1rem 0;">2. Build a Strong Online Presence</h2>
-                    <p style="margin-bottom: 1rem;">Your online presence is often the first impression potential clients have of you. This includes:</p>
-                    <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
-                        <li style="margin-bottom: 0.5rem;"><strong>Professional Website/Portfolio:</strong> Showcase your best work and clearly articulate your value proposition.</li>
-                        <li style="margin-bottom: 0.5rem;"><strong>LinkedIn Profile:</strong> Engage with industry professionals and share insights.</li>
-                        <li style="margin-bottom: 0.5rem;"><strong>Social Media:</strong> Use platforms relevant to your niche to share content and connect with your audience.</li>
-                    </ul>
+                    <div id="deliver-value">
+                        <h2 style="margin: 2rem 0 1rem 0;">4. Deliver Exceptional Value</h2>
+                        <p style="margin-bottom: 1rem;">Your reputation is everything in freelancing. Consistently exceed client expectations, communicate proactively, and meet deadlines. Happy clients become repeat customers and are your best source of referrals.</p>
+                    </div>
 
-                    <h2 style="margin: 2rem 0 1rem 0;">3. Set Clear Rates and Boundaries</h2>
-                    <p style="margin-bottom: 1rem;">Undervaluing your work is a common pitfall. Research industry standards for your skills and experience level. Create clear contracts outlining project scope, deliverables, timelines, and payment terms. Don't be afraid to say no to projects that don't align with your goals or pay fairly.</p>
+                    <div id="invest-yourself">
+                        <h2 style="margin: 2rem 0 1rem 0;">5. Invest in Yourself</h2>
+                        <p style="margin-bottom: 1rem;">The freelance market is competitive. Continuously update your skills through courses, workshops, and self-study. Stay informed about industry trends. Consider investing in tools and software that can improve your efficiency and the quality of your work.</p>
+                    </div>
 
-                    <h2 style="margin: 2rem 0 1rem 0;">4. Deliver Exceptional Value</h2>
-                    <p style="margin-bottom: 1rem;">Your reputation is everything in freelancing. Consistently exceed client expectations, communicate proactively, and meet deadlines. Happy clients become repeat customers and are your best source of referrals.</p>
+                    <div id="conclusion">
+                        <h2 style="margin: 2rem 0 1rem 0;">Conclusion</h2>
+                        <p style="margin-bottom: 1rem;">Building a successful freelance career is a marathon, not a sprint. By focusing on your niche, building a strong brand, setting clear boundaries, delivering exceptional work, and investing in continuous learning, you can create a thriving and fulfilling freelance business.</p>
+                    </div>
 
-                    <h2 style="margin: 2rem 0 1rem 0;">5. Invest in Yourself</h2>
-                    <p style="margin-bottom: 1rem;">The freelance market is competitive. Continuously update your skills through courses, workshops, and self-study. Stay informed about industry trends. Consider investing in tools and software that can improve your efficiency and the quality of your work.</p>
+                    <!-- Social Sharing -->
+                    <div style="display: flex; justify-content: center; gap: 1rem; margin: 3rem 0;">
+                        <a href="#" class="btn btn-outline" style="display: flex; align-items: center; padding: 0.5rem 1rem;">
+                            <i class="fab fa-twitter" style="margin-right: 0.5rem;"></i> Tweet
+                        </a>
+                        <a href="#" class="btn btn-outline" style="display: flex; align-items: center; padding: 0.5rem 1rem;">
+                            <i class="fab fa-facebook-f" style="margin-right: 0.5rem;"></i> Share
+                        </a>
+                        <a href="#" class="btn btn-outline" style="display: flex; align-items: center; padding: 0.5rem 1rem;">
+                            <i class="fab fa-linkedin-in" style="margin-right: 0.5rem;"></i> LinkedIn
+                        </a>
+                        <a href="#" class="btn btn-outline" style="display: flex; align-items: center; padding: 0.5rem 1rem;">
+                            <i class="fas fa-envelope" style="margin-right: 0.5rem;"></i> Email
+                        </a>
+                    </div>
 
-                    <h2 style="margin: 2rem 0 1rem 0;">Conclusion</h2>
-                    <p style="margin-bottom: 1rem;">Building a successful freelance career is a marathon, not a sprint. By focusing on your niche, building a strong brand, setting clear boundaries, delivering exceptional work, and investing in continuous learning, you can create a thriving and fulfilling freelance business.</p>
+                    <!-- Author Bio -->
+                    <div style="background: var(--gray-50); border-radius: 0.5rem; padding: 2rem; margin: 3rem 0; border: 1px solid var(--border-color);">
+                        <div style="display: flex; align-items: flex-start;">
+                            <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-100), var(--secondary-100)); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--primary-800); margin-right: 1.5rem; box-shadow: var(--shadow-xs); flex-shrink: 0;">
+                                A
+                            </div>
+                            <div>
+                                <h3 style="margin-bottom: 0.5rem;">Admin</h3>
+                                <p style="margin-bottom: 1rem; color: var(--gray-600);">Senior Content Writer & Industry Expert at AtMyWorks. Passionate about helping freelancers build successful careers.</p>
+                                <div style="display: flex; gap: 1rem;">
+                                    <a href="#" style="color: var(--primary-600); text-decoration: none; display: flex; align-items: center;">
+                                        <i class="fab fa-twitter" style="margin-right: 0.5rem;"></i> @AtMyWorksAdmin
+                                    </a>
+                                    <a href="#" style="color: var(--primary-600); text-decoration: none; display: flex; align-items: center;">
+                                        <i class="fas fa-link" style="margin-right: 0.5rem;"></i> Website
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tags -->
+                    <div style="margin-bottom: 2rem;">
+                        <h4 style="margin-bottom: 0.5rem;">Tags:</h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            <span class="badge badge-secondary">Freelancing</span>
+                            <span class="badge badge-secondary">Career Advice</span>
+                            <span class="badge badge-secondary">Online Business</span>
+                            <span class="badge badge-secondary">Work-Life Balance</span>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <a href="../blog.html" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+                    </div>
                 </div>
 
-                <div style="text-align: center; margin-bottom: 2rem;">
-                    <a href="../blog.html" class="btn btn-outline">← Back to Blog</a> <!-- Note the ../ path -->
+                <!-- Sidebar -->
+                <div>
+                    <!-- Newsletter Widget -->
+                    <div style="background: white; border-radius: 0.5rem; padding: 1.5rem; box-shadow: var(--shadow-md); margin-bottom: 2rem;">
+                        <h3 style="margin-bottom: 1rem;">Subscribe to Newsletter</h3>
+                        <p style="margin-bottom: 1rem; font-size: var(--font-size-sm); color: var(--gray-600);">Get the latest posts delivered right to your inbox.</p>
+                        <form class="newsletter-form">
+                            <div class="form-group">
+                                <label for="sidebarNewsletterEmail" class="sr-only">Email Address</label>
+                                <input type="email" id="sidebarNewsletterEmail" class="form-control" placeholder="Your email address" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Subscribe</button>
+                        </form>
+                    </div>
+
+                    <!-- Related Posts Widget -->
+                    <div style="background: white; border-radius: 0.5rem; padding: 1.5rem; box-shadow: var(--shadow-md); margin-bottom: 2rem;">
+                        <h3 style="margin-bottom: 1rem;">Related Posts</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 0.75rem 0; border-bottom: 1px solid var(--border-color);">
+                                <a href="#" style="text-decoration: none; color: var(--gray-800); display: flex; align-items: flex-start;">
+                                    <img src="https://placehold.co/80x60?text=Tips" alt="Related Post" style="width: 80px; height: 60px; object-fit: cover; border-radius: 0.25rem; margin-right: 1rem; flex-shrink: 0;">
+                                    <div>
+                                        <h4 style="font-size: var(--font-size-sm); margin-bottom: 0.25rem; font-weight: var(--font-weight-semibold);">Top 10 Skills in Demand for 2023</h4>
+                                        <p style="font-size: var(--font-size-xs); color: var(--gray-500); margin: 0;">June 10, 2023</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li style="padding: 0.75rem 0; border-bottom: 1px solid var(--border-color);">
+                                <a href="#" style="text-decoration: none; color: var(--gray-800); display: flex; align-items: flex-start;">
+                                    <img src="https://placehold.co/80x60?text=Marketing" alt="Related Post" style="width: 80px; height: 60px; object-fit: cover; border-radius: 0.25rem; margin-right: 1rem; flex-shrink: 0;">
+                                    <div>
+                                        <h4 style="font-size: var(--font-size-sm); margin-bottom: 0.25rem; font-weight: var(--font-weight-semibold);">How to Create an Effective Job Posting</h4>
+                                        <p style="font-size: var(--font-size-xs); color: var(--gray-500); margin: 0;">June 5, 2023</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li style="padding: 0.75rem 0;">
+                                <a href="#" style="text-decoration: none; color: var(--gray-800); display: flex; align-items: flex-start;">
+                                    <img src="https://placehold.co/80x60?text=Remote" alt="Related Post" style="width: 80px; height: 60px; object-fit: cover; border-radius: 0.25rem; margin-right: 1rem; flex-shrink: 0;">
+                                    <div>
+                                        <h4 style="font-size: var(--font-size-sm); margin-bottom: 0.25rem; font-weight: var(--font-weight-semibold);">Remote Work Trends Shaping 2023</h4>
+                                        <p style="font-size: var(--font-size-xs); color: var(--gray-500); margin: 0;">May 28, 2023</p>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Categories Widget -->
+                    <div style="background: white; border-radius: 0.5rem; padding: 1.5rem; box-shadow: var(--shadow-md);">
+                        <h3 style="margin-bottom: 1rem;">Categories</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="margin-bottom: 0.75rem;"><a href="/browse.html?category=graphics-design" style="text-decoration: none; color: var(--gray-700); display: flex; justify-content: space-between; align-items: center;"><span>Graphics & Design</span> <span class="badge badge-secondary">24</span></a></li>
+                            <li style="margin-bottom: 0.75rem;"><a href="/browse.html?category=digital-marketing" style="text-decoration: none; color: var(--gray-700); display: flex; justify-content: space-between; align-items: center;"><span>Digital Marketing</span> <span class="badge badge-secondary">18</span></a></li>
+                            <li style="margin-bottom: 0.75rem;"><a href="/browse.html?category=programming-tech" style="text-decoration: none; color: var(--gray-700); display: flex; justify-content: space-between; align-items: center;"><span>Programming & Tech</span> <span class="badge badge-secondary">32</span></a></li>
+                            <li style="margin-bottom: 0.75rem;"><a href="/browse.html?category=video-animation" style="text-decoration: none; color: var(--gray-700); display: flex; justify-content: space-between; align-items: center;"><span>Video & Animation</span> <span class="badge badge-secondary">15</span></a></li>
+                            <li style="margin-bottom: 0.75rem;"><a href="/browse.html?category=writing-translation" style="text-decoration: none; color: var(--gray-700); display: flex; justify-content: space-between; align-items: center;"><span>Writing & Translation</span> <span class="badge badge-secondary">27</span></a></li>
+                            <li><a href="/browse.html?category=music-audio" style="text-decoration: none; color: var(--gray-700); display: flex; justify-content: space-between; align-items: center;"><span>Music & Audio</span> <span class="badge badge-secondary">9</span></a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -88,7 +254,7 @@
                         <li><a href="#">About Us</a></li>
                         <li><a href="#">Careers</a></li>
                         <li><a href="#">Press</a></li>
-                        <li><a href="../blog.html">Blog</a></li> <!-- Note the ../ path -->
+                        <li><a href="/blog.html">Blog</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -118,5 +284,65 @@
 
     <!-- JavaScript Files -->
     <script src="../js/main.js"></script> <!-- Note the ../ path -->
+    <script src="../js/auth.js"></script> <!-- Note the ../ path -->
+    <script src="../js/blog.js"></script> <!-- Note the ../ path -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log("Blog Post DOM loaded");
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Newsletter form submission (from sidebar)
+            const newsletterForm = document.querySelector('.newsletter-form');
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const emailInput = this.querySelector('input[type="email"]');
+                    const email = emailInput.value.trim();
+
+                    if (!email) {
+                        alert("Please enter your email address.");
+                        return;
+                    }
+
+                    // Email validation regex (basic)
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(email)) {
+                        alert("Please enter a valid email address.");
+                        return;
+                    }
+
+                    console.log("Subscribing email:", email);
+                    // In a full implementation, send this to your backend or Firebase
+                    alert(`Thank you for subscribing with ${email}!`);
+                    emailInput.value = '';
+                });
+            }
+
+            // Social sharing buttons (placeholder)
+            const socialShareButtons = document.querySelectorAll('.btn-outline');
+            socialShareButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const platform = this.querySelector('i').className.split(' ')[1]; // Get icon class (e.g., fa-twitter)
+                    console.log(`Sharing on ${platform}`);
+                    alert(`Sharing functionality for ${platform} would be implemented here.`);
+                });
+            });
+        });
+    </script>
 </body>
 </html>

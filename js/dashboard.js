@@ -1,11 +1,11 @@
-// dashboard.js - JavaScript for dashboard pages
+// js/dashboard.js - JavaScript for dashboard pages
 
 console.log("Dashboard module loaded");
 
 document.addEventListener('DOMContentLoaded', function () {
     console.log("Dashboard DOM loaded");
 
-    // --- Tab Navigation ---
+    // --- TAB NAVIGATION ---
     const tabs = document.querySelectorAll('.tab');
     if (tabs.length > 0) {
         tabs.forEach(tab => {
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // --- Generic Button Handling (Action Buttons in Tables) ---
+    // --- GENERIC BUTTON HANDLING (Action Buttons in Tables) ---
     document.body.addEventListener('click', function (e) {
         // Handle "Message Seller" button
         if (e.target.classList.contains('message-btn')) {
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // This could open a review modal
         }
 
-        // Handle "Approve Payment" button (Admin/Escrow Release)
+        // Example: Approve Payment (Admin/Escrow Release)
         if (e.target.classList.contains('approve-payment-btn')) {
             const paymentId = e.target.getAttribute('data-payment-id');
             console.log(`Approving payment ${paymentId}`);
@@ -203,6 +203,178 @@ document.addEventListener('DOMContentLoaded', function () {
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;");
     }
+
+    // --- CURRENCY SETTINGS LOGIC (Admin Dashboard) ---
+    const primaryCurrencySelect = document.getElementById('primaryCurrencySelect');
+    const supportedCurrenciesSelect = document.getElementById('supportedCurrenciesSelect');
+    const saveCurrencySettingsBtn = document.getElementById('saveCurrencySettingsBtn');
+    const resetCurrencySettingsBtn = document.getElementById('resetCurrencySettingsBtn');
+    const exchangeRatesDisplay = document.getElementById('exchangeRatesDisplay');
+
+    if (primaryCurrencySelect && supportedCurrenciesSelect && saveCurrencySettingsBtn && resetCurrencySettingsBtn) {
+        console.log("Currency settings elements found, loading current settings...");
+
+        // Load current currency settings from Firestore
+        loadCurrencySettings();
+
+        // Handle Save Button Click
+        saveCurrencySettingsBtn.addEventListener('click', async function() {
+            console.log("Saving currency settings...");
+            
+            const primaryCurrency = primaryCurrencySelect.value;
+            const selectedOptions = Array.from(supportedCurrenciesSelect.selectedOptions);
+            const supportedCurrencies = selectedOptions.map(option => option.value);
+
+            if (!primaryCurrency) {
+                alert("Please select a primary currency.");
+                return;
+            }
+
+            if (supportedCurrencies.length === 0) {
+                alert("Please select at least one supported currency.");
+                return;
+            }
+
+            if (!supportedCurrencies.includes(primaryCurrency)) {
+                alert("The primary currency must also be selected in supported currencies.");
+                return;
+            }
+
+            const settingsData = {
+                primaryCurrency: primaryCurrency,
+                supportedCurrencies: supportedCurrencies
+            };
+
+            console.log("Saving currency settings:", settingsData);
+
+            try {
+                // Ensure Firebase services are available
+                if (!window.firebaseApp || !window.firebaseApp.db) {
+                    throw new Error("Firestore 'db' not available.");
+                }
+
+                // Update the 'platform' document in the 'settings' collection
+                await window.firebaseApp.db.collection('settings').doc('platform').update(settingsData);
+                
+                console.log("Currency settings saved successfully!");
+                alert("Currency settings saved successfully!");
+                
+                // Reload platform settings globally
+                if (typeof window.loadPlatformSettings === 'function') {
+                    await window.loadPlatformSettings();
+                }
+                
+                // Reload the currency settings display
+                loadCurrencySettings();
+                
+            } catch (error) {
+                console.error("Error saving currency settings:", error);
+                alert("Failed to save currency settings. Please try again.");
+            }
+        });
+
+        // Handle Reset Button Click
+        resetCurrencySettingsBtn.addEventListener('click', function() {
+            console.log("Resetting currency settings form...");
+            loadCurrencySettings(); // Reload from Firestore
+        });
+    } else {
+        console.log("Currency settings elements not found on this page (not admin dashboard).");
+    }
+
+    /**
+     * Loads current currency settings from Firestore and populates the form.
+     */
+    async function loadCurrencySettings() {
+        console.log("Loading currency settings from Firestore...");
+        
+        // Ensure elements exist
+        if (!primaryCurrencySelect || !supportedCurrenciesSelect || !exchangeRatesDisplay) {
+            console.warn("Currency settings form elements not found.");
+            return;
+        }
+
+        // Show loading state
+        primaryCurrencySelect.innerHTML = '<option value="">Loading...</option>';
+        supportedCurrenciesSelect.innerHTML = '<option value="">Loading...</option>';
+        exchangeRatesDisplay.textContent = 'Loading exchange rates...';
+
+        try {
+            // Ensure Firebase services are available
+            if (!window.firebaseApp || !window.firebaseApp.db) {
+                throw new Error("Firestore 'db' not available.");
+            }
+
+            // Query the 'settings' collection for the 'platform' document
+            const settingsDoc = await window.firebaseApp.db.collection('settings').doc('platform').get();
+
+            if (settingsDoc.exists) {
+                const settingsData = settingsDoc.data();
+                console.log("Currency settings data loaded:", settingsData);
+
+                const primaryCurrency = settingsData.primaryCurrency || 'USD';
+                const supportedCurrencies = settingsData.supportedCurrencies || ['USD'];
+                const exchangeRates = settingsData.exchangeRates || {};
+
+                // Populate Primary Currency Select
+                primaryCurrencySelect.innerHTML = ''; // Clear loading option
+                const currencyOptions = [
+                    { value: 'USD', label: 'USD - US Dollar' },
+                    { value: 'EUR', label: 'EUR - Euro' },
+                    { value: 'PHP', label: 'PHP - Philippine Peso' },
+                    { value: 'NGN', label: 'NGN - Nigerian Naira' },
+                    { value: 'SGD', label: 'SGD - Singapore Dollar' },
+                    { value: 'AUD', label: 'AUD - Australian Dollar' },
+                    { value: 'INR', label: 'INR - Indian Rupee' }
+                ];
+
+                currencyOptions.forEach(option => {
+                    const opt = document.createElement('option');
+                    opt.value = option.value;
+                    opt.textContent = option.label;
+                    if (option.value === primaryCurrency) {
+                        opt.selected = true;
+                    }
+                    primaryCurrencySelect.appendChild(opt);
+                });
+
+                // Populate Supported Currencies Multi-Select
+                supportedCurrenciesSelect.innerHTML = ''; // Clear loading option
+                currencyOptions.forEach(option => {
+                    const opt = document.createElement('option');
+                    opt.value = option.value;
+                    opt.textContent = option.label;
+                    if (supportedCurrencies.includes(option.value)) {
+                        opt.selected = true;
+                    }
+                    supportedCurrenciesSelect.appendChild(opt);
+                });
+
+                // Display Exchange Rates
+                let ratesHtml = '<strong>Current Exchange Rates (relative to primary):</strong><br>';
+                if (Object.keys(exchangeRates).length > 0) {
+                    for (const [currency, rate] of Object.entries(exchangeRates)) {
+                        ratesHtml += `${currency}: ${rate}<br>`;
+                    }
+                } else {
+                    ratesHtml += 'No exchange rates configured.';
+                }
+                exchangeRatesDisplay.innerHTML = ratesHtml;
+
+            } else {
+                console.warn("Platform settings document not found in Firestore.");
+                primaryCurrencySelect.innerHTML = '<option value="">Select Primary Currency</option>';
+                supportedCurrenciesSelect.innerHTML = '<option value="">Select Supported Currencies</option>';
+                exchangeRatesDisplay.textContent = 'No exchange rates configured.';
+            }
+        } catch (error) {
+            console.error("Error loading currency settings:", error);
+            primaryCurrencySelect.innerHTML = '<option value="">Error loading</option>';
+            supportedCurrenciesSelect.innerHTML = '<option value="">Error loading</option>';
+            exchangeRatesDisplay.textContent = `Error loading exchange rates: ${error.message}`;
+        }
+    }
+    // --- END CURRENCY SETTINGS LOGIC ---
 
     // Placeholder for job deletion function (requires Firestore integration and security rules)
     // async function deleteJobPost(jobId) {

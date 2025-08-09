@@ -2,16 +2,263 @@
 <header class="header">
     <div class="container">
         <nav class="navbar">
-            <a href="/index.html" class="logo">AtMyWorks</a>
-            <ul class="nav-links">
+            <!-- Logo -->
+            <a href="/index.html" class="logo" aria-label="AtMyWorks Homepage">
+                <i class="fas fa-briefcase logo-icon" style="margin-right: 0.5rem;"></i> <!-- Optional icon -->
+                AtMyWorks
+            </a>
+
+            <!-- Mobile Menu Toggle (Hidden on Desktop) -->
+            <button class="navbar-toggler" type="button" id="mobileMenuToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mobileMenu">
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navigation Links (Desktop & Mobile) -->
+            <ul class="nav-links" id="mainNav">
                 <li><a href="/browse.html">Find Work</a></li>
                 <li><a href="/blog.html">Blog</a></li>
-                <li><a href="#">How It Works</a></li>
+                <li><a href="/how-it-works.html">How It Works</a></li>
+                <!-- Conditional Links (shown based on auth state) -->
+                <li id="dashboardNavLink" style="display: none;"><a href="/dashboard-client.html">Dashboard</a></li>
+                <li id="adminNavLink" style="display: none;"><a href="/dashboard-admin.html">Admin</a></li>
             </ul>
-            <div class="auth-buttons">
-                <button class="btn btn-outline" id="loginBtn">Log In</button>
-                <button class="btn btn-primary" id="signupBtn">Sign Up</button>
+
+            <!-- Authentication/User Menu Area -->
+            <div class="auth-area">
+                <!-- Auth Buttons (Shown when not logged in) -->
+                <div class="auth-buttons" id="authButtons">
+                    <button class="btn btn-outline" id="loginBtn">Log In</button>
+                    <button class="btn btn-primary" id="signupBtn">Sign Up</button>
+                </div>
+
+                <!-- User Menu (Shown when logged in) -->
+                <div class="user-menu" id="userMenu" style="display: none; position: relative;">
+                    <button class="btn btn-outline user-menu-toggle" id="userMenuToggle" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-bell" style="margin-right: 0.5rem;"></i>
+                        <span class="user-avatar" id="userAvatar" style="width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-100), var(--secondary-100)); display: inline-flex; align-items: center; justify-content: center; font-weight: bold; color: var(--primary-800); margin-right: 0.5rem; box-shadow: var(--shadow-xs);">U</span>
+                        <span id="userName">User</span>
+                        <i class="fas fa-chevron-down" style="margin-left: 0.5rem; font-size: var(--font-size-xs);"></i>
+                    </button>
+
+                    <!-- User Menu Dropdown -->
+                    <div class="user-menu-dropdown" id="userMenuDropdown" style="display: none; position: absolute; top: 100%; right: 0; width: 250px; background: white; border-radius: var(--border-radius-lg); box-shadow: var(--shadow-lg); padding: 1rem; z-index: 1000; margin-top: 0.5rem;">
+                        <div style="display: flex; align-items: center; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+                            <div class="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-100), var(--secondary-100)); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--primary-800); margin-right: 1rem; box-shadow: var(--shadow-xs);">U</div>
+                            <div>
+                                <div style="font-weight: var(--font-weight-semibold);" id="dropdownUserName">User Name</div>
+                                <div style="font-size: var(--font-size-sm); color: var(--gray-500);" id="dropdownUserEmail">user@example.com</div>
+                            </div>
+                        </div>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="margin-bottom: 0.5rem;"><a href="/profile.html" class="user-menu-link"><i class="fas fa-user-circle" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> My Profile</a></li>
+                            <li style="margin-bottom: 0.5rem;"><a href="/messages.html" class="user-menu-link"><i class="fas fa-comments" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Messages <span class="badge badge-primary" style="float: right;">3</span></a></li>
+                            <li style="margin-bottom: 0.5rem;"><a href="/dashboard-client.html" class="user-menu-link" id="dashboardMenuLink"><i class="fas fa-tachometer-alt" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Dashboard</a></li>
+                            <li style="margin-bottom: 0.5rem;"><a href="/settings.html" class="user-menu-link"><i class="fas fa-cog" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Settings</a></li>
+                            <li><button class="btn btn-outline btn-block logout-btn" id="logoutBtnInMenu" style="margin-top: 1rem;"><i class="fas fa-sign-out-alt" style="margin-right: 0.75rem;"></i> Logout</button></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </nav>
     </div>
 </header>
+
+<!-- Inline JavaScript for Header Interactivity -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log("Header JS loaded");
+
+        // --- MOBILE MENU TOGGLE ---
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mainNav = document.getElementById('mainNav');
+
+        if (mobileMenuToggle && mainNav) {
+            mobileMenuToggle.addEventListener('click', function() {
+                const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                this.setAttribute('aria-expanded', !isExpanded);
+                mainNav.classList.toggle('show');
+                console.log("Mobile menu toggled");
+            });
+        }
+
+        // --- USER MENU TOGGLE ---
+        const userMenuToggle = document.getElementById('userMenuToggle');
+        const userMenuDropdown = document.getElementById('userMenuDropdown');
+
+        if (userMenuToggle && userMenuDropdown) {
+            userMenuToggle.addEventListener('click', function() {
+                const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                this.setAttribute('aria-expanded', !isExpanded);
+                userMenuDropdown.style.display = isExpanded ? 'none' : 'block';
+                console.log("User menu toggled");
+            });
+
+            // Close user menu if clicked outside
+            document.addEventListener('click', function(e) {
+                if (!userMenuToggle.contains(e.target) && !userMenuDropdown.contains(e.target)) {
+                    userMenuToggle.setAttribute('aria-expanded', 'false');
+                    userMenuDropdown.style.display = 'none';
+                }
+            });
+        }
+
+        // --- AUTH STATE LISTENER ---
+        // This assumes `auth` is globally available from your Firebase initialization
+        if (typeof window.auth !== 'undefined') {
+            window.auth.onAuthStateChanged(user => {
+                console.log("Header auth state changed:", user ? user.uid : "None");
+                updateHeaderAuthUI(user);
+            });
+        } else {
+            console.warn("Firebase Auth not available in header. Check firebase-config.js");
+        }
+
+        /**
+         * Updates the header UI based on the user's authentication state.
+         * @param {Object|null} user - The Firebase User object or null if not logged in.
+         */
+        function updateHeaderAuthUI(user) {
+            const authButtons = document.getElementById('authButtons');
+            const userMenu = document.getElementById('userMenu');
+            const userNameElement = document.getElementById('userName');
+            const dropdownUserNameElement = document.getElementById('dropdownUserName');
+            const dropdownUserEmailElement = document.getElementById('dropdownUserEmail');
+            const userAvatarElements = document.querySelectorAll('.user-avatar');
+            const dashboardNavLink = document.getElementById('dashboardNavLink');
+            const adminNavLink = document.getElementById('adminNavLink');
+            const dashboardMenuLink = document.getElementById('dashboardMenuLink');
+
+            if (user) {
+                // User is signed in
+                console.log("User is signed in, updating header UI:", user.email);
+                
+                // Hide auth buttons
+                if (authButtons) authButtons.style.display = 'none';
+                
+                // Show user menu
+                if (userMenu) userMenu.style.display = 'flex';
+
+                // Update user name and email in menu
+                const displayName = user.displayName || user.email?.split('@')[0] || 'User';
+                if (userNameElement) userNameElement.textContent = displayName;
+                if (dropdownUserNameElement) dropdownUserNameElement.textContent = displayName;
+                if (dropdownUserEmailElement) dropdownUserEmailElement.textContent = user.email || 'No email';
+
+                // Update user avatar initials (simple approach)
+                const initials = displayName.charAt(0).toUpperCase();
+                userAvatarElements.forEach(avatar => {
+                    if (avatar) avatar.textContent = initials;
+                });
+
+                // Determine user role and update dashboard links
+                // In a real app, you'd fetch this from Firestore
+                // For now, we'll simulate based on email or UID prefix
+                // This is a placeholder - replace with actual role fetching logic
+                let userRole = 'client'; // Default assumption
+                if (user.email && (user.email.includes('admin') || user.email.includes('support'))) {
+                    userRole = 'admin';
+                } else if (user.email && user.email.includes('freelancer')) {
+                    userRole = 'freelancer';
+                }
+                console.log("Simulated user role:", userRole);
+
+                // Update dashboard navigation links based on role
+                if (dashboardNavLink) {
+                    dashboardNavLink.style.display = 'block';
+                    const dashboardLink = dashboardNavLink.querySelector('a');
+                    if (dashboardLink) {
+                        if (userRole === 'freelancer') {
+                            dashboardLink.href = '/dashboard-freelancer.html';
+                            dashboardLink.textContent = 'My Gigs';
+                        } else if (userRole === 'admin') {
+                            dashboardLink.href = '/dashboard-admin.html';
+                            dashboardLink.textContent = 'Admin Panel';
+                        } else {
+                            dashboardLink.href = '/dashboard-client.html';
+                            dashboardLink.textContent = 'My Projects';
+                        }
+                    }
+                }
+
+                if (adminNavLink) {
+                    adminNavLink.style.display = userRole === 'admin' ? 'block' : 'none';
+                }
+
+                if (dashboardMenuLink) {
+                    if (userRole === 'freelancer') {
+                        dashboardMenuLink.href = '/dashboard-freelancer.html';
+                        dashboardMenuLink.innerHTML = '<i class="fas fa-briefcase" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> My Gigs';
+                    } else if (userRole === 'admin') {
+                        dashboardMenuLink.href = '/dashboard-admin.html';
+                        dashboardMenuLink.innerHTML = '<i class="fas fa-cog" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Admin Panel';
+                    } else {
+                        dashboardMenuLink.href = '/dashboard-client.html';
+                        dashboardMenuLink.innerHTML = '<i class="fas fa-tachometer-alt" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> My Projects';
+                    }
+                }
+
+            } else {
+                // User is signed out
+                console.log("User is signed out, updating header UI");
+                
+                // Show auth buttons
+                if (authButtons) authButtons.style.display = 'flex';
+                
+                // Hide user menu
+                if (userMenu) userMenu.style.display = 'none';
+
+                // Hide conditional nav links
+                if (dashboardNavLink) dashboardNavLink.style.display = 'none';
+                if (adminNavLink) adminNavLink.style.display = 'none';
+            }
+        }
+
+        // --- EVENT LISTENERS FOR AUTH BUTTONS ---
+        // These delegate to functions in js/auth.js
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const logoutBtnInMenu = document.getElementById('logoutBtnInMenu');
+
+        if (loginBtn) {
+            loginBtn.addEventListener('click', function () {
+                console.log("Login button clicked in header");
+                // Delegate to auth.js function
+                if (typeof window.openLoginModal === 'function') {
+                    window.openLoginModal();
+                } else {
+                    // Fallback: redirect to login page
+                    window.location.href = '/login.html';
+                }
+            });
+        }
+
+        if (signupBtn) {
+            signupBtn.addEventListener('click', function () {
+                console.log("Signup button clicked in header");
+                // Delegate to auth.js function
+                if (typeof window.openSignupModal === 'function') {
+                    window.openSignupModal();
+                } else {
+                    // Fallback: redirect to jobseeker signup
+                    window.location.href = '/signup-jobseeker.html';
+                }
+            });
+        }
+
+        if (logoutBtnInMenu) {
+            logoutBtnInMenu.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevent default button behavior if it's a submit
+                console.log("Logout button clicked in user menu");
+                // Delegate to auth.js function
+                if (typeof window.handleFirebaseLogout === 'function') {
+                    window.handleFirebaseLogout();
+                } else {
+                    alert("Logout functionality not available. Please refresh the page.");
+                }
+            });
+        }
+        // --- END AUTH BUTTON LISTENERS ---
+    });
+</script>
