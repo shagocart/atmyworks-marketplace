@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jobseeker Signup - AtMyWorks</title>
+    <title>Employer Signup - AtMyWorks</title>
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -38,25 +38,24 @@
         <div class="container">
             <div style="max-width: 500px; margin: 2rem auto; background: white; padding: 2rem; border-radius: 0.5rem; box-shadow: var(--shadow-md);">
                 <div style="text-align: center; margin-bottom: 2rem;">
-                    <h1 style="margin-bottom: 0.5rem;">Create a Jobseeker Account</h1>
-                    <p style="color: var(--gray-600);">Find work and build your freelance career</p>
+                    <h1 style="margin-bottom: 0.5rem;">Create an Employer Account</h1>
+                    <p style="color: var(--gray-600);">Hire top talent for your projects</p>
                 </div>
 
-                <form id="jobseekerSignupForm">
+                <form id="employerSignupForm">
                     <div class="form-group">
-                        <label for="username" class="form-label">Username (Unique) *</label>
-                        <input type="text" id="username" name="username" class="form-control" placeholder="your_unique_username" required>
-                        <div class="form-text">This will be your public profile name.</div>
+                        <label for="companyName" class="form-label">Company Name *</label>
+                        <input type="text" id="companyName" name="companyName" class="form-control" placeholder="Your Company Name" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="fullName" class="form-label">Full Name (as on ID) *</label>
+                        <label for="fullName" class="form-label">Your Full Name *</label>
                         <input type="text" id="fullName" name="fullName" class="form-control" placeholder="John Doe" required>
                     </div>
 
                     <div class="form-group">
                         <label for="email" class="form-label">Email Address *</label>
-                        <input type="email" id="email" name="email" class="form-control" placeholder="john.doe@example.com" required>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="john.doe@company.com" required>
                     </div>
 
                     <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
@@ -77,9 +76,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="portfolioLink" class="form-label">Portfolio Link (Optional)</label>
-                        <input type="url" id="portfolioLink" name="portfolioLink" class="form-control" placeholder="https://yourportfolio.com">
-                        <div class="form-text">Link to your online portfolio or LinkedIn profile.</div>
+                        <label for="website" class="form-label">Company Website (Optional)</label>
+                        <input type="url" id="website" name="website" class="form-control" placeholder="https://www.yourcompany.com">
                     </div>
 
                     <div class="form-check" style="margin-bottom: 1.5rem;">
@@ -89,7 +87,7 @@
                         </label>
                     </div>
 
-                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem; margin-bottom: 1rem;">Create Jobseeker Account</button>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem; margin-bottom: 1rem;">Create Employer Account</button>
 
                     <p style="text-align: center; font-size: var(--font-size-sm); color: var(--gray-600);">
                         Already have an account? <a href="/login.html" id="loginLink" style="color: var(--primary-600); text-decoration: none;">Log In</a>
@@ -141,16 +139,16 @@
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
     <script>
-         document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function () {
              // Check if firebaseApp is available (from firebase-config.js)
             if (typeof window.firebaseApp !== 'undefined') {
                 window.auth = window.firebaseApp.auth;
                 window.db = window.firebaseApp.db;
-                console.log("Firebase services available in signup-jobseeker.html");
+                console.log("Firebase services available in signup-employer.html");
             } else {
-                console.warn("Firebase not initialized in signup-jobseeker.html.");
+                console.warn("Firebase not initialized in signup-employer.html.");
                  // Optionally disable form or show error message
-                 const form = document.getElementById('jobseekerSignupForm');
+                 const form = document.getElementById('employerSignupForm');
                  if (form) {
                      form.innerHTML = '<p style="text-align: center; color: red;">Unable to connect to authentication service. Please try again later.</p>';
                  }
@@ -171,8 +169,8 @@
             if (signupBtnNav) {
                 signupBtnNav.addEventListener('click', function() {
                     // Already on signup page, could show a dropdown or do nothing
-                    // For now, let's redirect to employer signup as an example
-                    window.location.href = '/signup-employer.html';
+                    // For now, let's redirect to jobseeker signup as an example
+                    window.location.href = '/signup-jobseeker.html';
                 });
             }
 
@@ -184,23 +182,23 @@
             }
 
             // Handle form submission
-            const jobseekerSignupForm = document.getElementById('jobseekerSignupForm');
-            if (jobseekerSignupForm) {
-                jobseekerSignupForm.addEventListener('submit', async function(e) {
+            const employerSignupForm = document.getElementById('employerSignupForm');
+            if (employerSignupForm) {
+                employerSignupForm.addEventListener('submit', async function(e) {
                     e.preventDefault();
-                    console.log("Jobseeker signup form submitted");
+                    console.log("Employer signup form submitted");
 
                     const formData = new FormData(this);
-                    const username = formData.get('username').trim();
+                    const companyName = formData.get('companyName').trim();
                     const fullName = formData.get('fullName').trim();
                     const email = formData.get('email').trim();
                     const password = formData.get('password');
                     const confirmPassword = formData.get('confirmPassword');
                     const phoneNumber = formData.get('phoneNumber').trim();
-                    const portfolioLink = formData.get('portfolioLink').trim();
+                    const website = formData.get('website').trim();
 
                     // Basic Validation
-                    if (!username || !fullName || !email || !password) {
+                    if (!companyName || !fullName || !email || !password) {
                         alert("Please fill in all required fields.");
                         return;
                     }
@@ -215,7 +213,7 @@
                         return;
                     }
 
-                     // Email validation regex (basic)
+                    // Email validation regex (basic)
                     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                     if (!emailRegex.test(email)) {
                         alert("Please enter a valid email address.");
@@ -225,14 +223,14 @@
                     const userData = {
                         email: email,
                         password: password,
-                        username: username,
+                        companyName: companyName,
                         fullName: fullName,
                         phoneNumber: phoneNumber || '',
-                        portfolioLink: portfolioLink || '',
-                        role: 'jobseeker' // Assign role
+                        website: website || '',
+                        role: 'employer' // Assign role
                     };
 
-                    console.log("Jobseeker signup attempt with:", userData);
+                    console.log("Employer signup attempt with:", userData);
 
                     // Call the signup function from auth.js
                     // Make sure auth.js is loaded and the function is globally available
@@ -247,21 +245,17 @@
                             await window.handleFirebaseSignup(userData);
                              // If successful, handleFirebaseSignup might redirect or show a success message
                             // If it doesn't redirect, you might want to do something here
-                            console.log("Jobseeker signup process completed (or redirected)");
+                            console.log("Employer signup process completed (or redirected)");
                         } catch (error) {
                             // Re-enable button on error
                             submitButton.disabled = false;
                             submitButton.innerHTML = originalButtonText;
                             // Error should be handled inside handleFirebaseSignup, but log it anyway
-                            console.error("Jobseeker signup error caught in form handler:", error);
+                            console.error("Employer signup error caught in form handler:", error);
                         }
                     } else {
                         console.error("handleFirebaseSignup function not found. Is auth.js loaded correctly?");
                         alert("Signup functionality is not available. Please try refreshing the page.");
-                         // Re-enable button
-                        const submitButton = this.querySelector('button[type="submit"]');
-                        submitButton.disabled = false;
-                        submitButton.innerHTML = 'Create Jobseeker Account';
                     }
                 });
             }
