@@ -51,7 +51,6 @@
                     <div class="stat-card-value" id="totalUsersCount">0</div>
                     <div class="stat-card-label">Total Users</div>
                 </div>
-
                 <div class="stat-card">
                     <div class="stat-card-icon">
                         <i class="fas fa-briefcase"></i>
@@ -59,7 +58,6 @@
                     <div class="stat-card-value" id="totalGigsCount">0</div>
                     <div class="stat-card-label">Total Services</div>
                 </div>
-
                 <div class="stat-card">
                     <div class="stat-card-icon">
                         <i class="fas fa-shopping-cart"></i>
@@ -67,7 +65,6 @@
                     <div class="stat-card-value" id="totalOrdersCount">0</div>
                     <div class="stat-card-label">Total Orders</div>
                 </div>
-
                 <div class="stat-card">
                     <div class="stat-card-icon">
                         <i class="fas fa-chart-line"></i>
@@ -470,54 +467,6 @@
         </div>
     </main>
 
-<!-- Inside the Platform Settings section in dashboard-admin.html -->
-<div style="background: white; border-radius: var(--border-radius-lg); padding: 1.5rem; box-shadow: var(--shadow-md); margin-bottom: 2rem;">
-    <h3 style="margin-bottom: 1rem;">Currency Settings</h3>
-    
-    <!-- Primary Currency Selector -->
-    <div class="form-group" style="margin-bottom: 1.5rem;">
-        <label for="primaryCurrencySelect" class="form-label">Primary Currency *</label>
-        <select id="primaryCurrencySelect" class="form-control" required>
-            <option value="">Select Primary Currency</option>
-            <option value="USD">USD - US Dollar</option>
-            <option value="EUR">EUR - Euro</option>
-            <option value="PHP">PHP - Philippine Peso</option>
-            <option value="NGN">NGN - Nigerian Naira</option>
-            <option value="SGD">SGD - Singapore Dollar</option>
-            <option value="AUD">AUD - Australian Dollar</option>
-            <option value="INR">INR - Indian Rupee</option>
-        </select>
-        <div class="form-text">This is the default currency displayed throughout the platform.</div>
-    </div>
-
-    <!-- Supported Currencies Multi-Select -->
-    <div class="form-group" style="margin-bottom: 1.5rem;">
-        <label for="supportedCurrenciesSelect" class="form-label">Supported Currencies</label>
-        <select id="supportedCurrenciesSelect" class="form-control" multiple size="7">
-            <option value="USD">USD - US Dollar</option>
-            <option value="EUR">EUR - Euro</option>
-            <option value="PHP">PHP - Philippine Peso</option>
-            <option value="NGN">NGN - Nigerian Naira</option>
-            <option value="SGD">SGD - Singapore Dollar</option>
-            <option value="AUD">AUD - Australian Dollar</option>
-            <option value="INR">INR - Indian Rupee</option>
-        </select>
-        <div class="form-text">Hold Ctrl (Cmd on Mac) to select multiple currencies. These will be available for users to choose from.</div>
-    </div>
-
-    <!-- Exchange Rates (Placeholder for now) -->
-    <div class="form-group" style="margin-bottom: 1.5rem;">
-        <label class="form-label">Exchange Rates</label>
-        <p class="form-text">Exchange rates are currently managed manually in Firestore. For dynamic updates, integrate with a currency API service.</p>
-        <div id="exchangeRatesDisplay" style="background: var(--gray-50); padding: 1rem; border-radius: var(--border-radius-md); font-family: monospace; font-size: var(--font-size-sm);">
-            Loading exchange rates...
-        </div>
-    </div>
-
-    <button type="button" id="saveCurrencySettingsBtn" class="btn btn-primary">Save Currency Settings</button>
-    <button type="button" id="resetCurrencySettingsBtn" class="btn btn-outline" style="margin-left: 0.5rem;">Reset</button>
-</div>
-
     <!-- Modals -->
     <!-- User Modal -->
     <div id="userModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
@@ -672,12 +621,12 @@
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.min.js"></script> <!-- Quill JS -->
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
-    <script src="js/dashboard.js"></script> <!-- Dedicated admin JS -->
+    <script src="js/dashboard.js"></script> <!-- Dedicated dashboard JS -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             console.log("Admin Dashboard DOM loaded");
 
-             // Check if firebaseApp is available (from firebase-config.js)
+            // Check if firebaseApp is available (from firebase-config.js)
             if (typeof window.firebaseApp !== 'undefined') {
                 window.auth = window.firebaseApp.auth;
                 window.db = window.firebaseApp.db;
@@ -689,7 +638,8 @@
                 return;
             }
 
-            // --- AUTHORIZATION CHECK ---
+            // --- SECURITY CHECK: ENSURE USER IS AN ADMIN ---
+            // This check happens on page load
             checkAdminAuthorization();
 
             async function checkAdminAuthorization() {
@@ -703,6 +653,7 @@
 
                 try {
                     // Use the helper function from js/auth.js to check admin role
+                    // Ensure this function correctly queries Firestore for the user's role
                     const isAdmin = await window.checkIfUserIsAdmin();
                     if (!isAdmin) {
                         console.log("User is not an admin, redirecting.");
@@ -841,7 +792,7 @@
 
         // Function to switch between admin sections
         function switchSection(sectionId) {
-            console.log("Switching to section:", sectionId);
+            console.log("Switching to admin section:", sectionId);
             // Hide all sections
             const sections = document.querySelectorAll('.admin-section');
             sections.forEach(section => {

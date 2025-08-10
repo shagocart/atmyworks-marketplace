@@ -7,7 +7,7 @@
     <meta name="description" content="Find the perfect freelance services for your business or get hired for your skills on AtMyWorks, the world's largest freelance marketplace.">
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- ========== FIREBASE SDK ========== -->
     <!-- Load Firebase SDK scripts -->
@@ -15,7 +15,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
-
     <script src="js/firebase-config.js"></script>
     <!-- ========== END FIREBASE SDK ========== -->
 </head>
@@ -24,15 +23,46 @@
     <header class="header">
         <div class="container">
             <nav class="navbar">
-                <a href="/index.html" class="logo">AtMyWorks</a>
+                <a href="/index.html" class="logo">
+                    <i class="fas fa-briefcase logo-icon"></i> <!-- Optional icon -->
+                    AtMyWorks
+                </a>
                 <ul class="nav-links">
                     <li><a href="/browse.html">Find Work</a></li>
                     <li><a href="/blog.html">Blog</a></li>
                     <li><a href="#">How It Works</a></li>
                 </ul>
-                <div class="auth-buttons">
-                    <button class="btn btn-outline" id="loginBtn">Log In</button>
-                    <button class="btn btn-primary" id="signupBtn">Sign Up</button>
+                <!-- Auth Buttons (shown when not logged in) -->
+                <div class="auth-buttons" id="authButtons">
+                    <a href="/login.html" class="btn btn-outline" id="loginBtnNav">Log In</a>
+                    <a href="/signup-options.html" class="btn btn-primary" id="signupBtnNav">Sign Up</a>
+                </div>
+                <!-- User Menu (shown when logged in) -->
+                <div class="user-menu" id="userMenu" style="display: none; position: relative;">
+                    <button class="btn btn-outline user-menu-toggle" id="userMenuToggle" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-bell" style="margin-right: 0.5rem;"></i>
+                        <span class="user-avatar" id="userAvatar" style="width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-100), var(--secondary-100)); display: inline-flex; align-items: center; justify-content: center; font-weight: bold; color: var(--primary-800); margin-right: 0.5rem; box-shadow: var(--shadow-xs);">U</span>
+                        <span id="userName">User</span>
+                        <i class="fas fa-chevron-down" style="margin-left: 0.5rem; font-size: var(--font-size-xs);"></i>
+                    </button>
+
+                    <!-- User Menu Dropdown -->
+                    <div class="user-menu-dropdown" id="userMenuDropdown" style="display: none; position: absolute; top: 100%; right: 0; width: 250px; background: white; border-radius: var(--border-radius-lg); box-shadow: var(--shadow-lg); padding: 1rem; z-index: 1000; margin-top: 0.5rem;">
+                        <div style="display: flex; align-items: center; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+                            <div class="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-100), var(--secondary-100)); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--primary-800); margin-right: 1rem; box-shadow: var(--shadow-xs);">U</div>
+                            <div>
+                                <div style="font-weight: var(--font-weight-semibold);" id="dropdownUserName">User Name</div>
+                                <div style="font-size: var(--font-size-sm); color: var(--gray-500);" id="dropdownUserEmail">user@example.com</div>
+                            </div>
+                        </div>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="margin-bottom: 0.5rem;"><a href="/profile.html" class="user-menu-link"><i class="fas fa-user-circle" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> My Profile</a></li>
+                            <li style="margin-bottom: 0.5rem;"><a href="/messages.html" class="user-menu-link"><i class="fas fa-comments" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Messages <span class="badge badge-primary" style="float: right;">3</span></a></li>
+                            <li style="margin-bottom: 0.5rem;"><a href="/dashboard-client.html" class="user-menu-link" id="dashboardMenuLink"><i class="fas fa-tachometer-alt" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Dashboard</a></li>
+                            <li style="margin-bottom: 0.5rem;"><a href="/settings.html" class="user-menu-link"><i class="fas fa-cog" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Settings</a></li>
+                            <li><button class="btn btn-outline btn-block logout-btn" id="logoutBtnInMenu" style="margin-top: 1rem;"><i class="fas fa-sign-out-alt" style="margin-right: 0.75rem;"></i> Logout</button></li>
+                        </ul>
+                    </div>
                 </div>
             </nav>
         </div>
@@ -232,7 +262,7 @@
                             <span class="gig-rating-value">4.8</span>
                             <span>(86)</span>
                         </div>
-                        <div class="gig-price">From $200</div>
+                        <div class="gig-price">From $250</div>
                         <a href="/gig-detail.html" class="btn btn-primary mt-3">View Details</a>
                     </div>
                 </div>
@@ -253,7 +283,7 @@
                             <span class="gig-rating-value">4.7</span>
                             <span>(42)</span>
                         </div>
-                        <div class="gig-price">From $100</div>
+                        <div class="gig-price">From $150</div>
                         <a href="/gig-detail.html" class="btn btn-primary mt-3">View Details</a>
                     </div>
                 </div>
@@ -279,66 +309,46 @@
             <div class="footer-content">
                 <div class="footer-column">
                     <h3>AtMyWorks</h3>
-                    <p class="footer-description mb-3" style="font-size: var(--font-size-sm); color: var(--gray-400);">
-                        Connecting talented freelancers with businesses worldwide to turn ideas into reality.
-                    </p>
                     <ul>
-                        <li><a href="/about.html">About Us</a></li>
-                        <li><a href="/careers.html">Careers</a></li>
-                        <li><a href="/press.html">Press</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
                         <li><a href="/blog.html">Blog</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h3>Resources</h3>
                     <ul>
-                        <li><a href="/help.html">Help & Support</a></li>
-                        <li><a href="/trust-safety.html">Trust & Safety</a></li>
-                        <li><a href="/selling.html">Selling on AtMyWorks</a></li>
-                        <li><a href="/buying.html">Buying on AtMyWorks</a></li>
-                        <li><a href="/community-guidelines.html">Community Guidelines</a></li>
-                        <li><a href="/success-stories.html">Success Stories</a></li>
+                        <li><a href="#">Help & Support</a></li>
+                        <li><a href="#">Trust & Safety</a></li>
+                        <li><a href="#">Selling on AtMyWorks</a></li>
+                        <li><a href="#">Buying on AtMyWorks</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h3>Legal</h3>
                     <ul>
-                        <li><a href="/terms.html">Terms of Service</a></li>
-                        <li><a href="/privacy.html">Privacy Policy</a></li>
-                        <li><a href="/cookies.html">Cookie Policy</a></li>
-                        <li><a href="/copyright.html">Copyright Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Copyright Policy</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h3>Stay Connected</h3>
-                    <p class="mb-3" style="font-size: var(--font-size-sm); color: var(--gray-400);">
-                        Subscribe to our newsletter for the latest updates and offers.
-                    </p>
-                    <form class="newsletter-form mb-4" id="footerNewsletterForm">
-                        <div class="form-group mb-2">
+                    <p class="mb-3">Subscribe to our newsletter for the latest updates and offers.</p>
+                    <form class="newsletter-form mb-4">
+                        <div class="form-group">
                             <label for="footerNewsletterEmail" class="sr-only">Email Address</label>
-                            <div style="display: flex;">
-                                <input type="email" id="footerNewsletterEmail" class="form-control" placeholder="Your email address" required style="border-top-right-radius: 0; border-bottom-right-radius: 0; flex: 1;">
-                                <button type="submit" class="btn btn-primary" style="border-top-left-radius: 0; border-bottom-left-radius: 0; padding: 0 1rem;">
-                                    <i class="fas fa-paper-plane"></i>
-                                </button>
-                            </div>
+                            <input type="email" id="footerNewsletterEmail" class="form-control" placeholder="Your email address" required>
                         </div>
-                        <!-- Success Message (Initially Hidden) -->
-                        <div id="newsletterSuccessMessageFooter" class="form-text text-success" style="display: none; text-align: center; font-weight: var(--font-weight-semibold);">
-                            <i class="fas fa-check-circle"></i> Thank you for subscribing!
-                        </div>
-                        <!-- Error Message (Initially Hidden) -->
-                        <div id="newsletterErrorMessageFooter" class="form-text text-danger" style="display: none; text-align: center;">
-                            Please enter a valid email address.
-                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Subscribe</button>
                     </form>
                     <div class="social-links">
-                        <a href="https://twitter.com/AtMyWorks" aria-label="Twitter" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i></a>
-                        <a href="https://facebook.com/AtMyWorks" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://linkedin.com/company/AtMyWorks" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="https://instagram.com/AtMyWorks" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
-                        <a href="https://youtube.com/AtMyWorks" aria-label="YouTube" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
             </div>
@@ -354,7 +364,7 @@
     <script src="js/blog.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            console.log("Index Page JS loaded");
+            console.log("Index Page DOM loaded");
 
             // Check if firebaseApp is available (from firebase-config.js)
             if (typeof window.firebaseApp !== 'undefined') {
@@ -365,7 +375,122 @@
             } else {
                 console.warn("Firebase not initialized in index.html.");
                 // Hide auth-dependent UI elements or show an error
-                // updateAuthUI(null); // If you have this function in main.js
+                updateAuthUI(null);
+                return;
+            }
+
+            // --- AUTH STATE LISTENER ---
+            // Listen for auth state changes (login/logout)
+            window.auth.onAuthStateChanged(user => {
+                console.log("Auth state changed on index.html. Current user:", user ? user.uid : "None");
+                updateAuthUI(user);
+            });
+
+            // --- AUTH UI UPDATER ---
+            function updateAuthUI(user) {
+                const authButtons = document.getElementById('authButtons');
+                const userMenu = document.getElementById('userMenu');
+                const userNameElement = document.getElementById('userName');
+                const dropdownUserNameElement = document.getElementById('dropdownUserName');
+                const dropdownUserEmailElement = document.getElementById('dropdownUserEmail');
+                const userAvatarElements = document.querySelectorAll('.user-avatar');
+                const dashboardMenuLink = document.getElementById('dashboardMenuLink');
+                const logoutBtnInMenu = document.getElementById('logoutBtnInMenu');
+
+                if (user) {
+                    // User is signed in
+                    console.log("User is signed in on index.html:", user.email);
+                    if (authButtons) authButtons.style.display = 'none';
+                    if (userMenu) userMenu.style.display = 'flex'; // Or 'block'
+
+                    // Update user name/avatar in menu
+                    const displayName = user.displayName || user.email?.split('@')[0] || 'User';
+                    if (userNameElement) {
+                        userNameElement.textContent = displayName;
+                    }
+                    if (dropdownUserNameElement) {
+                        dropdownUserNameElement.textContent = displayName;
+                    }
+                    if (dropdownUserEmailElement) {
+                        dropdownUserEmailElement.textContent = user.email || 'No email';
+                    }
+
+                    // Update user avatar initials
+                    const initials = displayName.charAt(0).toUpperCase();
+                    userAvatarElements.forEach(avatar => {
+                        if (avatar) {
+                            avatar.textContent = initials;
+                        }
+                    });
+
+                    // Determine user role and update dashboard link
+                    // In a real app, you'd fetch this from Firestore
+                    // For now, we'll simulate based on email or UID prefix
+                    let userRole = 'client'; // Default assumption
+                    if (user.email && (user.email.includes('admin') || user.email.includes('support'))) {
+                        userRole = 'admin';
+                    } else if (user.email && user.email.includes('freelancer')) {
+                        userRole = 'freelancer';
+                    }
+                    console.log("Simulated user role on index.html:", userRole);
+
+                    if (dashboardMenuLink) {
+                        if (userRole === 'freelancer') {
+                            dashboardMenuLink.href = '/dashboard-freelancer.html';
+                            dashboardMenuLink.innerHTML = '<i class="fas fa-briefcase" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> My Gigs';
+                        } else if (userRole === 'admin') {
+                            dashboardMenuLink.href = '/dashboard-admin.html';
+                            dashboardMenuLink.innerHTML = '<i class="fas fa-cog" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Admin Panel';
+                        } else {
+                            dashboardMenuLink.href = '/dashboard-client.html';
+                            dashboardMenuLink.innerHTML = '<i class="fas fa-tachometer-alt" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> My Projects';
+                        }
+                    }
+
+                    if (logoutBtnInMenu) {
+                        logoutBtnInMenu.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            console.log("Logout button clicked in user menu on index.html");
+                            if (typeof window.handleFirebaseLogout === 'function') {
+                                window.handleFirebaseLogout();
+                            } else {
+                                alert("Logout functionality not available. Please refresh the page.");
+                            }
+                        });
+                    }
+
+                } else {
+                    // User is signed out
+                    console.log("User is signed out on index.html");
+                    if (authButtons) authButtons.style.display = 'flex'; // Or 'block'
+                    if (userMenu) userMenu.style.display = 'none';
+
+                    // Remove logout listener if it was added previously
+                    if (logoutBtnInMenu) {
+                        logoutBtnInMenu.removeEventListener('click', window.handleFirebaseLogout);
+                    }
+                }
+            }
+
+            // --- USER MENU TOGGLE ---
+            const userMenuToggle = document.getElementById('userMenuToggle');
+            const userMenuDropdown = document.getElementById('userMenuDropdown');
+
+            if (userMenuToggle && userMenuDropdown) {
+                userMenuToggle.addEventListener('click', function() {
+                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                    this.setAttribute('aria-expanded', !isExpanded);
+                    userMenuDropdown.style.display = isExpanded ? 'none' : 'block';
+                    console.log("User menu toggled on index.html");
+                });
+
+                // Close user menu if clicked outside
+                document.addEventListener('click', function(e) {
+                    if (!userMenuToggle.contains(e.target) && !userMenuDropdown.contains(e.target)) {
+                        userMenuToggle.setAttribute('aria-expanded', 'false');
+                        userMenuDropdown.style.display = 'none';
+                    }
+                });
             }
 
             // --- HERO SEARCH FUNCTIONALITY ---
@@ -392,87 +517,31 @@
                 });
             }
 
-            // --- AUTHENTICATION BUTTON ACTIONS (Header) ---
-            const loginBtn = document.getElementById('loginBtn');
-            const signupBtn = document.getElementById('signupBtn');
-
-            if (loginBtn) {
-                loginBtn.addEventListener('click', function () {
-                    console.log("Login button clicked");
-                    window.location.href = '/signup-employer.html'; // Or a dedicated login page
-                });
-            }
-
-            if (signupBtn) {
-                signupBtn.addEventListener('click', function () {
-                    console.log("Signup button clicked");
-                    window.location.href = '/signup-jobseeker.html'; // Default to jobseeker
-                });
-            }
-
             // --- NEWSLETTER FORM (Footer) ---
-            const newsletterForm = document.getElementById('footerNewsletterForm');
+            const newsletterForm = document.querySelector('.newsletter-form');
             if (newsletterForm) {
                 newsletterForm.addEventListener('submit', function(e) {
                     e.preventDefault();
-                    const emailInput = this.querySelector('#footerNewsletterEmail');
+                    const emailInput = this.querySelector('input[type="email"]');
                     const email = emailInput.value.trim();
-                    const successMessage = document.getElementById('newsletterSuccessMessageFooter');
-                    const errorMessage = document.getElementById('newsletterErrorMessageFooter');
 
-                    // Reset messages
-                    if (successMessage) successMessage.style.display = 'none';
-                    if (errorMessage) errorMessage.style.display = 'none';
-
-                    // Basic Validation
                     if (!email) {
-                        if (errorMessage) {
-                            errorMessage.textContent = "Please enter your email address.";
-                            errorMessage.style.display = 'block';
-                        }
+                        alert("Please enter your email address.");
                         return;
                     }
 
                     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                     if (!emailRegex.test(email)) {
-                        if (errorMessage) {
-                            errorMessage.textContent = "Please enter a valid email address.";
-                            errorMessage.style.display = 'block';
-                        }
+                        alert("Please enter a valid email address.");
                         return;
                     }
 
-                    console.log("Subscribing footer email:", email);
+                    console.log("Subscribing email:", email);
                     // In a full implementation, send this to your backend or Firebase
-                    // For now, simulate success
-                    if (successMessage) {
-                        successMessage.style.display = 'block';
-                    }
+                    alert(`Thank you for subscribing with ${email}!`);
                     emailInput.value = '';
-                    
-                    // Optional: Auto-hide success message after a few seconds
-                    setTimeout(() => {
-                        if (successMessage) {
-                            successMessage.style.display = 'none';
-                        }
-                    }, 5000);
                 });
             }
-
-            // --- GENERAL FORM HANDLING (Example) ---
-            // You can add more specific form handlers here or in dedicated files like auth.js
-            // For example, handling a contact form:
-            /*
-            const contactForm = document.getElementById('contactForm');
-            if (contactForm) {
-                contactForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    // Handle contact form submission
-                    console.log("Contact form submitted");
-                    // ... logic ...
-                });
-            }
-            */
         });
     </script>
 </body>

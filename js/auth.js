@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 userMenuNav.style.display = 'flex'; // Or 'block'
                 // Update user name/avatar in menu
                 const userNameElement = userMenuNav.querySelector('#userName');
-                if (userNameNameElement) {
+                if (userNameElement) {
                     userNameElement.textContent = user.displayName || user.email?.split('@')[0] || 'User';
                 }
                 // Update user avatar initials
@@ -61,7 +61,10 @@ document.addEventListener('DOMContentLoaded', function () {
             if (logoutBtnNav) {
                 // Remove any existing listener to prevent duplicates
                 logoutBtnNav.removeEventListener('click', window.handleFirebaseLogout);
-                logoutBtnNav.addEventListener('click', window.handleFirebaseLogout);
+                logoutBtnNav.addEventListener('click', function(e) {
+                    e.preventDefault(); // Prevent default link behavior if it's an <a> tag
+                    window.handleFirebaseLogout();
+                });
             }
         } else {
             // User is signed out
@@ -372,7 +375,7 @@ document.addEventListener('DOMContentLoaded', function () {
             showMessage(userMessage, "danger");
             throw error;
         }
-    }
+    };
 
     /**
      * Checks if the current user has an active subscription.
@@ -395,7 +398,7 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             console.log(`Checking subscription for user: ${userId}`);
             // Query the 'users' collection for the document with the user's UID
-            const userDoc = await window.db.collection('users').doc(userId).get();
+            const userDoc = await window.db.collection('users').doc(userId).get({ source: 'server' }); // Force server fetch
 
             if (userDoc.exists) {
                 const userData = userDoc.data();
@@ -453,7 +456,8 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             console.log(`Checking admin role for user: ${user.uid}`);
             // Query the 'users' collection for the document with the user's UID
-            const userDoc = await window.db.collection('users').doc(user.uid).get();
+            // Force fetching from the server to bypass potential cache issues
+            const userDoc = await window.db.collection('users').doc(user.uid).get({ source: 'server' });
 
             if (userDoc.exists) {
                 const userData = userDoc.data();
@@ -750,6 +754,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Make showMessage globally available
     window.showMessage = showMessage;
+
+    /**
+     * Utility function to escape HTML to prevent XSS.
+     * @param {string} str - The string to escape.
+     * @returns {string} The escaped string.
+     */
+    function escapeHtml(str) {
+        if (typeof str !== 'string') return str;
+        return str
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "<")
+            .replace(/>/g, ">")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    // Make escapeHtml globally available
+    window.escapeHtml = escapeHtml;
 
     // --- ATTACH LISTENERS TO EXISTING FORMS ON PAGE LOAD ---
     // This part might be redundant now as we are attaching listeners directly in the HTML pages
