@@ -6,17 +6,15 @@
     <title>How It Works - AtMyWorks</title>
     <meta name="description" content="Learn how AtMyWorks connects businesses with skilled freelancers. Discover the simple process to find talent, collaborate, and get work done.">
     <link rel="stylesheet" href="css/styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <!-- ========== FIREBASE SDK ========== -->
-    <!-- Load Firebase SDK scripts -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
     <script src="js/firebase-config.js"></script>
-    <!-- ========== END FIREBASE SDK ========== -->
 </head>
 <body data-page="how-it-works">
     <!-- Header -->
@@ -27,35 +25,35 @@
                 <ul class="nav-links">
                     <li><a href="/browse.html">Find Work</a></li>
                     <li><a href="/blog.html">Blog</a></li>
-                    <li><a href="/how-it-works.html" class="active">How It Works</a></li>
+                    <li><a href="/how-it-works.html">How It Works</a></li>
                 </ul>
-                <div class="auth-buttons" id="authButtons">
+                <div class="auth-buttons">
                     <button class="btn btn-outline" id="loginBtnNav">Log In</button>
                     <button class="btn btn-primary" id="signupBtnNav">Sign Up</button>
                 </div>
-                <div class="user-menu" id="userMenu" style="display: none; position: relative;">
-                    <button class="btn btn-outline user-menu-toggle" id="userMenuToggle" aria-haspopup="true" aria-expanded="false">
+                <div class="user-menu" id="userMenuNav" style="display: none; position: relative;">
+                    <button class="btn btn-outline user-menu-toggle" id="userMenuToggleNav" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-bell" style="margin-right: 0.5rem;"></i>
-                        <span class="user-avatar" id="userAvatar" style="width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-100), var(--secondary-100)); display: inline-flex; align-items: center; justify-content: center; font-weight: bold; color: var(--primary-800); margin-right: 0.5rem; box-shadow: var(--shadow-xs);">U</span>
-                        <span id="userName">User</span>
+                        <span class="user-avatar" id="userAvatarNav" style="width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-100), var(--secondary-100)); display: inline-flex; align-items: center; justify-content: center; font-weight: bold; color: var(--primary-800); margin-right: 0.5rem; box-shadow: var(--shadow-xs);">U</span>
+                        <span id="userNameNav">User</span>
                         <i class="fas fa-chevron-down" style="margin-left: 0.5rem; font-size: var(--font-size-xs);"></i>
                     </button>
 
                     <!-- User Menu Dropdown -->
-                    <div class="user-menu-dropdown" id="userMenuDropdown" style="display: none; position: absolute; top: 100%; right: 0; width: 250px; background: white; border-radius: var(--border-radius-lg); box-shadow: var(--shadow-lg); padding: 1rem; z-index: 1000; margin-top: 0.5rem;">
+                    <div class="user-menu-dropdown" id="userMenuDropdownNav" style="display: none; position: absolute; top: 100%; right: 0; width: 250px; background: white; border-radius: var(--border-radius-lg); box-shadow: var(--shadow-lg); padding: 1rem; z-index: 1000; margin-top: 0.5rem;">
                         <div style="display: flex; align-items: center; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
                             <div class="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-100), var(--secondary-100)); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--primary-800); margin-right: 1rem; box-shadow: var(--shadow-xs);">U</div>
                             <div>
-                                <div style="font-weight: var(--font-weight-semibold);" id="dropdownUserName">User Name</div>
-                                <div style="font-size: var(--font-size-sm); color: var(--gray-500);" id="dropdownUserEmail">user@example.com</div>
+                                <div style="font-weight: var(--font-weight-semibold);" id="dropdownUserNameNav">User Name</div>
+                                <div style="font-size: var(--font-size-sm); color: var(--gray-500);" id="dropdownUserEmailNav">user@example.com</div>
                             </div>
                         </div>
                         <ul style="list-style: none; padding: 0; margin: 0;">
                             <li style="margin-bottom: 0.5rem;"><a href="/profile.html" class="user-menu-link"><i class="fas fa-user-circle" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> My Profile</a></li>
                             <li style="margin-bottom: 0.5rem;"><a href="/messages.html" class="user-menu-link"><i class="fas fa-comments" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Messages <span class="badge badge-primary" style="float: right;">3</span></a></li>
-                            <li style="margin-bottom: 0.5rem;"><a href="/dashboard-client.html" class="user-menu-link" id="dashboardMenuLink"><i class="fas fa-tachometer-alt" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Dashboard</a></li>
+                            <li style="margin-bottom: 0.5rem;"><a href="/dashboard-client.html" class="user-menu-link" id="dashboardMenuLinkNav"><i class="fas fa-tachometer-alt" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Dashboard</a></li>
                             <li style="margin-bottom: 0.5rem;"><a href="/settings.html" class="user-menu-link"><i class="fas fa-cog" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Settings</a></li>
-                            <li><button class="btn btn-outline btn-block logout-btn" id="logoutBtnInMenu" style="margin-top: 1rem;"><i class="fas fa-sign-out-alt" style="margin-right: 0.75rem;"></i> Logout</button></li>
+                            <li><button class="btn btn-outline btn-block logout-btn" id="logoutBtnInMenuNav" style="margin-top: 1rem;"><i class="fas fa-sign-out-alt" style="margin-right: 0.75rem;"></i> Logout</button></li>
                         </ul>
                     </div>
                 </div>
@@ -195,7 +193,7 @@
     <!-- CTA Section -->
     <section class="section section-primary text-center">
         <div class="container">
-            <h2>Ready to Get Started?</h2>
+            <h2>Get Started Today!</h2>
             <p class="mb-6">Join millions of businesses and freelancers already on AtMyWorks.</p>
             <div class="cta-buttons">
                 <a href="/signup-employer.html" class="btn btn-secondary btn-lg me-3 mb-3">Hire Talent</a>
@@ -235,26 +233,9 @@
                         <li><a href="#">Copyright Policy</a></li>
                     </ul>
                 </div>
-                <div class="footer-column">
-                    <h3>Stay Connected</h3>
-                    <p class="mb-3">Subscribe to our newsletter for the latest updates and offers.</p>
-                    <form class="newsletter-form mb-4">
-                        <div class="form-group">
-                            <label for="footerNewsletterEmail" class="sr-only">Email Address</label>
-                            <input type="email" id="footerNewsletterEmail" class="form-control" placeholder="Your email address" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block">Subscribe</button>
-                    </form>
-                    <div class="social-links">
-                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2023 AtMyWorks. All rights reserved.</p>
+                <p>&copy; 2025 AtMyWorks. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -290,35 +271,71 @@
                 const authButtonsNav = document.getElementById('authButtonsNav');
                 const userMenuNav = document.getElementById('userMenuNav');
                 const logoutBtnNav = document.getElementById('logoutBtnNav');
+                const userNameElementNav = document.getElementById('userNameNav');
+                const dropdownUserNameElementNav = document.getElementById('dropdownUserNameNav');
+                const dropdownUserEmailElementNav = document.getElementById('dropdownUserEmailNav');
+                const userAvatarElementsNav = document.querySelectorAll('.user-avatar');
 
                 if (user) {
                     // User is signed in
                     console.log("User is signed in on how-it-works.html:", user.email);
                     if (authButtonsNav) authButtonsNav.style.display = 'none';
-                    if (userMenuNav) userMenuNav.style.display = 'flex'; // Or 'block'
+                    if (userMenuNav) {
+                        userMenuNav.style.display = 'flex'; // Or 'block'
 
-                    // Update user name/avatar in menu
-                    const userNameElement = document.getElementById('userName');
-                    if (userNameElement) {
-                        userNameElement.textContent = user.displayName || user.email?.split('@')[0] || 'User';
-                    }
-
-                    // Update user avatar initials
-                    const userAvatarElements = document.querySelectorAll('.user-avatar');
-                    userAvatarElements.forEach(avatar => {
-                        if (avatar) {
-                            const initials = (user.displayName || user.email?.split('@')[0] || 'U').charAt(0).toUpperCase();
-                            avatar.textContent = initials;
+                        // Update user name/avatar in menu
+                        const displayName = user.displayName || user.email?.split('@')[0] || 'User';
+                        if (userNameElementNav) {
+                            userNameElementNav.textContent = displayName;
                         }
-                    });
+                        if (dropdownUserNameElementNav) {
+                            dropdownUserNameElementNav.textContent = displayName;
+                        }
+                        if (dropdownUserEmailElementNav) {
+                            dropdownUserEmailElementNav.textContent = user.email || 'No email';
+                        }
 
-                    if (logoutBtnNav) {
-                        // Remove any existing listener to prevent duplicates
-                        logoutBtnNav.removeEventListener('click', window.handleFirebaseLogout);
-                        logoutBtnNav.addEventListener('click', function(e) {
-                            e.preventDefault(); // Prevent default link behavior if it's an <a> tag
-                            window.handleFirebaseLogout();
+                        // Update user avatar initials
+                        const initials = (displayName || 'U').charAt(0).toUpperCase();
+                        userAvatarElementsNav.forEach(avatar => {
+                            if (avatar) {
+                                avatar.textContent = initials;
+                            }
                         });
+
+                        // Determine user role and update dashboard link
+                        // In a real app, you'd fetch this from Firestore
+                        // For now, we'll simulate based on email or UID prefix
+                        let userRole = 'client'; // Default assumption
+                        if (user.email && (user.email.includes('admin') || user.email.includes('support'))) {
+                            userRole = 'admin';
+                        } else if (user.email && user.email.includes('freelancer')) {
+                            userRole = 'freelancer';
+                        }
+                        console.log("Simulated user role on how-it-works.html:", userRole);
+
+                        if (dashboardMenuLinkNav) {
+                            if (userRole === 'freelancer') {
+                                dashboardMenuLinkNav.href = '/dashboard-freelancer.html';
+                                dashboardMenuLinkNav.innerHTML = '<i class="fas fa-briefcase" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> My Gigs';
+                            } else if (userRole === 'admin') {
+                                dashboardMenuLinkNav.href = '/dashboard-admin.html';
+                                dashboardMenuLinkNav.innerHTML = '<i class="fas fa-cog" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Admin Panel';
+                            } else {
+                                dashboardMenuLinkNav.href = '/dashboard-client.html';
+                                dashboardMenuLinkNav.innerHTML = '<i class="fas fa-tachometer-alt" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> My Projects';
+                            }
+                        }
+
+                        if (logoutBtnNav) {
+                            // Remove any existing listener to prevent duplicates
+                            logoutBtnNav.removeEventListener('click', window.handleFirebaseLogout);
+                            logoutBtnNav.addEventListener('click', function(e) {
+                                e.preventDefault(); // Prevent default link behavior if it's an <a> tag
+                                window.handleFirebaseLogout();
+                            });
+                        }
+
                     }
                 } else {
                     // User is signed out
@@ -334,22 +351,46 @@
             }
 
             // --- USER MENU TOGGLE ---
-            const userMenuToggle = document.getElementById('userMenuToggle');
-            const userMenuDropdown = document.getElementById('userMenuDropdown');
+            const userMenuToggleNav = document.getElementById('userMenuToggleNav');
+            const userMenuDropdownNav = document.getElementById('userMenuDropdownNav');
 
-            if (userMenuToggle && userMenuDropdown) {
-                userMenuToggle.addEventListener('click', function() {
+            if (userMenuToggleNav && userMenuDropdownNav) {
+                userMenuToggleNav.addEventListener('click', function() {
                     const isExpanded = this.getAttribute('aria-expanded') === 'true';
                     this.setAttribute('aria-expanded', !isExpanded);
-                    userMenuDropdown.style.display = isExpanded ? 'none' : 'block';
+                    userMenuDropdownNav.style.display = isExpanded ? 'none' : 'block';
                     console.log("User menu toggled on how-it-works.html");
                 });
 
                 // Close user menu if clicked outside
                 document.addEventListener('click', function(e) {
-                    if (!userMenuToggle.contains(e.target) && !userMenuDropdown.contains(e.target)) {
-                        userMenuToggle.setAttribute('aria-expanded', 'false');
-                        userMenuDropdown.style.display = 'none';
+                    if (!userMenuToggleNav.contains(e.target) && !userMenuDropdownNav.contains(e.target)) {
+                        userMenuToggleNav.setAttribute('aria-expanded', 'false');
+                        userMenuDropdownNav.style.display = 'none';
+                    }
+                });
+            }
+
+            // --- HERO SEARCH FUNCTIONALITY ---
+            const heroSearchInput = document.getElementById('heroSearchInput');
+            const heroSearchButton = document.getElementById('heroSearchButton');
+
+            if (heroSearchInput && heroSearchButton) {
+                const performHeroSearch = () => {
+                    const query = heroSearchInput.value.trim();
+                    if (query) {
+                        console.log("Hero search for:", query);
+                        // Redirect to browse page with query parameter
+                        window.location.href = `/browse.html?q=${encodeURIComponent(query)}`;
+                    } else {
+                        window.location.href = `/browse.html`;
+                    }
+                };
+
+                heroSearchButton.addEventListener('click', performHeroSearch);
+                heroSearchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        performHeroSearch();
                     }
                 });
             }
@@ -373,13 +414,12 @@
                         return;
                     }
 
-                    console.log("Subscribing footer email:", email);
+                    console.log("Subscribing email:", email);
                     // In a full implementation, send this to your backend or Firebase
                     alert(`Thank you for subscribing with ${email}!`);
                     emailInput.value = '';
                 });
             }
-            // --- END NEWSLETTER FORM ---
         });
     </script>
 </body>

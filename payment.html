@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Payment - AtMyWorks</title>
+    <meta name="description" content="Complete your payment securely on AtMyWorks. Choose from multiple payment methods including PayPal, Stripe, GCash, and Maya.">
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    
+    <!-- Stripe SDK (if using Stripe) -->
+    <script src="https://js.stripe.com/v3/"></script>
+    
+    <!-- PayPal SDK (if using PayPal) -->
+    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=USD"></script>
+</head>
+<body data-page="payment">
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="/index.html" class="logo">AtMyWorks</a>
+                <ul class="nav-links">
+                    <li><a href="/browse.html">Find Work</a></li>
+                    <li><a href="/blog.html">Blog</a></li>
+                    <li><a href="#">How It Works</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline" id="loginBtnNav">Log In</button>
+                    <button class="btn btn-primary" id="signupBtnNav">Sign Up</button>
+                </div>
+                <div class="user-menu" id="userMenuNav" style="display: none; position: relative;">
+                    <button class="btn btn-outline user-menu-toggle" id="userMenuToggleNav" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-bell" style="margin-right: 0.5rem;"></i>
+                        <span class="user-avatar" id="userAvatarNav" style="width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-100), var(--secondary-100)); display: inline-flex; align-items: center; justify-content: center; font-weight: bold; color: var(--primary-800); margin-right: 0.5rem; box-shadow: var(--shadow-xs);">U</span>
+                        <span id="userNameNav">User</span>
+                        <i class="fas fa-chevron-down" style="margin-left: 0.5rem; font-size: var(--font-size-xs);"></i>
+                    </button>
+
+                    <!-- User Menu Dropdown -->
+                    <div class="user-menu-dropdown" id="userMenuDropdownNav" style="display: none; position: absolute; top: 100%; right: 0; width: 250px; background: white; border-radius: var(--border-radius-lg); box-shadow: var(--shadow-lg); padding: 1rem; z-index: 1000; margin-top: 0.5rem;">
+                        <div style="display: flex; align-items: center; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+                            <div class="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-100), var(--secondary-100)); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--primary-800); margin-right: 1rem; box-shadow: var(--shadow-xs);">U</div>
+                            <div>
+                                <div style="font-weight: var(--font-weight-semibold);" id="dropdownUserNameNav">User Name</div>
+                                <div style="font-size: var(--font-size-sm); color: var(--gray-500);" id="dropdownUserEmailNav">user@example.com</div>
+                            </div>
+                        </div>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="margin-bottom: 0.5rem;"><a href="/profile.html" class="user-menu-link"><i class="fas fa-user-circle" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> My Profile</a></li>
+                            <li style="margin-bottom: 0.5rem;"><a href="/messages.html" class="user-menu-link"><i class="fas fa-comments" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Messages <span class="badge badge-primary" style="float: right;">3</span></a></li>
+                            <li style="margin-bottom: 0.5rem;"><a href="/dashboard-client.html" class="user-menu-link" id="dashboardMenuLinkNav"><i class="fas fa-tachometer-alt" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Dashboard</a></li>
+                            <li style="margin-bottom: 0.5rem;"><a href="/settings.html" class="user-menu-link"><i class="fas fa-cog" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Settings</a></li>
+                            <li><button class="btn btn-outline btn-block logout-btn" id="logoutBtnInMenuNav" style="margin-top: 1rem;"><i class="fas fa-sign-out-alt" style="margin-right: 0.75rem;"></i> Logout</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Payment Content -->
+    <main class="payment" style="padding: 2rem 0;">
+        <div class="container">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <div style="background: white; border-radius: 0.5rem; padding: 2rem; box-shadow: var(--shadow-md); margin-bottom: 2rem;">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <div style="font-size: 3rem; color: var(--primary-600); margin-bottom: 1rem;">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h1 style="margin-bottom: 0.5rem;">Secure Payment</h1>
+                        <p style="color: var(--gray-500); margin: 0;">Complete your payment for the selected service</p>
+                    </div>
+
+                    <!-- Payment Summary -->
+                    <div style="background: var(--gray-50); border-radius: var(--border-radius-lg); padding: 1.5rem; margin-bottom: 2rem; border: 1px solid var(--border-color);">
+                        <h3 style="margin-bottom: 1rem; color: var(--gray-800);">Payment Summary</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                            <div>
+                                <div style="font-weight: var(--font-weight-semibold); color: var(--gray-500); font-size: var(--font-size-sm); margin-bottom: 0.25rem;">Service</div>
+                                <div id="serviceName" style="font-size: var(--font-size-base);">-</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: var(--font-weight-semibold); color: var(--gray-500); font-size: var(--font-size-sm); margin-bottom: 0.25rem;">Seller</div>
+                                <div id="sellerName" style="font-size: var(--font-size-base);">-</div>
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                            <div>
+                                <div style="font-weight: var(--font-weight-semibold); color: var(--gray-500); font-size: var(--font-size-sm); margin-bottom: 0.25rem;">Category</div>
+                                <div id="serviceCategory" style="font-size: var(--font-size-base);">-</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: var(--font-weight-semibold); color: var(--gray-500); font-size: var(--font-size-sm); margin-bottom: 0.25rem;">Price</div>
+                                <div id="servicePrice" style="font-size: var(--font-size-xl); font-weight: var(--font-weight-bold); color: var(--primary-700);">-</div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="font-weight: var(--font-weight-semibold); color: var(--gray-500); font-size: var(--font-size-sm); margin-bottom: 0.25rem;">Description</div>
+                            <div id="serviceDescription" style="font-size: var(--font-size-sm); color: var(--gray-600);">-</div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method Selection -->
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="margin-bottom: 1rem; color: var(--gray-800);">Select Payment Method</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                            <!-- PayPal Option -->
+                            <div class="payment-method-card" style="background: white; border-radius: var(--border-radius-lg); padding: 1rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); transition: all var(--transition-normal); cursor: pointer; display: flex; flex-direction: column; align-items: center; text-align: center;" data-method="paypal">
+                                <div style="font-size: 2rem; color: #003087; margin-bottom: 0.5rem;">
+                                    <i class="fab fa-paypal"></i>
+                                </div>
+                                <h4 style="margin-bottom: 0.5rem; font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); color: var(--gray-800);">PayPal</h4>
+                                <p style="font-size: var(--font-size-sm); color: var(--gray-500); margin-bottom: 0;">Secure online payment</p>
+                            </div>
+
+                            <!-- Stripe Option -->
+                            <div class="payment-method-card" style="background: white; border-radius: var(--border-radius-lg); padding: 1rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); transition: all var(--transition-normal); cursor: pointer; display: flex; flex-direction: column; align-items: center; text-align: center;" data-method="stripe">
+                                <div style="font-size: 2rem; color: #6772e5; margin-bottom: 0.5rem;">
+                                    <i class="fab fa-stripe"></i>
+                                </div>
+                                <h4 style="margin-bottom: 0.5rem; font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); color: var(--gray-800);">Stripe</h4>
+                                <p style="font-size: var(--font-size-sm); color: var(--gray-500); margin-bottom: 0;">Credit/Debit card payment</p>
+                            </div>
+
+                            <!-- GCash Option -->
+                            <div class="payment-method-card" style="background: white; border-radius: var(--border-radius-lg); padding: 1rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); transition: all var(--transition-normal); cursor: pointer; display: flex; flex-direction: column; align-items: center; text-align: center;" data-method="gcash">
+                                <div style="font-size: 2rem; color: #007AFF; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <h4 style="margin-bottom: 0.5rem; font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); color: var(--gray-800);">GCash</h4>
+                                <p style="font-size: var(--font-size-sm); color: var(--gray-500); margin-bottom: 0;">Mobile payment (Philippines)</p>
+                            </div>
+
+                            <!-- Maya Option -->
+                            <div class="payment-method-card" style="background: white; border-radius: var(--border-radius-lg); padding: 1rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); transition: all var(--transition-normal); cursor: pointer; display: flex; flex-direction: column; align-items: center; text-align: center;" data-method="maya">
+                                <div style="font-size: 2rem; color: #FF6B00; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-wallet"></i>
+                                </div>
+                                <h4 style="margin-bottom: 0.5rem; font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); color: var(--gray-800);">Maya</h4>
+                                <p style="font-size: var(--font-size-sm); color: var(--gray-500); margin-bottom: 0;">Mobile payment (Philippines)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Form Container -->
+                    <div id="paymentFormContainer" style="display: none;">
+                        <!-- PayPal Form (Placeholder) -->
+                        <div id="paypalForm" class="payment-method-form" style="display: none;">
+                            <h3 style="margin-bottom: 1rem; color: var(--gray-800);">Pay with PayPal</h3>
+                            <p style="margin-bottom: 1.5rem; color: var(--gray-600);">You will be redirected to PayPal to complete your payment.</p>
+                            <div id="paypal-button-container" style="margin-bottom: 1.5rem;"></div>
+                            <button class="btn btn-outline" onclick="cancelPaymentMethod()"><i class="fas fa-arrow-left"></i> Back to Payment Methods</button>
+                        </div>
+
+                        <!-- Stripe Form (Placeholder) -->
+                        <div id="stripeForm" class="payment-method-form" style="display: none;">
+                            <h3 style="margin-bottom: 1rem; color: var(--gray-800);">Pay with Credit/Debit Card (Stripe)</h3>
+                            <p style="margin-bottom: 1.5rem; color: var(--gray-600);">Enter your card details to complete the payment.</p>
+                            <form id="stripePaymentForm">
+                                <div class="form-group">
+                                    <label for="cardholderName" class="form-label">Cardholder Name *</label>
+                                    <input type="text" id="cardholderName" name="cardholderName" class="form-control" placeholder="John Doe" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cardNumber" class="form-label">Card Number *</label>
+                                    <div id="cardNumberElement" class="form-control" style="padding: 0.75rem;"></div>
+                                </div>
+                                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                                    <div class="form-group">
+                                        <label for="cardExpiry" class="form-label">Expiration Date *</label>
+                                        <div id="cardExpiryElement" class="form-control" style="padding: 0.75rem;"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cardCvc" class="form-label">CVC *</label>
+                                        <div id="cardCvcElement" class="form-control" style="padding: 0.75rem;"></div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem; margin-bottom: 1rem;">Pay with Card</button>
+                                <button class="btn btn-outline" onclick="cancelPaymentMethod()" style="width: 100%; padding: 0.75rem;"><i class="fas fa-arrow-left"></i> Back to Payment Methods</button>
+                            </form>
+                        </div>
+
+                        <!-- GCash Form (Manual) -->
+                        <div id="gcashForm" class="payment-method-form" style="display: none;">
+                            <h3 style="margin-bottom: 1rem; color: var(--gray-800);">Pay with GCash</h3>
+                            <p style="margin-bottom: 1.5rem; color: var(--gray-600);">Please send the payment to the following GCash number:</p>
+                            <div style="background: var(--gray-50); border-radius: var(--border-radius-lg); padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid var(--border-color); text-align: center;">
+                                <div style="font-size: 2rem; color: #007AFF; margin-bottom: 1rem;">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <div style="font-size: var(--font-size-xl); font-weight: var(--font-weight-bold); color: var(--gray-800); margin-bottom: 0.5rem;">09159459320</div>
+                                <div style="font-size: var(--font-size-sm); color: var(--gray-500);">GCash Number</div>
+                            </div>
+                            <p style="margin-bottom: 1.5rem; color: var(--gray-600);">After payment, please click "Payment Completed" to notify the system.</p>
+                            <button class="btn btn-primary" onclick="confirmManualPayment('gcash')" style="width: 100%; padding: 0.75rem; margin-bottom: 1rem;">Payment Completed</button>
+                            <button class="btn btn-outline" onclick="cancelPaymentMethod()" style="width: 100%; padding: 0.75rem;"><i class="fas fa-arrow-left"></i> Back to Payment Methods</button>
+                        </div>
+
+                        <!-- Maya Form (Manual) -->
+                        <div id="mayaForm" class="payment-method-form" style="display: none;">
+                            <h3 style="margin-bottom: 1rem; color: var(--gray-800);">Pay with Maya</h3>
+                            <p style="margin-bottom: 1.5rem; color: var(--gray-600);">Please send the payment to the following Maya number:</p>
+                            <div style="background: var(--gray-50); border-radius: var(--border-radius-lg); padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid var(--border-color); text-align: center;">
+                                <div style="font-size: 2rem; color: #FF6B00; margin-bottom: 1rem;">
+                                    <i class="fas fa-wallet"></i>
+                                </div>
+                                <div style="font-size: var(--font-size-xl); font-weight: var(--font-weight-bold); color: var(--gray-800); margin-bottom: 0.5rem;">09159459320</div>
+                                <div style="font-size: var(--font-size-sm); color: var(--gray-500);">Maya Number</div>
+                            </div>
+                            <p style="margin-bottom: 1.5rem; color: var(--gray-600);">After payment, please click "Payment Completed" to notify the system.</p>
+                            <button class="btn btn-primary" onclick="confirmManualPayment('maya')" style="width: 100%; padding: 0.75rem; margin-bottom: 1rem;">Payment Completed</button>
+                            <button class="btn btn-outline" onclick="cancelPaymentMethod()" style="width: 100%; padding: 0.75rem;"><i class="fas fa-arrow-left"></i> Back to Payment Methods</button>
+                        </div>
+                    </div>
+
+                    <!-- Success Message (Initially Hidden) -->
+                    <div id="paymentSuccessMessage" style="display: none; text-align: center; padding: var(--spacing-10); grid-column: 1 / -1;">
+                        <div style="font-size: 3rem; color: var(--success-500); margin-bottom: 1rem;">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h2 style="margin-bottom: 1rem;">Payment Successful!</h2>
+                        <p style="margin-bottom: 1.5rem; font-size: var(--font-size-lg);">Thank you for your payment. Your order has been created and the freelancer has been notified.</p>
+                        <a href="/dashboard-client.html" class="btn btn-primary btn-lg me-3 mb-3">Go to My Dashboard</a>
+                        <a href="/index.html" class="btn btn-outline btn-lg mb-3">Return to Homepage</a>
+                    </div>
+
+                    <!-- Error Message (Initially Hidden) -->
+                    <div id="paymentErrorMessage" style="display: none; text-align: center; padding: var(--spacing-10); grid-column: 1 / -1; color: var(--danger-500);">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <h2 style="margin-bottom: 1rem;">Payment Failed</h2>
+                        <p style="margin-bottom: 1.5rem; font-size: var(--font-size-lg);">Your payment could not be processed. Please try again or contact support.</p>
+                        <button class="btn btn-outline" onclick="retryPayment()"><i class="fas fa-redo"></i> Retry Payment</button>
+                        <a href="/index.html" class="btn btn-primary btn-lg me-3 mb-3" style="margin-left: 1rem;">Return to Homepage</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>AtMyWorks</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="/blog.html">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Help & Support</a></li>
+                        <li><a href="#">Trust & Safety</a></li>
+                        <li><a href="#">Selling on AtMyWorks</a></li>
+                        <li><a href="#">Buying on AtMyWorks</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Copyright Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 AtMyWorks. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/payments.js"></script> <!-- Dedicated payments JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log("Payment Page DOM loaded");
+
+            // Check if firebaseApp is available (from firebase-config.js)
+            if (typeof window.firebaseApp !== 'undefined') {
+                window.auth = window.firebaseApp.auth;
+                window.db = window.firebaseApp.db;
+                window.storage = window.firebaseApp.storage;
+                console.log("Firebase services available in payment.html");
+            } else {
+                console.warn("Firebase not initialized in payment.html.");
+                alert("Unable to connect to the database. Please try refreshing the page.");
+                return;
+            }
+
+            // --- PAYMENT PAGE SPECIFIC LOGIC ---
+            window.PaymentPage = {
+                currentUser: null,
+                currentGigId: null,
+                currentGigData: null,
+                selectedPaymentMethod: null,
+
+                /**
+                 * Initializes the payment page.
+                 * Sets up auth state listener and loads gig data.
+                 */
+                async init() {
+                    console.log("Initializing Payment Page...");
+
+                    // Listen for auth state changes (login/logout)
+                    window.auth.onAuthStateChanged(user => {
+                        console.log("Auth state changed on payment.html. Current user:", user ? user.uid : "None");
+                        this.currentUser = user;
+                        updateAuthUI(user);
+                        
+                        if (user) {
+                            // User is signed in, load gig data
+                            this.loadGigData();
+                        } else {
+                            // User is signed out, redirect to login
+                            console.log("No user logged in, redirecting to login.");
+                            alert("Please log in to complete your payment.");
+                            window.location.href = '/login.html';
+                            return;
+                        }
+                    });
+                },
+
+                /**
+                 * Loads gig data from Firestore based on URL parameters.
+                 */
+                async loadGigData() {
+                    console.log("Loading gig data for payment...");
+
+                    // Get gig ID from URL parameters
+                    const urlParams = new URLSearchParams(window.location.search);
+                    this.currentGigId = urlParams.get('gigId');
+                    
+                    if (!this.currentGigId) {
+                        console.warn("No gig ID provided in URL parameters.");
+                        alert("Invalid gig ID. Please go back and select a service.");
+                        window.location.href = '/browse.html';
+                        return;
+                    }
+
+                    console.log("Gig ID for payment:", this.currentGigId);
+
+                    try {
+                        // Query Firestore for the gig document
+                        const gigDoc = await window.db.collection('gigs').doc(this.currentGigId).get();
+
+                        if (gigDoc.exists) {
+                            this.currentGigData = gigDoc.data();
+                            console.log("Gig data loaded for payment:", this.currentGigData);
+                            this.updatePaymentSummary(this.currentGigData);
+                        } else {
+                            console.warn("Gig document not found in Firestore for ID:", this.currentGigId);
+                            alert("Gig not found. Please go back and select a valid service.");
+                            window.location.href = '/browse.html';
+                        }
+
+                    } catch (error) {
+                        console.error("Error loading gig data for payment:", error);
+                        alert(`Failed to load gig data: ${error.message}. Please try again.`);
+                        window.location.href = '/browse.html';
+                    }
+                },
+
+                /**
+                 * Updates the payment summary section with gig data.
+                 * @param {Object} gigData - The gig data from Firestore.
+                 */
+                updatePaymentSummary(gigData) {
+                    console.log("Updating payment summary with gig data:", gigData);
+
+                    const serviceNameElement = document.getElementById('serviceName');
+                    const sellerNameElement = document.getElementById('sellerName');
+                    const serviceCategoryElement = document.getElementById('serviceCategory');
+                    const servicePriceElement = document.getElementById('servicePrice');
+                    const serviceDescriptionElement = document.getElementById('serviceDescription');
+
+                    if (serviceNameElement) {
+                        serviceNameElement.textContent = gigData.title || 'Service Title';
+                    }
+                    if (sellerNameElement) {
+                        sellerNameElement.textContent = gigData.sellerName || 'Seller Name';
+                    }
+                    if (serviceCategoryElement) {
+                        serviceCategoryElement.textContent = gigData.category || 'Uncategorized';
+                    }
+                    if (servicePriceElement) {
+                        servicePriceElement.textContent = gigData.price ? `From $${gigData.price}` : 'Price N/A';
+                    }
+                    if (serviceDescriptionElement) {
+                        serviceDescriptionElement.textContent = gigData.description || 'No description available.';
+                    }
+                },
+
+                /**
+                 * Selects a payment method and shows the corresponding form.
+                 * @param {string} method - The selected payment method ('paypal', 'stripe', 'gcash', 'maya').
+                 */
+                selectPaymentMethod(method) {
+                    console.log("Selecting payment method:", method);
+                    this.selectedPaymentMethod = method;
+
+                    // Hide all payment method forms
+                    const paymentMethodForms = document.querySelectorAll('.payment-method-form');
+                    paymentMethodForms.forEach(form => {
+                        form.style.display = 'none';
+                        form.classList.remove('active');
+                    });
+
+                    // Show the selected payment method form
+                    const selectedForm = document.getElementById(`${method}Form`);
+                    if (selectedForm) {
+                        selectedForm.style.display = 'block';
+                        selectedForm.classList.add('active');
+                    } else {
+                        console.warn(`Payment form for method '${method}' not found.`);
+                        alert(`Payment method '${method}' is not yet supported. Please choose another.`);
+                        return;
+                    }
+
+                    // Show the payment form container
+                    const paymentFormContainer = document.getElementById('paymentFormContainer');
+                    if (paymentFormContainer) {
+                        paymentFormContainer.style.display = 'block';
+                    }
+
+                    // Hide the payment method selection
+                    const paymentMethodSelection = document.querySelector('.payment-method-selection');
+                    if (paymentMethodSelection) {
+                        paymentMethodSelection.style.display = 'none';
+                    }
+
+                    // Initialize payment method specific logic
+                    if (method === 'paypal') {
+                        this.initPayPalPayment();
+                    } else if (method === 'stripe') {
+                        this.initStripePayment();
+                    }
+                },
+
+                /**
+                 * Initializes PayPal payment.
+                 */
+                initPayPalPayment() {
+                    console.log("Initializing PayPal payment...");
+
+                    // Check if PayPal SDK is available
+                    if (typeof window.paypal === 'undefined') {
+                        console.warn("PayPal SDK not loaded.");
+                        alert("PayPal payment method is not available. Please try another method or refresh the page.");
+                        return;
+                    }
+
+                    // Render PayPal buttons
+                    const paypalButtonContainer = document.getElementById('paypal-button-container');
+                    if (paypalButtonContainer) {
+                        console.log("Rendering PayPal buttons...");
+                        // In a real implementation, you would call your backend to create an order
+                        // and get an order ID to pass to PayPal.
+                        // For now, we'll simulate a successful payment.
+                        paypalButtonContainer.innerHTML = `
+                            <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 1.5rem;">
+                                <button class="btn btn-primary" onclick="simulatePayPalPayment()"><i class="fab fa-paypal"></i> Pay with PayPal</button>
+                            </div>
+                        `;
+                    }
+                },
+
+                /**
+                 * Initializes Stripe payment.
+                 */
+                initStripePayment() {
+                    console.log("Initializing Stripe payment...");
+
+                    // Check if Stripe SDK is available
+                    if (typeof window.Stripe === 'undefined') {
+                        console.warn("Stripe SDK not loaded.");
+                        alert("Stripe payment method is not available. Please try another method or refresh the page.");
+                        return;
+                    }
+
+                    // Initialize Stripe Elements (if not already done)
+                    if (!window.stripeElements) {
+                        // Use your actual Stripe Publishable Key from your Stripe Dashboard
+                        window.stripeElements = window.Stripe('pk_test_YOUR_STRIPE_PUBLISHABLE_KEY');
+                        console.log("Stripe Elements initialized");
+                    }
+
+                    // Create card elements if not already created
+                    if (!window.cardNumberElement || !window.cardExpiryElement || !window.cardCvcElement) {
+                        const elements = window.stripeElements.elements();
+                        
+                        window.cardNumberElement = elements.create('cardNumber', {
+                            style: {
+                                base: {
+                                    fontSize: '16px',
+                                    color: '#334155',
+                                    '::placeholder': {
+                                        color: '#94a3b8',
+                                    },
+                                },
+                            },
+                        });
+                        window.cardNumberElement.mount('#cardNumberElement');
+                        
+                        window.cardExpiryElement = elements.create('cardExpiry', {
+                            style: {
+                                base: {
+                                    fontSize: '16px',
+                                    color: '#334155',
+                                    '::placeholder': {
+                                        color: '#94a3b8',
+                                    },
+                                },
+                            },
+                        });
+                        window.cardExpiryElement.mount('#cardExpiryElement');
+                        
+                        window.cardCvcElement = elements.create('cardCvc', {
+                            style: {
+                                base: {
+                                    fontSize: '16px',
+                                    color: '#334155',
+                                    '::placeholder': {
+                                        color: '#94a3b8',
+                                    },
+                                },
+                            },
+                        });
+                        window.cardCvcElement.mount('#cardCvcElement');
+                        
+                        console.log("Stripe card elements created and mounted");
+                    }
+
+                    // Handle Stripe payment form submission
+                    const stripePaymentForm = document.getElementById('stripePaymentForm');
+                    if (stripePaymentForm) {
+                        stripePaymentForm.addEventListener('submit', async function(e) {
+                            e.preventDefault();
+                            console.log("Stripe payment form submitted");
+                            
+                            const cardholderName = document.getElementById('cardholderName').value.trim();
+                            if (!cardholderName) {
+                                alert("Please enter the cardholder's name.");
+                                return;
+                            }
+
+                            // In a real implementation, you would call your backend to create a payment intent
+                            // and get a client secret to confirm the payment.
+                            // For now, we'll simulate a successful payment.
+                            alert(`Processing Stripe payment for ${cardholderName}...`);
+                            simulateStripePayment();
+                        });
+                    }
+                }
+            };
+
+            // Initialize the payment page
+            window.PaymentPage.init();
+
+            // --- ATTACH EVENT LISTENERS ---
+            // Handle payment method selection
+            const paymentMethodCards = document.querySelectorAll('.payment-method-card');
+            if (paymentMethodCards.length > 0) {
+                console.log(`Found ${paymentMethodCards.length} payment method card(s), attaching click listeners`);
+                paymentMethodCards.forEach(card => {
+                    card.addEventListener('click', function() {
+                        const method = this.getAttribute('data-method');
+                        console.log("Payment method selected:", method);
+                        window.PaymentPage.selectPaymentMethod(method);
+                    });
+                });
+            } else {
+                console.log("No payment method cards found on payment.html");
+            }
+
+            // Handle "Back to Payment Methods" buttons
+            const backToPaymentMethodsButtons = document.querySelectorAll('button[onclick^="cancelPaymentMethod"]');
+            if (backToPaymentMethodsButtons.length > 0) {
+                console.log(`Found ${backToPaymentMethodsButtons.length} "Back to Payment Methods" button(s), attaching click listeners`);
+                backToPaymentMethodsButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        console.log("Back to Payment Methods button clicked");
+                        cancelPaymentMethod();
+                    });
+                });
+            } else {
+                console.log("No 'Back to Payment Methods' buttons found on payment.html");
+            }
+
+            // Handle "Payment Completed" buttons for manual methods
+            const paymentCompletedButtons = document.querySelectorAll('button[onclick^="confirmManualPayment"]');
+            if (paymentCompletedButtons.length > 0) {
+                console.log(`Found ${paymentCompletedButtons.length} "Payment Completed" button(s), attaching click listeners`);
+                paymentCompletedButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const method = this.getAttribute('onclick').match(/'(\w+)'$/)[1]; // Extract method from onclick attribute
+                        console.log("Payment Completed button clicked for method:", method);
+                        confirmManualPayment(method);
+                    });
+                });
+            } else {
+                console.log("No 'Payment Completed' buttons found on payment.html");
+            }
+
+            // Handle "Retry Payment" button
+            const retryPaymentButton = document.querySelector('#paymentErrorMessage button');
+            if (retryPaymentButton) {
+                console.log("Found 'Retry Payment' button, attaching click listener");
+                retryPaymentButton.addEventListener('click', function() {
+                    console.log("Retry Payment button clicked");
+                    retryPayment();
+                });
+            } else {
+                console.log("No 'Retry Payment' button found on payment.html");
+            }
+            // --- END ATTACH EVENT LISTENERS ---
+
+            // --- UTILITY FUNCTIONS ---
+            /**
+             * Cancels the selected payment method and returns to the method selection screen.
+             */
+            window.cancelPaymentMethod = function() {
+                console.log("Cancelling payment method selection");
+
+                // Hide all payment method forms
+                const paymentMethodForms = document.querySelectorAll('.payment-method-form');
+                paymentMethodForms.forEach(form => {
+                    form.style.display = 'none';
+                    form.classList.remove('active');
+                });
+
+                // Hide the payment form container
+                const paymentFormContainer = document.getElementById('paymentFormContainer');
+                if (paymentFormContainer) {
+                    paymentFormContainer.style.display = 'none';
+                    console.log("Payment form container hidden");
+                }
+
+                // Show the payment method selection
+                const paymentMethodSelection = document.querySelector('.payment-method-selection');
+                if (paymentMethodSelection) {
+                    paymentMethodSelection.style.display = 'block';
+                    console.log("Payment method selection shown");
+                }
+
+                // Reset selected payment method
+                window.PaymentPage.selectedPaymentMethod = null;
+            };
+
+            /**
+             * Confirms a manual payment (GCash/Maya).
+             * @param {string} method - The manual payment method ('gcash', 'maya').
+             */
+            window.confirmManualPayment = async function(method) {
+                console.log("Confirming manual payment for method:", method);
+                
+                if (!window.PaymentPage.currentUser || !window.PaymentPage.currentGigId || !window.PaymentPage.currentGigData) {
+                    alert("Unable to confirm payment. Please refresh the page.");
+                    return;
+                }
+
+                const user = window.PaymentPage.currentUser;
+                const gigId = window.PaymentPage.currentGigId;
+                const gigData = window.PaymentPage.currentGigData;
+
+                try {
+                    // Create order document in Firestore
+                    const orderData = {
+                        gigId: gigId,
+                        buyerId: user.uid,
+                        sellerId: gigData.sellerId || gigData.freelancerId || 'N/A',
+                        amount: gigData.price || 0,
+                        currency: 'USD', // Or PHP for GCash/Maya
+                        status: 'pending_payment_confirmation',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    };
+
+                    const orderRef = await window.db.collection('orders').add(orderData);
+                    console.log("Order created with ID:", orderRef.id);
+
+                    // Update UI to show success message
+                    const paymentFormContainer = document.getElementById('paymentFormContainer');
+                    const paymentSuccessMessage = document.getElementById('paymentSuccessMessage');
+                    
+                    if (paymentFormContainer) paymentFormContainer.style.display = 'none';
+                    if (paymentSuccessMessage) paymentSuccessMessage.style.display = 'block';
+                    
+                    alert(`Payment confirmation for ${method} submitted successfully! The order has been created and the freelancer notified.`);
+
+                } catch (error) {
+                    console.error("Error confirming manual payment:", error);
+                    alert(`Failed to confirm payment: ${error.message}. Please try again.`);
+                }
+            };
+
+            /**
+             * Retries the payment process.
+             */
+            window.retryPayment = function() {
+                console.log("Retrying payment process");
+                
+                // Hide error message
+                const paymentErrorMessage = document.getElementById('paymentErrorMessage');
+                if (paymentErrorMessage) paymentErrorMessage.style.display = 'none';
+                
+                // Show payment method selection
+                const paymentMethodSelection = document.querySelector('.payment-method-selection');
+                if (paymentMethodSelection) paymentMethodSelection.style.display = 'block';
+                
+                // Reset selected payment method
+                window.PaymentPage.selectedPaymentMethod = null;
+                
+                alert("Payment process restarted. Please select a payment method.");
+            };
+
+            /**
+             * Simulates a successful PayPal payment.
+             */
+            window.simulatePayPalPayment = async function() {
+                console.log("Simulating PayPal payment...");
+                
+                if (!window.PaymentPage.currentUser || !window.PaymentPage.currentGigId || !window.PaymentPage.currentGigData) {
+                    alert("Unable to process payment. Please refresh the page.");
+                    return;
+                }
+
+                const user = window.PaymentPage.currentUser;
+                const gigId = window.PaymentPage.currentGigId;
+                const gigData = window.PaymentPage.currentGigData;
+
+                try {
+                    // Create order document in Firestore
+                    const orderData = {
+                        gigId: gigId,
+                        buyerId: user.uid,
+                        sellerId: gigData.sellerId || gigData.freelancerId || 'N/A',
+                        amount: gigData.price || 0,
+                        currency: 'USD',
+                        status: 'paid',
+                        paymentMethod: 'paypal',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    };
+
+                    const orderRef = await window.db.collection('orders').add(orderData);
+                    console.log("Order created with ID:", orderRef.id);
+
+                    // Update UI to show success message
+                    const paymentFormContainer = document.getElementById('paymentFormContainer');
+                    const paymentSuccessMessage = document.getElementById('paymentSuccessMessage');
+                    
+                    if (paymentFormContainer) paymentFormContainer.style.display = 'none';
+                    if (paymentSuccessMessage) paymentSuccessMessage.style.display = 'block';
+                    
+                    alert("PayPal payment processed successfully! The order has been created and the freelancer notified.");
+
+                } catch (error) {
+                    console.error("Error simulating PayPal payment:", error);
+                    alert(`Failed to process PayPal payment: ${error.message}. Please try again.`);
+                }
+            };
+
+            /**
+             * Simulates a successful Stripe payment.
+             */
+            window.simulateStripePayment = async function() {
+                console.log("Simulating Stripe payment...");
+                
+                if (!window.PaymentPage.currentUser || !window.PaymentPage.currentGigId || !window.PaymentPage.currentGigData) {
+                    alert("Unable to process payment. Please refresh the page.");
+                    return;
+                }
+
+                const user = window.PaymentPage.currentUser;
+                const gigId = window.PaymentPage.currentGigId;
+                const gigData = window.PaymentPage.currentGigData;
+
+                try {
+                    // Create order document in Firestore
+                    const orderData = {
+                        gigId: gigId,
+                        buyerId: user.uid,
+                        sellerId: gigData.sellerId || gigData.freelancerId || 'N/A',
+                        amount: gigData.price || 0,
+                        currency: 'USD',
+                        status: 'paid',
+                        paymentMethod: 'stripe',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    };
+
+                    const orderRef = await window.db.collection('orders').add(orderData);
+                    console.log("Order created with ID:", orderRef.id);
+
+                    // Update UI to show success message
+                    const paymentFormContainer = document.getElementById('paymentFormContainer');
+                    const paymentSuccessMessage = document.getElementById('paymentSuccessMessage');
+                    
+                    if (paymentFormContainer) paymentFormContainer.style.display = 'none';
+                    if (paymentSuccessMessage) paymentSuccessMessage.style.display = 'block';
+                    
+                    alert("Stripe payment processed successfully! The order has been created and the freelancer notified.");
+
+                } catch (error) {
+                    console.error("Error simulating Stripe payment:", error);
+                    alert(`Failed to process Stripe payment: ${error.message}. Please try again.`);
+                }
+            };
+            // --- END UTILITY FUNCTIONS ---
+        });
+    </script>
+</body>
+</html>

@@ -4,11 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subscription Plans - AtMyWorks</title>
+    <meta name="description" content="Choose the right subscription plan for your hiring needs on AtMyWorks. Unlock powerful tools to find and hire top talent.">
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
 </head>
-<body>
+<body data-page="subscription-plans">
     <!-- Header -->
     <header class="header">
         <div class="container">
@@ -17,109 +25,212 @@
                 <ul class="nav-links">
                     <li><a href="/browse.html">Find Work</a></li>
                     <li><a href="/blog.html">Blog</a></li>
-                    <li><a href="#">How It Works</a></li>
+                    <li><a href="/how-it-works.html">How It Works</a></li>
                 </ul>
                 <div class="auth-buttons">
-                    <button class="btn btn-outline" id="loginBtn">Log In</button>
-                    <button class="btn btn-primary" id="signupBtn">Sign Up</button>
+                    <button class="btn btn-outline" id="loginBtnNav">Log In</button>
+                    <button class="btn btn-primary" id="signupBtnNav">Sign Up</button>
+                </div>
+                <div class="user-menu" id="userMenuNav" style="display: none; position: relative;">
+                    <button class="btn btn-outline user-menu-toggle" id="userMenuToggleNav" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-bell" style="margin-right: 0.5rem;"></i>
+                        <span class="user-avatar" id="userAvatarNav" style="width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-100), var(--secondary-100)); display: inline-flex; align-items: center; justify-content: center; font-weight: bold; color: var(--primary-800); margin-right: 0.5rem; box-shadow: var(--shadow-xs);">U</span>
+                        <span id="userNameNav">User</span>
+                        <i class="fas fa-chevron-down" style="margin-left: 0.5rem; font-size: var(--font-size-xs);"></i>
+                    </button>
+
+                    <!-- User Menu Dropdown -->
+                    <div class="user-menu-dropdown" id="userMenuDropdownNav" style="display: none; position: absolute; top: 100%; right: 0; width: 250px; background: white; border-radius: var(--border-radius-lg); box-shadow: var(--shadow-lg); padding: 1rem; z-index: 1000; margin-top: 0.5rem;">
+                        <div style="display: flex; align-items: center; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+                            <div class="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-100), var(--secondary-100)); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--primary-800); margin-right: 1rem; box-shadow: var(--shadow-xs);">U</div>
+                            <div>
+                                <div style="font-weight: var(--font-weight-semibold);" id="dropdownUserNameNav">User Name</div>
+                                <div style="font-size: var(--font-size-sm); color: var(--gray-500);" id="dropdownUserEmailNav">user@example.com</div>
+                            </div>
+                        </div>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="margin-bottom: 0.5rem;"><a href="/profile.html" class="user-menu-link"><i class="fas fa-user-circle" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> My Profile</a></li>
+                            <li style="margin-bottom: 0.5rem;"><a href="/messages.html" class="user-menu-link"><i class="fas fa-comments" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Messages <span class="badge badge-primary" style="float: right;">3</span></a></li>
+                            <li style="margin-bottom: 0.5rem;"><a href="/dashboard-client.html" class="user-menu-link" id="dashboardMenuLinkNav"><i class="fas fa-tachometer-alt" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Dashboard</a></li>
+                            <li style="margin-bottom: 0.5rem;"><a href="/settings.html" class="user-menu-link"><i class="fas fa-cog" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Settings</a></li>
+                            <li><button class="btn btn-outline btn-block logout-btn" id="logoutBtnInMenuNav" style="margin-top: 1rem;"><i class="fas fa-sign-out-alt" style="margin-right: 0.75rem;"></i> Logout</button></li>
+                        </ul>
+                    </div>
                 </div>
             </nav>
         </div>
     </header>
 
-    <!-- Subscription Plans Section -->
-    <section class="section section-light">
+    <!-- Hero Section -->
+    <section class="hero">
         <div class="container">
-            <div class="section-header text-center">
-                <h1>Choose the Right Plan for Your Hiring Needs</h1>
-                <p class="text-muted">Unlock powerful tools to find and hire top talent.</p>
+            <div class="hero-content">
+                <h1>Choose the Right <span class="text-primary">Subscription Plan</span> for Your Hiring Needs</h1>
+                <p>Unlock powerful tools to find and hire top talent.</p>
             </div>
+        </div>
+    </section>
 
-            <div class="pricing-grid">
+    <!-- Subscription Plans Content -->
+    <main class="subscription-plans" style="padding: 2rem 0;">
+        <div class="container">
+            <!-- Pricing Grid -->
+            <div class="pricing-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-8); margin-bottom: var(--spacing-12);">
                 <!-- Starter Plan -->
-                <div class="pricing-card">
-                    <div class="pricing-header">
-                        <h3 class="pricing-title">Starter</h3>
-                        <div class="pricing-price">
-                            <span class="amount">$29</span>
-                            <span class="period">/month</span>
+                <div class="pricing-card" style="background: linear-gradient(135deg, var(--white), var(--gray-50)); border-radius: var(--border-radius-lg); padding: var(--spacing-6); box-shadow: var(--shadow-md); text-align: center; border: 1px solid var(--border-color); transition: all var(--transition-normal); position: relative; overflow: hidden;">
+                    <div class="pricing-header" style="margin-bottom: var(--spacing-6);">
+                        <h3 class="pricing-title" style="margin-bottom: var(--spacing-3); font-size: var(--font-size-xl); font-weight: var(--font-weight-semibold); color: var(--gray-800);">Starter</h3>
+                        <div class="pricing-price" style="margin-bottom: var(--spacing-4);">
+                            <span class="amount" style="display: block; font-size: var(--font-size-4xl); font-weight: var(--font-weight-extrabold); color: var(--primary-700); margin-bottom: var(--spacing-1);">$29</span>
+                            <span class="period" style="display: block; font-size: var(--font-size-sm); color: var(--gray-500);">per month</span>
                         </div>
-                        <p class="pricing-description">Perfect for small businesses and startups.</p>
+                        <p class="pricing-description" style="color: var(--gray-600); font-size: var(--font-size-sm);">Perfect for small businesses and startups.</p>
                     </div>
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check-circle text-success"></i> Post up to 2 jobs per month</li>
-                        <li><i class="fas fa-check-circle text-success"></i> View up to 10 applications per job</li>
-                        <li><i class="fas fa-check-circle text-success"></i> Basic search filters</li>
-                        <li><i class="fas fa-times-circle text-danger"></i> <span class="text-muted">Advanced candidate matching</span></li>
-                        <li><i class="fas fa-times-circle text-danger"></i> <span class="text-muted">Priority support</span></li>
-                        <li><i class="fas fa-times-circle text-danger"></i> <span class="text-muted">Custom branding</span></li>
+                    <ul class="pricing-features" style="list-style: none; padding: 0; margin-bottom: var(--spacing-6); text-align: left;">
+                        <li style="padding: var(--spacing-2) 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: center;">
+                            <i class="fas fa-check-circle text-success" style="margin-right: var(--spacing-2); width: 20px; text-align: center;"></i>
+                            <span>Post up to 2 jobs per month</span>
+                        </li>
+                        <li style="padding: var(--spacing-2) 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: center;">
+                            <i class="fas fa-check-circle text-success" style="margin-right: var(--spacing-2); width: 20px; text-align: center;"></i>
+                            <span>View up to 10 applications per job</span>
+                        </li>
+                        <li style="padding: var(--spacing-2) 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: center;">
+                            <i class="fas fa-check-circle text-success" style="margin-right: var(--spacing-2); width: 20px; text-align: center;"></i>
+                            <span>Basic search filters</span>
+                        </li>
+                        <li style="padding: var(--spacing-2) 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: center;">
+                            <i class="fas fa-times-circle text-danger" style="margin-right: var(--spacing-2); width: 20px; text-align: center;"></i>
+                            <span class="text-muted">Advanced candidate matching</span>
+                        </li>
+                        <li style="padding: var(--spacing-2) 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: center;">
+                            <i class="fas fa-times-circle text-danger" style="margin-right: var(--spacing-2); width: 20px; text-align: center;"></i>
+                            <span class="text-muted">Priority support</span>
+                        </li>
+                        <li style="padding: var(--spacing-2) 0; display: flex; align-items: center;">
+                            <i class="fas fa-times-circle text-danger" style="margin-right: var(--spacing-2); width: 20px; text-align: center;"></i>
+                            <span class="text-muted">Custom branding</span>
+                        </li>
                     </ul>
-                    <button class="btn btn-outline btn-block">Get Started</button>
+                    <button class="btn btn-outline btn-block purchase-plan-btn" data-plan="starter" style="width: 100%; padding: var(--spacing-3); margin-bottom: 1rem;">Get Started</button>
+                    <div class="form-text text-muted" style="font-size: var(--font-size-xs);">Billed monthly. Cancel anytime.</div>
                 </div>
 
                 <!-- Professional Plan (Highlighted) -->
-                <div class="pricing-card pricing-card-highlighted">
-                    <div class="pricing-badge">Most Popular</div>
-                    <div class="pricing-header">
-                        <h3 class="pricing-title">Professional</h3>
-                        <div class="pricing-price">
-                            <span class="amount">$79</span>
-                            <span class="period">/month</span>
-                        </div>
-                        <p class="pricing-description">Ideal for growing teams and agencies.</p>
+                <div class="pricing-card pricing-card-highlighted" style="background: linear-gradient(135deg, var(--white), var(--gray-50)); border-radius: var(--border-radius-lg); padding: var(--spacing-6); box-shadow: var(--shadow-lg); text-align: center; border: 2px solid var(--primary-500); transition: all var(--transition-normal); position: relative; overflow: hidden;">
+                    <div class="pricing-badge" style="position: absolute; top: -10px; right: -10px; background: var(--secondary-500); color: var(--white); padding: 0.25rem 0.75rem; border-radius: var(--border-radius-full); font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); box-shadow: var(--shadow-md); transform: rotate(15deg);">
+                        Most Popular
                     </div>
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check-circle text-success"></i> Post up to 10 jobs per month</li>
-                        <li><i class="fas fa-check-circle text-success"></i> View unlimited applications</li>
-                        <li><i class="fas fa-check-circle text-success"></i> Advanced search filters</li>
-                        <li><i class="fas fa-check-circle text-success"></i> Advanced candidate matching</li>
-                        <li><i class="fas fa-check-circle text-success"></i> Priority support</li>
-                        <li><i class="fas fa-times-circle text-danger"></i> <span class="text-muted">Custom branding</span></li>
+                    <div class="pricing-header" style="margin-bottom: var(--spacing-6);">
+                        <h3 class="pricing-title" style="margin-bottom: var(--spacing-3); font-size: var(--font-size-xl); font-weight: var(--font-weight-semibold); color: var(--gray-800);">Professional</h3>
+                        <div class="pricing-price" style="margin-bottom: var(--spacing-4);">
+                            <span class="amount" style="display: block; font-size: var(--font-size-4xl); font-weight: var(--font-weight-extrabold); color: var(--primary-700); margin-bottom: var(--spacing-1);">$79</span>
+                            <span class="period" style="display: block; font-size: var(--font-size-sm); color: var(--gray-500);">per month</span>
+                        </div>
+                        <p class="pricing-description" style="color: var(--gray-600); font-size: var(--font-size-sm);">Ideal for growing teams and agencies.</p>
+                    </div>
+                    <ul class="pricing-features" style="list-style: none; padding: 0; margin-bottom: var(--spacing-6); text-align: left;">
+                        <li style="padding: var(--spacing-2) 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: center;">
+                            <i class="fas fa-check-circle text-success" style="margin-right: var(--spacing-2); width: 20px; text-align: center;"></i>
+                            <span>Post up to 10 jobs per month</span>
+                        </li>
+                        <li style="padding: var(--spacing-2) 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: center;">
+                            <i class="fas fa-check-circle text-success" style="margin-right: var(--spacing-2); width: 20px; text-align: center;"></i>
+                            <span>View unlimited applications per job</span>
+                        </li>
+                        <li style="padding: var(--spacing-2) 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: center;">
+                            <i class="fas fa-check-circle text-success" style="margin-right: var(--spacing-2); width: 20px; text-align: center;"></i>
+                            <span>Advanced search filters</span>
+                        </li>
+                        <li style="padding: var(--spacing-2) 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: center;">
+                            <i class="fas fa-check-circle text-success" style="margin-right: var(--spacing-2); width: 20px; text-align: center;"></i>
+                            <span>Advanced candidate matching</span>
+                        </li>
+                        <li style="padding: var(--spacing-2) 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: center;">
+                            <i class="fas fa-check-circle text-success" style="margin-right: var(--spacing-2); width: 20px; text-align: center;"></i>
+                            <span>Priority support</span>
+                        </li>
+                        <li style="padding: var(--spacing-2) 0; display: flex; align-items: center;">
+                            <i class="fas fa-times-circle text-danger" style="margin-right: var(--spacing-2); width: 20px; text-align: center;"></i>
+                            <span class="text-muted">Custom branding</span>
+                        </li>
                     </ul>
-                    <button class="btn btn-primary btn-block">Get Professional Plan</button>
+                    <button class="btn btn-primary btn-block purchase-plan-btn" data-plan="professional" style="width: 100%; padding: var(--spacing-3); margin-bottom: 1rem;">Get Professional Plan</button>
+                    <div class="form-text text-muted" style="font-size: var(--font-size-xs);">Billed monthly. Cancel anytime.</div>
                 </div>
 
                 <!-- Enterprise Plan -->
-                <div class="pricing-card">
-                    <div class="pricing-header">
-                        <h3 class="pricing-title">Enterprise</h3>
-                        <div class="pricing-price">
-                            <span class="amount">$199</span>
-                            <span class="period">/month</span>
+                <div class="pricing-card" style="background: linear-gradient(135deg, var(--white), var(--gray-50)); border-radius: var(--border-radius-lg); padding: var(--spacing-6); box-shadow: var(--shadow-md); text-align: center; border: 1px solid var(--border-color); transition: all var(--transition-normal); position: relative; overflow: hidden;">
+                    <div class="pricing-header" style="margin-bottom: var(--spacing-6);">
+                        <h3 class="pricing-title" style="margin-bottom: var(--spacing-3); font-size: var(--font-size-xl); font-weight: var(--font-weight-semibold); color: var(--gray-800);">Enterprise</h3>
+                        <div class="pricing-price" style="margin-bottom: var(--spacing-4);">
+                            <span class="amount" style="display: block; font-size: var(--font-size-4xl); font-weight: var(--font-weight-extrabold); color: var(--primary-700); margin-bottom: var(--spacing-1);">$199</span>
+                            <span class="period" style="display: block; font-size: var(--font-size-sm); color: var(--gray-500);">per month</span>
                         </div>
-                        <p class="pricing-description">For large organizations with extensive hiring needs.</p>
+                        <p class="pricing-description" style="color: var(--gray-600); font-size: var(--font-size-sm);">For large organizations with extensive hiring needs.</p>
                     </div>
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check-circle text-success"></i> Post unlimited jobs</li>
-                        <li><i class="fas fa-check-circle text-success"></i> View unlimited applications</li>
-                        <li><i class="fas fa-check-circle text-success"></i> Advanced search filters</li>
-                        <li><i class="fas fa-check-circle text-success"></i> Advanced candidate matching</li>
-                        <li><i class="fas fa-check-circle text-success"></i> 24/7 dedicated support</li>
-                        <li><i class="fas fa-check-circle text-success"></i> Custom branding</li>
+                    <ul class="pricing-features" style="list-style: none; padding: 0; margin-bottom: var(--spacing-6); text-align: left;">
+                        <li style="padding: var(--spacing-2) 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: center;">
+                            <i class="fas fa-check-circle text-success" style="margin-right: var(--spacing-2); width: 20px; text-align: center;"></i>
+                            <span>Post unlimited jobs</span>
+                        </li>
+                        <li style="padding: var(--spacing-2) 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: center;">
+                            <i class="fas fa-check-circle text-success" style="margin-right: var(--spacing-2); width: 20px; text-align: center;"></i>
+                            <span>View unlimited applications</span>
+                        </li>
+                        <li style="padding: var(--spacing-2) 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: center;">
+                            <i class="fas fa-check-circle text-success" style="margin-right: var(--spacing-2); width: 20px; text-align: center;"></i>
+                            <span>Advanced search filters</span>
+                        </li>
+                        <li style="padding: var(--spacing-2) 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: center;">
+                            <i class="fas fa-check-circle text-success" style="margin-right: var(--spacing-2); width: 20px; text-align: center;"></i>
+                            <span>Advanced candidate matching</span>
+                        </li>
+                        <li style="padding: var(--spacing-2) 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: center;">
+                            <i class="fas fa-check-circle text-success" style="margin-right: var(--spacing-2); width: 20px; text-align: center;"></i>
+                            <span>24/7 dedicated support</span>
+                        </li>
+                        <li style="padding: var(--spacing-2) 0; display: flex; align-items: center;">
+                            <i class="fas fa-check-circle text-success" style="margin-right: var(--spacing-2); width: 20px; text-align: center;"></i>
+                            <span>Custom branding</span>
+                        </li>
                     </ul>
-                    <button class="btn btn-outline btn-block">Contact Sales</button>
+                    <button class="btn btn-outline btn-block contact-sales-btn" data-plan="enterprise" style="width: 100%; padding: var(--spacing-3); margin-bottom: 1rem;">Contact Sales</button>
+                    <div class="form-text text-muted" style="font-size: var(--font-size-xs);">Billed monthly. Cancel anytime.</div>
                 </div>
             </div>
 
             <!-- FAQ Section -->
-            <div class="faq-section mt-12">
+            <div class="faq-section" style="background: white; border-radius: var(--border-radius-lg); padding: var(--spacing-6); box-shadow: var(--shadow-md); margin-bottom: var(--spacing-8);">
                 <h2 class="text-center mb-8">Frequently Asked Questions</h2>
-                <div class="faq-item">
-                    <h3 class="faq-question">Can I change plans later?</h3>
-                    <p class="faq-answer">Yes, you can upgrade or downgrade your plan at any time. Changes will be prorated.</p>
+                <div class="faq-item" style="margin-bottom: var(--spacing-6); padding-bottom: var(--spacing-6); border-bottom: 1px solid var(--border-color);">
+                    <h3 class="faq-question" style="margin-bottom: var(--spacing-3); font-size: var(--font-size-lg); font-weight: var(--font-weight-semibold); color: var(--gray-800);">Can I change plans later?</h3>
+                    <p class="faq-answer" style="margin-bottom: 0; color: var(--gray-600);">Yes, you can upgrade or downgrade your plan at any time. Changes will be prorated.</p>
                 </div>
-                <div class="faq-item">
-                    <h3 class="faq-question">What payment methods do you accept?</h3>
-                    <p class="faq-answer">We accept all major credit cards and PayPal.</p>
+                <div class="faq-item" style="margin-bottom: var(--spacing-6); padding-bottom: var(--spacing-6); border-bottom: 1px solid var(--border-color);">
+                    <h3 class="faq-question" style="margin-bottom: var(--spacing-3); font-size: var(--font-size-lg); font-weight: var(--font-weight-semibold); color: var(--gray-800);">What payment methods do you accept?</h3>
+                    <p class="faq-answer" style="margin-bottom: 0; color: var(--gray-600);">We accept all major credit cards and PayPal.</p>
                 </div>
-                <div class="faq-item">
-                    <h3 class="faq-question">Is there a free trial?</h3>
-                    <p class="faq-answer">Yes, we offer a 14-day free trial for the Professional plan. No credit card required.</p>
+                <div class="faq-item" style="margin-bottom: var(--spacing-6); padding-bottom: var(--spacing-6); border-bottom: 1px solid var(--border-color);">
+                    <h3 class="faq-question" style="margin-bottom: var(--spacing-3); font-size: var(--font-size-lg); font-weight: var(--font-weight-semibold); color: var(--gray-800);">Is there a free trial?</h3>
+                    <p class="faq-answer" style="margin-bottom: 0; color: var(--gray-600);">Yes, we offer a 14-day free trial for the Professional plan. No credit card required.</p>
                 </div>
-                <div class="faq-item">
-                    <h3 class="faq-question">What happens if I exceed my plan limits?</h3>
-                    <p class="faq-answer">You will be notified and given the option to upgrade your plan or purchase additional credits.</p>
+                <div class="faq-item" style="margin-bottom: 0; padding-bottom: 0; border-bottom: none;">
+                    <h3 class="faq-question" style="margin-bottom: var(--spacing-3); font-size: var(--font-size-lg); font-weight: var(--font-weight-semibold); color: var(--gray-800);">What happens if I exceed my plan limits?</h3>
+                    <p class="faq-answer" style="margin-bottom: 0; color: var(--gray-600);">You will be notified and given the option to upgrade your plan or purchase additional credits.</p>
                 </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- CTA Section -->
+    <section class="section section-primary text-center">
+        <div class="container">
+            <h2>Ready to Get Started?</h2>
+            <p class="mb-6">Join millions of businesses and freelancers already on AtMyWorks.</p>
+            <div class="cta-buttons">
+                <a href="/signup-employer.html" class="btn btn-secondary btn-lg me-3 mb-3">Hire Talent</a>
+                <a href="/signup-jobseeker.html" class="btn btn-outline btn-lg mb-3">Find Work</a>
             </div>
         </div>
     </section>
@@ -165,5 +276,203 @@
     <!-- JavaScript Files -->
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log("Subscription Plans Page DOM loaded");
+
+            // Check if firebaseApp is available (from firebase-config.js)
+            if (typeof window.firebaseApp !== 'undefined') {
+                window.auth = window.firebaseApp.auth;
+                window.db = window.firebaseApp.db;
+                window.storage = window.firebaseApp.storage;
+                console.log("Firebase services available in subscription-plans.html");
+            } else {
+                console.warn("Firebase not initialized in subscription-plans.html.");
+                alert("Unable to connect to the database. Please try refreshing the page.");
+                return;
+            }
+
+            // --- AUTH STATE LISTENER ---
+            // Listen for auth state changes (login/logout)
+            window.auth.onAuthStateChanged(user => {
+                console.log("Auth state changed on subscription-plans.html. Current user:", user ? user.uid : "None");
+                updateAuthUI(user);
+            });
+
+            // --- AUTH UI UPDATER ---
+            function updateAuthUI(user) {
+                const authButtonsNav = document.getElementById('authButtonsNav');
+                const userMenuNav = document.getElementById('userMenuNav');
+                const logoutBtnNav = document.getElementById('logoutBtnNav');
+                const userNameElementNav = document.getElementById('userNameNav');
+                const dropdownUserNameElementNav = document.getElementById('dropdownUserNameNav');
+                const dropdownUserEmailElementNav = document.getElementById('dropdownUserEmailNav');
+                const userAvatarElementsNav = document.querySelectorAll('.user-avatar');
+
+                if (user) {
+                    // User is signed in
+                    console.log("User is signed in on subscription-plans.html:", user.email);
+                    if (authButtonsNav) authButtonsNav.style.display = 'none';
+                    if (userMenuNav) {
+                        userMenuNav.style.display = 'flex'; // Or 'block'
+
+                        // Update user name/avatar in menu
+                        const displayName = user.displayName || user.email?.split('@')[0] || 'User';
+                        if (userNameElementNav) {
+                            userNameElementNav.textContent = displayName;
+                        }
+                        if (dropdownUserNameElementNav) {
+                            dropdownUserNameElementNav.textContent = displayName;
+                        }
+                        if (dropdownUserEmailElementNav) {
+                            dropdownUserEmailElementNav.textContent = user.email || 'No email';
+                        }
+
+                        // Update user avatar initials
+                        const initials = (displayName || 'U').charAt(0).toUpperCase();
+                        userAvatarElementsNav.forEach(avatar => {
+                            if (avatar) {
+                                avatar.textContent = initials;
+                            }
+                        });
+
+                        // Determine user role and update dashboard link
+                        // In a real app, you'd fetch this from Firestore
+                        // For now, we'll simulate based on email or UID prefix
+                        let userRole = 'client'; // Default assumption
+                        if (user.email && (user.email.includes('admin') || user.email.includes('support'))) {
+                            userRole = 'admin';
+                        } else if (user.email && user.email.includes('freelancer')) {
+                            userRole = 'freelancer';
+                        }
+                        console.log("Simulated user role on subscription-plans.html:", userRole);
+
+                        if (dashboardMenuLinkNav) {
+                            if (userRole === 'freelancer') {
+                                dashboardMenuLinkNav.href = '/dashboard-freelancer.html';
+                                dashboardMenuLinkNav.innerHTML = '<i class="fas fa-briefcase" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> My Gigs';
+                            } else if (userRole === 'admin') {
+                                dashboardMenuLinkNav.href = '/dashboard-admin.html';
+                                dashboardMenuLinkNav.innerHTML = '<i class="fas fa-cog" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Admin Panel';
+                            } else {
+                                dashboardMenuLinkNav.href = '/dashboard-client.html';
+                                dashboardMenuLinkNav.innerHTML = '<i class="fas fa-tachometer-alt" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> My Projects';
+                            }
+                        }
+
+                        if (logoutBtnNav) {
+                            // Remove any existing listener to prevent duplicates
+                            logoutBtnNav.removeEventListener('click', window.handleFirebaseLogout);
+                            logoutBtnNav.addEventListener('click', function(e) {
+                                e.preventDefault(); // Prevent default link behavior if it's an <a> tag
+                                window.handleFirebaseLogout();
+                            });
+                        }
+
+                    }
+                } else {
+                    // User is signed out
+                    console.log("User is signed out on subscription-plans.html");
+                    if (authButtonsNav) authButtonsNav.style.display = 'flex'; // Or 'block'
+                    if (userMenuNav) userMenuNav.style.display = 'none';
+
+                    // Remove logout listener if it was added previously (good practice)
+                    if (logoutBtnNav) {
+                        logoutBtnNav.removeEventListener('click', window.handleFirebaseLogout);
+                    }
+                }
+            }
+
+            // --- PURCHASE PLAN BUTTONS ---
+            const purchasePlanButtons = document.querySelectorAll('.purchase-plan-btn');
+            if (purchasePlanButtons.length > 0) {
+                console.log(`Found ${purchasePlanButtons.length} purchase plan button(s), attaching click listeners`);
+                purchasePlanButtons.forEach(button => {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const plan = this.getAttribute('data-plan');
+                        console.log(`Purchase plan button clicked for plan: ${plan}`);
+                        initiatePlanPurchase(plan);
+                    });
+                });
+            } else {
+                console.log("No purchase plan buttons found on subscription-plans.html");
+            }
+
+            // --- CONTACT SALES BUTTONS ---
+            const contactSalesButtons = document.querySelectorAll('.contact-sales-btn');
+            if (contactSalesButtons.length > 0) {
+                console.log(`Found ${contactSalesButtons.length} contact sales button(s), attaching click listeners`);
+                contactSalesButtons.forEach(button => {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const plan = this.getAttribute('data-plan');
+                        console.log(`Contact sales button clicked for plan: ${plan}`);
+                        alert(`Contact sales functionality for ${plan} plan would be implemented here. You will be redirected to a contact form.`);
+                        // In a real app, you would redirect to a contact form or open a modal
+                        window.location.href = '/contact-sales.html'; // Or open a modal
+                    });
+                });
+            } else {
+                console.log("No contact sales buttons found on subscription-plans.html");
+            }
+
+            // --- PLAN PURCHASE INITIATOR ---
+            async function initiatePlanPurchase(plan) {
+                console.log("Initiating plan purchase for:", plan);
+
+                const user = window.auth.currentUser;
+                if (!user) {
+                    console.log("No user logged in, redirecting to employer signup.");
+                    alert("Please sign up as an employer to purchase a subscription plan.");
+                    window.location.href = '/signup-employer.html';
+                    return;
+                }
+
+                // Determine plan details
+                let planDetails = {};
+                switch(plan.toLowerCase()) {
+                    case 'starter':
+                        planDetails = {
+                            name: 'Starter',
+                            price: 29.00,
+                            currency: 'USD',
+                            description: 'Starter Plan for small businesses and startups.'
+                        };
+                        break;
+                    case 'professional':
+                        planDetails = {
+                            name: 'Professional',
+                            price: 79.00,
+                            currency: 'USD',
+                            description: 'Professional Plan for growing teams and agencies.'
+                        };
+                        break;
+                    case 'enterprise':
+                        planDetails = {
+                            name: 'Enterprise',
+                            price: 199.00,
+                            currency: 'USD',
+                            description: 'Enterprise Plan for large organizations.'
+                        };
+                        break;
+                    default:
+                        console.warn("Unknown plan for purchase:", plan);
+                        alert("Unknown plan selected. Please choose a valid plan.");
+                        return;
+                }
+
+                console.log("Plan details for purchase:", planDetails);
+
+                // Redirect to payment page with plan details
+                // In a real app, you would pass the plan ID or details as query parameters
+                // or use a more secure method (like a session token)
+                const paymentUrl = `/payment.html?plan=${encodeURIComponent(plan)}&price=${planDetails.price}&currency=${planDetails.currency}&description=${encodeURIComponent(planDetails.description)}`;
+                console.log("Redirecting to payment page:", paymentUrl);
+                window.location.href = paymentUrl;
+            }
+            // --- END PLAN PURCHASE INITIATOR ---
+        });
+    </script>
 </body>
 </html>
