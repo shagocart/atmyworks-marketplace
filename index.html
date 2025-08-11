@@ -68,7 +68,7 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
+       <!-- ========== HERO SECTION (Enhanced) ========== -->
     <section class="hero">
         <div class="container">
             <div class="hero-content">
@@ -80,19 +80,214 @@
                     <button id="heroSearchButton"><i class="fas fa-search"></i> Find Services</button>
                 </div>
 
-                <div class="hero-tabs">
-                    <h3 class="hero-tabs-title">Popular:</h3>
-                    <div class="hero-tab-list">
-                        <a href="/browse.html?category=graphics-design" class="hero-tab-link">Logo Design</a>
-                        <a href="/browse.html?category=programming-tech" class="hero-tab-link">Web Development</a>
-                        <a href="/browse.html?category=digital-marketing" class="hero-tab-link">Social Media</a>
-                        <a href="/browse.html?category=video-animation" class="hero-tab-link">Video Editing</a>
-                        <a href="/browse.html" class="hero-tab-link hero-tab-link-more">Explore More <i class="fas fa-arrow-right"></i></a>
+                                <!-- ========== ENHANCED HERO TABS (Popular Categories) ========== -->
+                <div class="hero-tabs" style="
+                    margin-top: var(--spacing-10);
+                    text-align: center;
+                    position: relative;
+                    z-index: 1;
+                ">
+                    <h3 class="hero-tabs-title" style="
+                        display: inline-block;
+                        margin: 0 var(--spacing-3) var(--spacing-4) 0;
+                        font-size: var(--font-size-base);
+                        font-weight: var(--font-weight-semibold);
+                        /* --- CHANGED TEXT COLOR TO BLUE --- */
+                        color: var(--primary-600); /* Use your primary blue */
+                        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle text shadow for depth */
+                    ">Popular:</h3>
+                    
+                    <div class="hero-tab-list" style="
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: center;
+                        gap: var(--spacing-3); /* Increased gap for better separation */
+                        position: relative;
+                        z-index: 1;
+                    ">
+                        <!-- Tab Link 1 -->
+                        <a href="/browse.html?category=graphics-design" class="hero-tab-link" style="
+                            display: inline-flex; /* Use flex for better alignment */
+                            align-items: center;
+                            justify-content: center;
+                            padding: var(--spacing-3) var(--spacing-4); /* Adjusted padding */
+                            /* --- ENHANCED STYLE --- */
+                            background-color: rgba(255, 255, 255, 0.2); /* Slightly more opaque background */
+                            /* --- CHANGED TEXT COLOR TO BLUE --- */
+                            color: var(--primary-700); /* Use a slightly darker blue for better contrast */
+                            text-decoration: none;
+                            border-radius: var(--border-radius-full); /* Fully rounded */
+                            font-size: var(--font-size-sm); /* Slightly larger font */
+                            font-weight: var(--font-weight-semibold); /* Bolder text */
+                            transition: all var(--transition-normal); /* Smooth transitions */
+                            backdrop-filter: blur(5px); /* Frosted glass effect */
+                            /* --- NEW ENHANCEMENTS --- */
+                            border: 1px solid rgba(59, 130, 246, 0.3); /* Blue border with transparency */
+                            box-shadow: var(--shadow-xs); /* Subtle shadow for depth */
+                            position: relative;
+                            overflow: hidden;
+                        ">
+                            <!-- Glittering Effect Overlay -->
+                            <span class="hero-tab-glitter" style="
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+                                transform: translateX(-100%);
+                                transition: transform 0.6s ease;
+                                pointer-events: none;
+                                z-index: 0;
+                            "></span>
+                            <span style="position: relative; z-index: 1;">Logo Design</span>
+                        </a>
+
+                        <!-- Tab Link 2 -->
+                        <a href="/browse.html?category=programming-tech" class="hero-tab-link" style="
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            padding: var(--spacing-3) var(--spacing-4);
+                            background-color: rgba(255, 255, 255, 0.2);
+                            color: var(--primary-700);
+                            text-decoration: none;
+                            border-radius: var(--border-radius-full);
+                            font-size: var(--font-size-sm);
+                            font-weight: var(--font-weight-semibold);
+                            transition: all var(--transition-normal);
+                            backdrop-filter: blur(5px);
+                            border: 1px solid rgba(59, 130, 246, 0.3);
+                            box-shadow: var(--shadow-xs);
+                            position: relative;
+                            overflow: hidden;
+                        ">
+                            <span class="hero-tab-glitter" style="
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+                                transform: translateX(-100%);
+                                transition: transform 0.6s ease;
+                                pointer-events: none;
+                                z-index: 0;
+                            "></span>
+                            <span style="position: relative; z-index: 1;">Web Development</span>
+                        </a>
+
+                        <!-- Tab Link 3 -->
+                        <a href="/browse.html?category=digital-marketing" class="hero-tab-link" style="
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            padding: var(--spacing-3) var(--spacing-4);
+                            background-color: rgba(255, 255, 255, 0.2);
+                            color: var(--primary-700);
+                            text-decoration: none;
+                            border-radius: var(--border-radius-full);
+                            font-size: var(--font-size-sm);
+                            font-weight: var(--font-weight-semibold);
+                            transition: all var(--transition-normal);
+                            backdrop-filter: blur(5px);
+                            border: 1px solid rgba(59, 130, 246, 0.3);
+                            box-shadow: var(--shadow-xs);
+                            position: relative;
+                            overflow: hidden;
+                        ">
+                            <span class="hero-tab-glitter" style="
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+                                transform: translateX(-100%);
+                                transition: transform 0.6s ease;
+                                pointer-events: none;
+                                z-index: 0;
+                            "></span>
+                            <span style="position: relative; z-index: 1;">Social Media</span>
+                        </a>
+
+                        <!-- Tab Link 4 -->
+                        <a href="/browse.html?category=video-animation" class="hero-tab-link" style="
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            padding: var(--spacing-3) var(--spacing-4);
+                            background-color: rgba(255, 255, 255, 0.2);
+                            color: var(--primary-700);
+                            text-decoration: none;
+                            border-radius: var(--border-radius-full);
+                            font-size: var(--font-size-sm);
+                            font-weight: var(--font-weight-semibold);
+                            transition: all var(--transition-normal);
+                            backdrop-filter: blur(5px);
+                            border: 1px solid rgba(59, 130, 246, 0.3);
+                            box-shadow: var(--shadow-xs);
+                            position: relative;
+                            overflow: hidden;
+                        ">
+                            <span class="hero-tab-glitter" style="
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+                                transform: translateX(-100%);
+                                transition: transform 0.6s ease;
+                                pointer-events: none;
+                                z-index: 0;
+                            "></span>
+                            <span style="position: relative; z-index: 1;">Video Editing</span>
+                        </a>
+
+                        <!-- Tab Link 5 (Explore More - Distinct Style) -->
+                        <a href="/browse.html" class="hero-tab-link hero-tab-link-more" style="
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            padding: var(--spacing-3) var(--spacing-4);
+                            /* --- ENHANCED DISTINCT STYLE --- */
+                            background: linear-gradient(135deg, var(--secondary-500), var(--secondary-600)); /* Warm orange gradient */
+                            color: var(--white);
+                            text-decoration: none;
+                            border-radius: var(--border-radius-full);
+                            font-size: var(--font-size-sm);
+                            font-weight: var(--font-weight-bold); /* Even bolder for emphasis */
+                            transition: all var(--transition-normal);
+                            border: none; /* No border for solid button */
+                            box-shadow: var(--shadow-md); /* Stronger shadow */
+                            position: relative;
+                            overflow: hidden;
+                        ">
+                            <!-- Glittering Effect Overlay for Explore More -->
+                            <span class="hero-tab-glitter" style="
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+                                transform: translateX(-100%);
+                                transition: transform 0.6s ease;
+                                pointer-events: none;
+                                z-index: 0;
+                            "></span>
+                            <span style="position: relative; z-index: 1;">
+                                Explore More <i class="fas fa-arrow-right" style="margin-left: var(--spacing-2); font-size: var(--font-size-xs);"></i>
+                            </span>
+                        </a>
                     </div>
                 </div>
+                <!-- ========== END ENHANCED HERO TABS ========== -->
             </div>
         </div>
     </section>
+    <!-- ========== END HERO SECTION ========== -->
 
     <!-- Trust Indicators / Stats Bar -->
     <section class="section section-gray py-5">
