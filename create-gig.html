@@ -33,91 +33,73 @@
         </div>
     </header>
 
-    <!-- Create Gig Form -->
-    <section style="padding: 2rem 0;">
-        <div class="container">
-            <div style="max-width: 800px; margin: 0 auto; background: white; padding: 2rem; border-radius: 0.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                <h2 style="margin-bottom: 1.5rem; text-align: center;">Create New Service</h2>
-                <p style="text-align: center; margin-bottom: 2rem;">List your skills and attract clients</p>
+        <!-- Create Gig Form -->
+    <form id="createGigForm"> <!-- ID is important for JS -->
+        <div class="form-group">
+            <label for="gigTitle" class="form-label">Gig Title *</label>
+            <input type="text" id="gigTitle" name="title" class="form-control" placeholder="I will..." required>
+            <!-- AI Assistant Button for Gig Title will be added by JS -->
+        </div>
 
-                <form id="createGigForm">
-                    <div class="form-group">
-                        <label for="gigTitle" class="form-label">Gig Title <span style="color: var(--danger-500);">*</span></label>
-                        <input type="text" id="gigTitle" name="title" class="form-control" placeholder="I will..." required>
-                        <div class="form-text">Briefly describe what you are offering.</div>
-                    </div>
+        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+            <div class="form-group">
+                <label for="gigCategory" class="form-label">Category *</label>
+                <select id="gigCategory" name="category" class="form-control" required>
+                    <option value="">Select Category</option>
+                    <option value="graphics-design">Graphics & Design</option>
+                    <option value="digital-marketing">Digital Marketing</option>
+                    <option value="programming-tech">Programming & Tech</option>
+                    <option value="video-animation">Video & Animation</option>
+                    <option value="writing-translation">Writing & Translation</option>
+                    <option value="music-audio">Music & Audio</option>
+                </select>
+            </div>
 
-                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
-                        <div class="form-group">
-                            <label for="gigCategory" class="form-label">Category <span style="color: var(--danger-500);">*</span></label>
-                            <select id="gigCategory" name="category" class="form-control" required>
-                                <option value="">Select Category</option>
-                                <option value="graphics-design">Graphics & Design</option>
-                                <option value="digital-marketing">Digital Marketing</option>
-                                <option value="programming-tech">Programming & Tech</option>
-                                <option value="video-animation">Video & Animation</option>
-                                <option value="writing-translation">Writing & Translation</option>
-                                <option value="music-audio">Music & Audio</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="gigDeliveryTime" class="form-label">Delivery Time (days) <span style="color: var(--danger-500);">*</span></label>
-                            <select id="gigDeliveryTime" name="deliveryTime" class="form-control" required>
-                                <option value="">Select Time</option>
-                                <option value="1">1 day</option>
-                                <option value="2">2 days</option>
-                                <option value="3">3 days</option>
-                                <option value="5">5 days</option>
-                                <option value="7">7 days</option>
-                                <option value="10">10 days</option>
-                                <option value="14">14 days</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="gigDescription" class="form-label">Description <span style="color: var(--danger-500);">*</span></label>
-                        <textarea id="gigDescription" name="description" rows="6" class="form-control" placeholder="Describe your service in detail..." required></textarea>
-                        <div class="form-text">Explain what you will do, the process, and what the buyer can expect.</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Gig Images</label>
-                        <div id="imageUploadArea" style="border: 2px dashed #cbd5e1; border-radius: 0.5rem; padding: 2rem; text-align: center; cursor: pointer; transition: border-color 0.3s;">
-                            <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #94a3b8; margin-bottom: 1rem;"></i>
-                            <p>Click to upload images</p>
-                            <p style="font-size: 0.875rem; color: #94a3b8;">Recommended size: 800x600px (JPG, PNG, GIF)</p>
-                            <input type="file" id="imageUpload" name="images" accept="image/*" multiple style="display: none;">
-                        </div>
-                        <div id="imagePreviewContainer" style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem;">
-                            <!-- Image previews will be added here -->
-                        </div>
-                    </div>
-
-                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
-                        <div class="form-group">
-                            <label for="gigPrice" class="form-label">Starting Price ($) <span style="color: var(--danger-500);">*</span></label>
-                            <input type="number" id="gigPrice" name="price" min="5" step="5" class="form-control" placeholder="20" required>
-                        </div>
-
-                        <div class="form-group">
-                            &nbsp; <!-- Spacer for grid alignment -->
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="gigTags" class="form-label">Tags (Optional)</label>
-                        <input type="text" id="gigTags" name="tags" class="form-control" placeholder="e.g., logo, branding, design">
-                        <div class="form-text">Comma-separated keywords to help clients find your gig.</div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem;">Create Gig</button>
-                </form>
+            <div class="form-group">
+                <label for="gigDeliveryTime" class="form-label">Delivery Time (days) *</label>
+                <select id="gigDeliveryTime" name="deliveryTime" class="form-control" required>
+                    <option value="">Select Time</option>
+                    <option value="1">1 day</option>
+                    <option value="2">2 days</option>
+                    <option value="3">3 days</option>
+                    <option value="5">5 days</option>
+                    <option value="7">7 days</option>
+                    <option value="10">10 days</option>
+                    <option value="14">14 days</option>
+                </select>
             </div>
         </div>
-    </section>
 
+        <div class="form-group">
+            <label for="gigDescription" class="form-label">Description *</label>
+            <textarea id="gigDescription" name="description" rows="6" class="form-control" placeholder="Describe your service in detail..." required></textarea>
+            <!-- AI Assistant Button for Gig Description will be added by JS -->
+            <div class="form-text">Explain what you will do, the process, and what the buyer can expect.</div>
+        </div>
+
+        <div class="form-group">
+            <label>Gig Images</label>
+            <div class="image-upload" id="imageUploadArea">
+                <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: var(--gray-400); margin-bottom: 1rem;"></i>
+                <p>Click to upload images</p>
+                <p style="font-size: 0.875rem; color: var(--gray-400);">Recommended size: 800x600px</p>
+                <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+            </div>
+            <img id="imagePreview" class="image-preview" style="display: none;">
+        </div>
+
+        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+            <div class="form-group">
+                <label for="gigPrice" class="form-label">Starting Price ($) *</label>
+                <input type="number" id="gigPrice" name="price" min="5" step="5" class="form-control" placeholder="20" required>
+            </div>
+
+            <div class="form-group">
+                <label>&nbsp;</label>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Create Gig</button>
+            </div>
+        </div>
+    </form>
     <!-- Footer -->
     <footer class="footer">
         <div class="container">

@@ -3,6 +3,7 @@
 console.log("Firebase Config Script Loading...");
 
 // !!! REPLACE WITH YOUR ACTUAL FIREBASE CONFIG FROM FIREBASE CONSOLE !!!
+// This configuration object is specific to YOUR Firebase project (atmyworks-cd97c)
 const firebaseConfig = {
   apiKey: "AIzaSyCNRX6gKVVp9UbqSFHrNC4TvPUflBvEAl8",
   authDomain: "atmyworks-cd97c.firebaseapp.com",
@@ -15,7 +16,7 @@ const firebaseConfig = {
 /**
  * Initializes Firebase App and core services (Auth, Firestore, Storage).
  * Ensures Firebase is only initialized once.
- * Makes services globally available via window.firebaseApp.
+ * Makes services globally accessible via window.firebaseApp.
  * @returns {Object|null} The initialized firebaseApp object or null on error.
  */
 function initializeFirebaseApp() {
@@ -33,7 +34,7 @@ function initializeFirebaseApp() {
     // Ensure the core Firebase object and initializeApp are available
     // This check is crucial as it depends on firebase-app-compat.js being loaded
     if (typeof firebase === 'undefined' || !firebase.initializeApp) {
-      throw new Error("Firebase core SDK (firebase-app-compat.js) not loaded or initializeApp is missing. Please check the console for Firebase loading errors and ensure the SDK script tag is present in your HTML <head>.");
+      throw new Error("Firebase core SDK (firebase-app-compat.js) not loaded or initializeApp is missing. Please check the console for Firebase loading errors and ensure the SDK script tag is present in your HTML <head> before this script.");
     }
 
     // --- INITIALIZE FIREBASE APP ---
@@ -66,10 +67,10 @@ function initializeFirebaseApp() {
 
     // Initialize Storage (Optional)
     if (typeof firebase.storage !== 'undefined') {
-      storageInstance = firebase.storage();
-      console.log("Firebase Storage instance (Compat) created.");
+        storageInstance = firebase.storage();
+        console.log("Firebase Storage instance (Compat) created.");
     } else {
-      console.warn("Firebase Storage service not available. Ensure firebase-storage-compat.js is loaded in your HTML <head> if you plan to use Storage.");
+        console.warn("Firebase Storage service not available. Ensure firebase-storage-compat.js is loaded in your HTML <head> before this script if needed.");
     }
 
     // --- MAKE SERVICES GLOBALLY ACCESSIBLE ---

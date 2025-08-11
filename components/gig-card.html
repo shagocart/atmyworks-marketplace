@@ -1,139 +1,20 @@
-<!-- components/gig-card.html (Upgraded) -->
-<div class="gig-card" style="
-    background: linear-gradient(135deg, var(--white), var(--gray-50));
-    border: 1px solid var(--border-color);
-    transition: all var(--transition-normal);
-    position: relative;
-    overflow: hidden;
-">
-    <!-- Gig Image Container -->
-    <div class="gig-image" style="
-        height: 180px;
-        overflow: hidden;
-        border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
-        position: relative;
-    ">
-        <img src="https://placehold.co/300x200/3b82f6/white?text=Service+Image" alt="Professional Service Image" style="
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform var(--transition-normal);
-        ">
-        <!-- Category Tag Overlay -->
-        <div class="badge badge-secondary" style="
-            position: absolute;
-            top: var(--spacing-2);
-            left: var(--spacing-2);
-            font-size: var(--font-size-xs);
-            padding: 0.25rem 0.5rem;
-            border-radius: var(--border-radius-full);
-            backdrop-filter: blur(2px);
-            background-color: rgba(255, 255, 255, 0.85);
-            color: var(--gray-800);
-            box-shadow: var(--shadow-xs);
-        ">Graphics & Design</div>
+<!-- components/gig-card.html -->
+<div class="gig-card">
+    <div class="gig-image">
+        <img src="https://placehold.co/300x200" alt="Service Title">
     </div>
-
-    <!-- Gig Content Area -->
-    <div class="gig-content" style="
-        padding: var(--spacing-5);
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-    ">
-        <!-- Seller Info -->
-        <div class="gig-seller" style="
-            display: flex;
-            align-items: center;
-            margin-bottom: var(--spacing-3);
-            padding-bottom: var(--spacing-3);
-            border-bottom: 1px solid var(--border-color);
-        ">
-            <div class="gig-seller-avatar" style="
-                width: 36px;
-                height: 36px;
-                border-radius: var(--border-radius-full);
-                background: linear-gradient(135deg, var(--primary-100), var(--secondary-100));
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: var(--font-size-xs);
-                font-weight: var(--font-weight-bold);
-                color: var(--primary-800);
-                margin-right: var(--spacing-2);
-                box-shadow: var(--shadow-xs);
-                flex-shrink: 0;
-            ">AJ</div>
-            <span class="gig-seller-name" style="
-                font-size: var(--font-size-sm);
-                font-weight: var(--font-weight-medium);
-                color: var(--gray-700);
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            ">Seller Name</span>
+    <div class="gig-content">
+        <div class="gig-seller">
+            <div class="gig-seller-avatar">AJ</div>
+            <span class="gig-seller-name">Seller Name</span>
         </div>
-
-        <!-- Gig Title -->
-        <h3 class="gig-title card-title" style="
-            margin-bottom: var(--spacing-2);
-            font-size: var(--font-size-lg);
-            font-weight: var(--font-weight-semibold);
-            color: var(--gray-900);
-            flex-grow: 1;
-        "><a href="/gig-detail.html" style="text-decoration: none; color: inherit;">Service Title</a></h3>
-
-        <!-- Gig Excerpt/Description -->
-        <p class="gig-excerpt" style="
-            font-size: var(--font-size-sm);
-            color: var(--gray-600);
-            margin-bottom: var(--spacing-3);
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        ">Brief description of the service offered. Highlights key benefits and what the buyer can expect.</p>
-
-        <!-- Gig Rating -->
-        <div class="gig-rating" style="
-            display: flex;
-            align-items: center;
-            margin-top: var(--spacing-1);
-            margin-bottom: var(--spacing-2);
-        ">
-            <i class="fas fa-star gig-rating-icon" style="
-                color: var(--warning-400);
-                margin-right: var(--spacing-1);
-            "></i>
-            <span class="gig-rating-value" style="
-                font-weight: var(--font-weight-semibold);
-                color: var(--warning-600);
-                margin-right: var(--spacing-1);
-                font-size: var(--font-size-sm);
-            ">4.9</span>
-            <span style="
-                color: var(--gray-500);
-                font-size: var(--font-size-sm);
-            ">(128)</span>
+        <h3 class="gig-title card-title">Service Title</h3>
+        <div class="gig-rating">
+            <i class="fas fa-star gig-rating-icon"></i>
+            <span class="gig-rating-value">4.5</span>
+            <span>(123)</span>
         </div>
-
-        <!-- Gig Price -->
-        <div class="gig-price" style="
-            font-size: var(--font-size-xl);
-            font-weight: var(--font-weight-bold);
-            color: var(--primary-700);
-            margin-top: var(--spacing-2);
-            margin-bottom: var(--spacing-3);
-        ">From $50</div>
-
-        <!-- View Details Button -->
-        <a href="/gig-detail.html" class="btn btn-primary mt-3" style="
-            width: 100%;
-            padding: 0.75rem;
-            font-size: var(--font-size-sm);
-            text-align: center;
-            transition: all var(--transition-fast);
-        ">View Details</a>
+        <div class="gig-price">From $50</div>
+        <a href="/gig-detail.html" class="btn btn-primary mt-3">View Details</a>
     </div>
 </div>

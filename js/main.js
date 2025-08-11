@@ -1,23 +1,10 @@
-// js/main.js - Core JavaScript for AtMyWorks Platform (Updated for Multi-Currency)
+// js/main.js - Core JavaScript for AtMyWorks Platform
 
-console.log("AtMyWorks JavaScript loaded");
+console.log("Main JS module loaded");
 
-// --- GLOBAL VARIABLES ---
-// These will be populated after Firebase initialization
-window.auth = null;
-window.db = null;
-window.storage = null;
-
-// Platform settings (including currency)
-window.platformSettings = {
-    primaryCurrency: 'USD', // Default fallback
-    supportedCurrencies: ['USD'], // Default fallback
-    exchangeRates: {} // Default fallback
-};
-
-// --- FIREBASE INITIALIZATION CHECK ---
+// Wait for the DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function () {
-    console.log("DOM fully loaded and parsed");
+    console.log("Main JS DOM loaded");
 
     // Check if firebaseApp is available (from firebase-config.js)
     if (typeof window.firebaseApp !== 'undefined') {
@@ -25,232 +12,219 @@ document.addEventListener('DOMContentLoaded', function () {
         window.db = window.firebaseApp.db;
         window.storage = window.firebaseApp.storage;
         console.log("Firebase services available in main.js");
-        
-        // Load platform settings (including currency) on DOM load
-        loadPlatformSettings();
     } else {
         console.warn("Firebase not initialized in main.js. Some features might not work.");
         // Hide auth-dependent UI elements or show an error
-        updateAuthUI(null); 
-    }
-
-    // --- MOBILE NAVIGATION TOGGLE (if you add one later) ---
-    // ... (keep existing mobile nav logic if present) ...
-
-    // --- AUTHENTICATION BUTTON ACTIONS (Header) ---
-    const loginBtn = document.getElementById('loginBtn');
-    const signupBtn = document.getElementById('signupBtn');
-
-    if (loginBtn) {
-        loginBtn.addEventListener('click', function () {
-            console.log("Login button clicked");
-            window.location.href = '/signup-employer.html'; // Or a dedicated login page
-        });
-    }
-
-    if (signupBtn) {
-        signupBtn.addEventListener('click', function () {
-            console.log("Signup button clicked");
-            window.location.href = '/signup-jobseeker.html'; // Default to jobseeker
-        });
-    }
-
-    // --- NEWSLETTER FORM (Footer) ---
-    const newsletterForm = document.querySelector('.newsletter-form');
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const emailInput = this.querySelector('input[type="email"]');
-            const email = emailInput.value.trim();
-
-            if (!email) {
-                alert("Please enter your email address.");
-                return;
-            }
-
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                alert("Please enter a valid email address.");
-                return;
-            }
-
-            console.log("Subscribing email:", email);
-            // In a full implementation, send this to your backend or Firebase
-            alert(`Thank you for subscribing with ${email}!`);
-            emailInput.value = '';
-        });
-    }
-
-    // --- GENERAL FORM HANDLING (Example) ---
-    // You can add more specific form handlers here or in dedicated files like auth.js
-    // For example, handling a contact form:
-    /*
-    const contactForm = document.getElementById('contactForm');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            // Handle contact form submission
-            console.log("Contact form submitted");
-            // ... logic ...
-        });
-    }
-    */
-
-});
-
-// --- PLATFORM SETTINGS LOADER ---
-/**
- * Loads platform-wide settings (like primary currency) from Firestore.
- * Updates the global window.platformSettings object.
- */
-async function loadPlatformSettings() {
-    console.log("Loading platform settings...");
-    
-    // Ensure Firebase services are available
-    if (!window.db) {
-        console.warn("Firestore 'db' not available for loading platform settings.");
+        updateAuthUI(null);
         return;
     }
 
-    try {
-        // Query the 'settings' collection for the 'platform' document
-        const settingsDoc = await window.db.collection('settings').doc('platform').get();
-
-        if (settingsDoc.exists) {
-            const settingsData = settingsDoc.data();
-            console.log("Platform settings loaded:", settingsData);
-
-            // Update global platform settings
-            window.platformSettings.primaryCurrency = settingsData.primaryCurrency || 'USD';
-            window.platformSettings.supportedCurrencies = settingsData.supportedCurrencies || ['USD'];
-            window.platformSettings.exchangeRates = settingsData.exchangeRates || {};
-            
-            console.log("Global platform settings updated:", window.platformSettings);
-            
-            // Dispatch a custom event to notify other parts of the app
-            window.dispatchEvent(new CustomEvent('platformSettingsLoaded', { detail: window.platformSettings }));
-            
-        } else {
-            console.warn("Platform settings document not found in Firestore. Using defaults.");
-            // Dispatch event even with defaults
-            window.dispatchEvent(new CustomEvent('platformSettingsLoaded', { detail: window.platformSettings }));
-        }
-    } catch (error) {
-        console.error("Error loading platform settings:", error);
-        // Dispatch event even on error (with defaults)
-        window.dispatchEvent(new CustomEvent('platformSettingsLoaded', { detail: window.platformSettings }));
+    // --- DYNAMIC CONTENT LOADING ---
+    // Load featured gigs on index.html
+    if (document.body.dataset.page === 'home') {
+        loadFeaturedGigs();
     }
-}
 
-// --- CURRENCY FORMATTING UTILITY ---
-/**
- * Formats a monetary amount according to the platform's primary currency.
- * @param {number} amount - The numerical amount to format.
- * @param {string} [currency] - Optional specific currency code. If omitted, uses platform's primary currency.
- * @param {boolean} [showCurrencyCode=true] - Whether to display the currency code (e.g., USD).
- * @returns {string} The formatted currency string (e.g., "$100.00" or "₱5,750.00").
- */
-function formatCurrency(amount, currency = null, showCurrencyCode = true) {
-    // Use provided currency or fall back to platform's primary currency
-    const currencyCode = currency || window.platformSettings.primaryCurrency || 'USD';
-    
-    // Format the number according to the currency and locale
-    // en-US is used as a base locale, but currency code determines symbol
-    try {
-        const formatter = new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: currencyCode,
-            // You can customize minimumFractionDigits, maximumFractionDigits here if needed
-        });
-        
-        let formattedAmount = formatter.format(amount);
-        
-        // Option to hide currency code (e.g., just show symbol)
-        if (!showCurrencyCode) {
-            // This is a simple way, might need refinement for complex locales
-            // Remove the currency code part (e.g., "USD", "PHP") if it's explicitly shown
-            // Intl usually handles this well with the symbol, but let's be safe
-            // formattedAmount = formattedAmount.replace(currencyCode, '').trim();
-            // A safer approach might be to format without style and prepend symbol manually
-            // For now, we'll keep the full formatted string as Intl provides it
-        }
-        
-        return formattedAmount;
-    } catch (e) {
-        console.error("Error formatting currency:", e);
-        // Fallback to a simple format if Intl fails
-        return `${currencyCode} ${amount.toFixed(2)}`;
+    // Load all gigs on browse.html
+    if (document.body.dataset.page === 'browse') {
+        loadAllGigs();
     }
-}
 
-// --- CURRENCY CONVERSION UTILITY (Basic) ---
-/**
- * Converts an amount from one currency to another using stored exchange rates.
- * This is a basic implementation. For real-time rates, integrate with a currency API.
- * @param {number} amount - The amount to convert.
- * @param {string} fromCurrency - The source currency code (e.g., 'USD').
- * @param {string} toCurrency - The target currency code (e.g., 'PHP').
- * @returns {number|null} The converted amount, or null if conversion is not possible.
- */
-function convertCurrency(amount, fromCurrency, toCurrency) {
-    if (fromCurrency === toCurrency) {
-        return amount;
-    }
-    
-    // Ensure exchange rates are loaded
-    if (!window.platformSettings.exchangeRates || Object.keys(window.platformSettings.exchangeRates).length === 0) {
-        console.warn("Exchange rates not loaded. Cannot perform conversion.");
-        return null;
-    }
-    
-    try {
-        // This assumes exchange rates are relative to the primary currency
-        const primaryCurrency = window.platformSettings.primaryCurrency;
-        
-        let convertedAmount = amount;
-        
-        // Convert to primary currency first if needed
-        if (fromCurrency !== primaryCurrency) {
-            const fromRate = window.platformSettings.exchangeRates[fromCurrency];
-            if (fromRate === undefined || fromRate <= 0) {
-                console.warn(`Exchange rate for ${fromCurrency} not found or invalid.`);
-                return null;
+    // --- FEATURED GIGS LOADER (for index.html) ---
+    async function loadFeaturedGigs() {
+        const gigsContainer = document.getElementById('featuredGigsContainer');
+        if (!gigsContainer) return;
+
+        // Show loading state
+        gigsContainer.innerHTML = `
+            <div style="text-align: center; padding: var(--spacing-10); grid-column: 1 / -1;">
+                <div class="spinner" style="width: 3rem; height: 3rem; border: 4px solid rgba(0, 0, 0, 0.1); border-left-color: var(--primary-600); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem;"></div>
+                <p>Loading featured services...</p>
+            </div>
+        `;
+
+        try {
+            // Query Firestore for featured gigs
+            // For now, we'll just load the first 3 gigs ordered by creation date
+            // In a real app, you'd have a 'featured' boolean field or similar
+            const querySnapshot = await window.db.collection('gigs')
+                .orderBy('createdAt', 'desc')
+                .limit(3)
+                .get();
+
+            if (querySnapshot.empty) {
+                gigsContainer.innerHTML = `
+                    <div style="text-align: center; padding: var(--spacing-10); grid-column: 1 / -1;">
+                        <p>No featured services available yet.</p>
+                    </div>
+                `;
+                return;
             }
-            // Convert from source to primary (amount / rate)
-            convertedAmount = amount / fromRate;
+
+            let gigsHtml = '';
+            querySnapshot.forEach(doc => {
+                const gigData = doc.data();
+                const gigId = doc.id;
+
+                // Format creation date
+                let formattedDate = 'N/A';
+                if (gigData.createdAt) {
+                    const dateObj = gigData.createdAt.toDate();
+                    formattedDate = dateObj.toLocaleDateString(); // e.g., 10/27/2023
+                }
+
+                // Determine seller info (could be username or company name)
+                let sellerName = gigData.sellerName || 'Unknown Seller';
+                let sellerAvatarText = sellerName.charAt(0).toUpperCase();
+
+                // Format rating
+                const ratingValue = gigData.rating?.toFixed(1) || 'N/A';
+                const ratingCount = gigData.reviews?.length || 0; // Simplified count
+
+                // Format price
+                const price = gigData.startingPrice ? `From $${gigData.startingPrice}` : 'Price N/A';
+
+                gigsHtml += `
+                    <div class="gig-card">
+                        <div class="gig-image">
+                            <img src="${gigData.imageUrl || 'https://placehold.co/600x400/3b82f6/white?text=Service+Image'}" alt="${escapeHtml(gigData.title || 'Service Title')}">
+                        </div>
+                        <div class="gig-content">
+                            <div class="gig-seller">
+                                <div class="gig-seller-avatar">${sellerAvatarText}</div>
+                                <span class="gig-seller-name">${escapeHtml(sellerName)}</span>
+                            </div>
+                            <h3 class="gig-title card-title"><a href="/gig-detail.html?id=${gigId}" style="text-decoration: none; color: inherit;">${escapeHtml(gigData.title || 'Untitled Gig')}</a></h3>
+                            <div class="gig-rating">
+                                <i class="fas fa-star gig-rating-icon"></i>
+                                <span class="gig-rating-value">${ratingValue}</span>
+                                <span>(${ratingCount})</span>
+                            </div>
+                            <div class="gig-price">From $${price}</div>
+                            <a href="/gig-detail.html?id=${gigId}" class="btn btn-primary mt-3">View Details</a>
+                        </div>
+                    </div>
+                `;
+            });
+
+            gigsContainer.innerHTML = gigsHtml;
+
+        } catch (error) {
+            console.error("Error loading featured gigs:", error);
+            gigsContainer.innerHTML = `
+                <div style="text-align: center; padding: var(--spacing-10); grid-column: 1 / -1; color: var(--danger-500);">
+                    <p>Error loading featured services: ${error.message}. Please try refreshing the page.</p>
+                </div>
+            `;
         }
-        
-        // Convert from primary to target currency if needed
-        if (toCurrency !== primaryCurrency) {
-            const toRate = window.platformSettings.exchangeRates[toCurrency];
-            if (toRate === undefined || toRate <= 0) {
-                console.warn(`Exchange rate for ${toCurrency} not found or invalid.`);
-                return null;
+    }
+
+    // --- ALL GIGS LOADER (for browse.html) ---
+    async function loadAllGigs() {
+         const gigsContainer = document.getElementById('gigsContainer');
+        if (!gigsContainer) return;
+
+        // Show loading state
+        gigsContainer.innerHTML = `
+            <div style="text-align: center; padding: var(--spacing-10); grid-column: 1 / -1;">
+                <div class="spinner" style="width: 3rem; height: 3rem; border: 4px solid rgba(0, 0, 0, 0.1); border-left-color: var(--primary-600); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem;"></div>
+                <p>Loading services...</p>
+            </div>
+        `;
+
+        try {
+            // Query Firestore for all gigs, ordered by creation date
+            const querySnapshot = await window.db.collection('gigs')
+                .orderBy('createdAt', 'desc')
+                .get();
+
+            if (querySnapshot.empty) {
+                gigsContainer.innerHTML = `
+                    <div style="text-align: center; padding: var(--spacing-10); grid-column: 1 / -1;">
+                        <p>No services available yet.</p>
+                    </div>
+                `;
+                return;
             }
-            // Convert from primary to target (amount * rate)
-            convertedAmount = convertedAmount * toRate;
+
+            let gigsHtml = '';
+            querySnapshot.forEach(doc => {
+                const gigData = doc.data();
+                const gigId = doc.id;
+
+                // Format creation date
+                let formattedDate = 'N/A';
+                if (gigData.createdAt) {
+                    const dateObj = gigData.createdAt.toDate();
+                    formattedDate = dateObj.toLocaleDateString(); // e.g., 10/27/2023
+                }
+
+                // Determine seller info (could be username or company name)
+                let sellerName = gigData.sellerName || 'Unknown Seller';
+                let sellerAvatarText = sellerName.charAt(0).toUpperCase();
+
+                // Format rating
+                const ratingValue = gigData.rating?.toFixed(1) || 'N/A';
+                const ratingCount = gigData.reviews?.length || 0; // Simplified count
+
+                // Format price
+                const price = gigData.startingPrice ? `From $${gigData.startingPrice}` : 'Price N/A';
+
+                gigsHtml += `
+                    <div class="gig-card">
+                        <div class="gig-image">
+                            <img src="${gigData.imageUrl || 'https://placehold.co/600x400/3b82f6/white?text=Service+Image'}" alt="${escapeHtml(gigData.title || 'Service Title')}">
+                        </div>
+                        <div class="gig-content">
+                            <div class="gig-seller">
+                                <div class="gig-seller-avatar">${sellerAvatarText}</div>
+                                <span class="gig-seller-name">${escapeHtml(sellerName)}</span>
+                            </div>
+                            <h3 class="gig-title card-title"><a href="/gig-detail.html?id=${gigId}" style="text-decoration: none; color: inherit;">${escapeHtml(gigData.title || 'Untitled Gig')}</a></h3>
+                            <div class="gig-rating">
+                                <i class="fas fa-star gig-rating-icon"></i>
+                                <span class="gig-rating-value">${ratingValue}</span>
+                                <span>(${ratingCount})</span>
+                            </div>
+                            <div class="gig-price">From $${price}</div>
+                            <a href="/gig-detail.html?id=${gigId}" class="btn btn-primary mt-3">View Details</a>
+                        </div>
+                    </div>
+                `;
+            });
+
+            gigsContainer.innerHTML = gigsHtml;
+
+        } catch (error) {
+            console.error("Error loading all gigs:", error);
+            gigsContainer.innerHTML = `
+                <div style="text-align: center; padding: var(--spacing-10); grid-column: 1 / -1; color: var(--danger-500);">
+                    <p>Error loading services: ${error.message}. Please try refreshing the page.</p>
+                </div>
+            `;
         }
-        
-        return convertedAmount;
-    } catch (error) {
-        console.error("Error converting currency:", error);
-        return null;
     }
-}
 
-// --- UTILITY FUNCTION TO SHOW/HIDE ELEMENTS ---
-function toggleElement(elementId, show) {
-    const element = document.getElementById(elementId);
-    if (element) {
-        element.style.display = show ? 'block' : 'none';
+    // Utility function to escape HTML to prevent XSS
+    function escapeHtml(str) {
+        if (typeof str !== 'string') return str;
+        return str
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "<")
+            .replace(/>/g, ">")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
     }
-}
 
-// --- MAKE FUNCTIONS GLOBALLY AVAILABLE ---
-// Export functions for use in other scripts
-window.formatCurrency = formatCurrency;
-window.convertCurrency = convertCurrency;
-window.loadPlatformSettings = loadPlatformSettings;
-window.toggleElement = toggleElement;
-
-console.log("Main JS module fully initialized");
+    // Add spinner animation
+    const style = document.createElement('style');
+    style.innerHTML = `
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .spinner {
+             animation: spin 1s linear infinite;
+        }
+    `;
+    document.head.appendChild(style);
+});

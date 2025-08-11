@@ -4,18 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Browse Services - AtMyWorks</title>
+    <meta name="description" content="Find the perfect freelance services for your business on AtMyWorks. Browse thousands of skilled freelancers offering services in Graphics & Design, Digital Marketing, Programming & Tech, and more.">
     <link rel="stylesheet" href="css/styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
     <script src="js/firebase-config.js"></script>
 </head>
-<body>
-    <!-- Header -->
+<body data-page="browse">
+        <!-- Header -->
     <header class="header">
         <div class="container">
             <nav class="navbar">
@@ -23,51 +25,82 @@
                 <ul class="nav-links">
                     <li><a href="/browse.html">Find Work</a></li>
                     <li><a href="/blog.html">Blog</a></li>
-                    <li><a href="#">How It Works</a></li>
+                    <li><a href="/how-it-works.html">How It Works</a></li>
                 </ul>
-                <div class="auth-buttons">
-                    <button class="btn btn-outline" id="loginBtn">Log In</button>
-                    <button class="btn btn-primary" id="signupBtn">Sign Up</button>
+                <!-- Auth Buttons (shown when not logged in) -->
+                <div class="auth-buttons" id="authButtons">
+                    <a href="/login.html" class="btn btn-outline" id="loginBtnNav">Log In</a>
+                    <a href="/signup-options.html" class="btn btn-primary" id="signupBtnNav">Sign Up</a>
+                </div>
+                <!-- User Menu (shown when logged in) -->
+                <div class="user-menu" id="userMenu" style="display: none; position: relative;">
+                    <button class="btn btn-outline user-menu-toggle" id="userMenuToggle" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-bell" style="margin-right: 0.5rem;"></i>
+                        <span class="user-avatar" id="userAvatar" style="width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-100), var(--secondary-100)); display: inline-flex; align-items: center; justify-content: center; font-weight: bold; color: var(--primary-800); margin-right: 0.5rem; box-shadow: var(--shadow-xs);">U</span>
+                        <span id="userName">User</span>
+                        <i class="fas fa-chevron-down" style="margin-left: 0.5rem; font-size: var(--font-size-xs);"></i>
+                    </button>
+
+                    <!-- User Menu Dropdown -->
+                    <div class="user-menu-dropdown" id="userMenuDropdown" style="display: none; position: absolute; top: 100%; right: 0; width: 250px; background: white; border-radius: var(--border-radius-lg); box-shadow: var(--shadow-lg); padding: 1rem; z-index: 1000; margin-top: 0.5rem;">
+                        <div style="display: flex; align-items: center; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+                            <div class="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-100), var(--secondary-100)); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--primary-800); margin-right: 1rem; box-shadow: var(--shadow-xs);">U</div>
+                            <div>
+                                <div style="font-weight: var(--font-weight-semibold);" id="dropdownUserName">User Name</div>
+                                <div style="font-size: var(--font-size-sm); color: var(--gray-500);" id="dropdownUserEmail">user@example.com</div>
+                            </div>
+                        </div>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="margin-bottom: 0.5rem;"><a href="/profile.html" class="user-menu-link"><i class="fas fa-user-circle" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> My Profile</a></li>
+                            <li style="margin-bottom: 0.5rem;"><a href="/messages.html" class="user-menu-link"><i class="fas fa-comments" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Messages <span class="badge badge-primary" style="float: right;">3</span></a></li>
+                            <li style="margin-bottom: 0.5rem;"><a href="/dashboard-client.html" class="user-menu-link" id="dashboardMenuLink"><i class="fas fa-tachometer-alt" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Dashboard</a></li>
+                            <li style="margin-bottom: 0.5rem;"><a href="/settings.html" class="user-menu-link"><i class="fas fa-cog" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Settings</a></li>
+                            <li><button class="btn btn-outline btn-block logout-btn" id="logoutBtnInMenu" style="margin-top: 1rem;"><i class="fas fa-sign-out-alt" style="margin-right: 0.75rem;"></i> Logout</button></li>
+                        </ul>
+                    </div>
                 </div>
             </nav>
         </div>
     </header>
-
     <!-- Search and Filters -->
-    <section style="padding: 2rem 0; background-color: var(--white);">
+    <section class="section section-gray py-5">
         <div class="container">
             <div style="max-width: 800px; margin: 0 auto;">
-                <form id="searchForm" style="display: flex; gap: 1rem; margin-bottom: 2rem;">
-                    <input type="text" id="searchQuery" placeholder="Search for services..." style="flex: 1; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 0.375rem;">
-                    <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+                <form id="searchForm" class="search-form">
+                    <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+                        <input type="text" id="searchQuery" class="form-control" placeholder="Search for services...">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <select id="categoryFilter" class="form-control">
+                            <option value="">All Categories</option>
+                            <option value="graphics-design">Graphics & Design</option>
+                            <option value="digital-marketing">Digital Marketing</option>
+                            <option value="programming-tech">Programming & Tech</option>
+                            <option value="video-animation">Video & Animation</option>
+                            <option value="writing-translation">Writing & Translation</option>
+                            <option value="music-audio">Music & Audio</option>
+                        </select>
+                        
+                        <select id="priceFilter" class="form-control">
+                            <option value="">Any Price</option>
+                            <option value="0-50">Under $50</option>
+                            <option value="50-100">$50 - $100</option>
+                            <option value="100-500">$100 - $500</option>
+                            <option value="500+">Over $500</option>
+                        </select>
+                        
+                        <select id="sortFilter" class="form-control">
+                            <option value="best-selling">Best Selling</option>
+                            <option value="newest">Newest</option>
+                            <option value="price-low-high">Price: Low to High</option>
+                            <option value="price-high-low">Price: High to Low</option>
+                        </select>
+                        
+                        <button type="button" id="resetFiltersBtn" class="btn btn-outline">Reset Filters</button>
+                    </div>
                 </form>
-
-                <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
-                    <select id="categoryFilter" style="padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 0.375rem;">
-                        <option value="">All Categories</option>
-                        <option value="graphics-design">Graphics & Design</option>
-                        <option value="digital-marketing">Digital Marketing</option>
-                        <option value="programming-tech">Programming & Tech</option>
-                        <option value="video-animation">Video & Animation</option>
-                        <option value="writing-translation">Writing & Translation</option>
-                        <option value="music-audio">Music & Audio</option>
-                    </select>
-
-                    <select id="priceFilter" style="padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 0.375rem;">
-                        <option value="">Any Price</option>
-                        <option value="0-50">Under $50</option>
-                        <option value="50-100">$50 - $100</option>
-                        <option value="100-500">$100 - $500</option>
-                        <option value="500+">Over $500</option>
-                    </select>
-
-                    <select id="sortFilter" style="padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 0.375rem;">
-                        <option value="best-selling">Best Selling</option>
-                        <option value="newest">Newest</option>
-                        <option value="price-low-high">Price: Low to High</option>
-                        <option value="price-high-low">Price: High to Low</option>
-                    </select>
-                </div>
             </div>
         </div>
     </section>
@@ -76,150 +109,46 @@
     <section class="gigs-section">
         <div class="container">
             <div class="section-header">
-                <h2>Available Services</h2>
                 <div>
-                    <span id="resultsCount">Showing 6 services</span>
+                    <h2>Available Services</h2>
+                    <p class="text-muted">Find the right talent for your next project</p>
                 </div>
+                <span id="resultsCount">Showing 0 services</span>
             </div>
+            
+            <!-- Loading State -->
+            <div id="loadingState" style="text-align: center; padding: var(--spacing-10); grid-column: 1 / -1; display: none;">
+                <div class="spinner" style="width: 3rem; height: 3rem; border: 4px solid rgba(0, 0, 0, 0.1); border-left-color: var(--primary-600); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem;"></div>
+                <p>Loading services...</p>
+            </div>
+            
+            <!-- Error State -->
+            <div id="errorState" style="text-align: center; padding: var(--spacing-10); grid-column: 1 / -1; color: var(--danger-500); display: none;">
+                <i class="fas fa-exclamation-circle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                <h3>Error Loading Services</h3>
+                <p id="errorMessage">An error occurred while loading services. Please try again.</p>
+                <button class="btn btn-outline mt-3" onclick="loadGigs()"><i class="fas fa-redo"></i> Retry</button>
+            </div>
+            
+            <!-- Empty State -->
+            <div id="emptyState" style="text-align: center; padding: var(--spacing-10); grid-column: 1 / -1; color: var(--gray-500); display: none;">
+                <i class="fas fa-box-open" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                <h3>No Services Found</h3>
+                <p>Try adjusting your filters or search query.</p>
+                <button class="btn btn-outline mt-3" onclick="resetFiltersAndReload()"><i class="fas fa-filter"></i> Reset Filters</button>
+            </div>
+            
+            <!-- Gigs Grid Container -->
             <div class="gigs-grid" id="gigsContainer">
                 <!-- Gig cards will be populated here by JavaScript -->
-                <!-- For now, we'll add static placeholders -->
-                <!-- Gig Card 1 -->
-                <div class="gig-card">
-                    <div class="gig-image">
-                        <img src="https://placehold.co/300x200/3b82f6/white?text=Logo+Design" alt="Professional Logo Design">
-                    </div>
-                    <div class="gig-content">
-                        <div class="gig-seller">
-                            <div class="gig-seller-avatar">AJ</div>
-                            <span class="gig-seller-name">Alex Johnson</span>
-                        </div>
-                        <h3 class="gig-title card-title">I will design a professional logo for your business</h3>
-                        <div class="gig-rating">
-                            <i class="fas fa-star gig-rating-icon"></i>
-                            <span class="gig-rating-value">4.9</span>
-                            <span>(128)</span>
-                        </div>
-                        <div class="gig-price">From $50</div>
-                        <a href="/gig-detail.html" class="btn btn-primary mt-3">View Details</a>
-                    </div>
-                </div>
-
-                <!-- Gig Card 2 -->
-                <div class="gig-card">
-                    <div class="gig-image">
-                        <img src="https://placehold.co/300x200/ef4444/white?text=Website+Dev" alt="Website Development">
-                    </div>
-                    <div class="gig-content">
-                        <div class="gig-seller">
-                            <div class="gig-seller-avatar">TS</div>
-                            <span class="gig-seller-name">Tech Solutions</span>
-                        </div>
-                        <h3 class="gig-title card-title">I will build a responsive website for your business</h3>
-                        <div class="gig-rating">
-                            <i class="fas fa-star gig-rating-icon"></i>
-                            <span class="gig-rating-value">4.8</span>
-                            <span>(86)</span>
-                        </div>
-                        <div class="gig-price">From $200</div>
-                        <a href="/gig-detail.html" class="btn btn-primary mt-3">View Details</a>
-                    </div>
-                </div>
-
-                <!-- Gig Card 3 -->
-                <div class="gig-card">
-                    <div class="gig-image">
-                        <img src="https://placehold.co/300x200/10b981/white?text=Social+Media" alt="Social Media Marketing">
-                    </div>
-                    <div class="gig-content">
-                        <div class="gig-seller">
-                            <div class="gig-seller-avatar">MP</div>
-                            <span class="gig-seller-name">Marketing Pro</span>
-                        </div>
-                        <h3 class="gig-title card-title">I will create a social media marketing strategy</h3>
-                        <div class="gig-rating">
-                            <i class="fas fa-star gig-rating-icon"></i>
-                            <span class="gig-rating-value">4.7</span>
-                            <span>(42)</span>
-                        </div>
-                        <div class="gig-price">From $100</div>
-                        <a href="/gig-detail.html" class="btn btn-primary mt-3">View Details</a>
-                    </div>
-                </div>
-
-                 <!-- Gig Card 4 -->
-                 <div class="gig-card">
-                    <div class="gig-image">
-                        <img src="https://placehold.co/300x200/f97316/white?text=Content+Writing" alt="Content Writing">
-                    </div>
-                    <div class="gig-content">
-                        <div class="gig-seller">
-                            <div class="gig-seller-avatar">CW</div>
-                            <span class="gig-seller-name">Content Writer</span>
-                        </div>
-                        <h3 class="gig-title card-title">I will write SEO-friendly blog posts for your website</h3>
-                        <div class="gig-rating">
-                            <i class="fas fa-star gig-rating-icon"></i>
-                            <span class="gig-rating-value">4.9</span>
-                            <span>(95)</span>
-                        </div>
-                        <div class="gig-price">From $30</div>
-                        <a href="/gig-detail.html" class="btn btn-primary mt-3">View Details</a>
-                    </div>
-                </div>
-
-                <!-- Gig Card 5 -->
-                <div class="gig-card">
-                    <div class="gig-image">
-                        <img src="https://placehold.co/300x200/8b5cf6/white?text=Video+Editing" alt="Video Editing">
-                    </div>
-                    <div class="gig-content">
-                        <div class="gig-seller">
-                            <div class="gig-seller-avatar">VE</div>
-                            <span class="gig-seller-name">Video Editor</span>
-                        </div>
-                        <h3 class="gig-title card-title">I will edit and produce your promotional video</h3>
-                        <div class="gig-rating">
-                            <i class="fas fa-star gig-rating-icon"></i>
-                            <span class="gig-rating-value">4.6</span>
-                            <span>(67)</span>
-                        </div>
-                        <div class="gig-price">From $150</div>
-                        <a href="/gig-detail.html" class="btn btn-primary mt-3">View Details</a>
-                    </div>
-                </div>
-
-                <!-- Gig Card 6 -->
-                <div class="gig-card">
-                    <div class="gig-image">
-                        <img src="https://placehold.co/300x200/ec4899/white?text=Music+Production" alt="Music Production">
-                    </div>
-                    <div class="gig-content">
-                        <div class="gig-seller">
-                            <div class="gig-seller-avatar">MP</div>
-                            <span class="gig-seller-name">Music Producer</span>
-                        </div>
-                        <h3 class="gig-title card-title">I will produce a custom jingle for your brand</h3>
-                        <div class="gig-rating">
-                            <i class="fas fa-star gig-rating-icon"></i>
-                            <span class="gig-rating-value">5.0</span>
-                            <span>(34)</span>
-                        </div>
-                        <div class="gig-price">From $75</div>
-                        <a href="/gig-detail.html" class="btn btn-primary mt-3">View Details</a>
-                    </div>
-                </div>
+                <!-- Initially empty, will be filled dynamically -->
             </div>
-
-            <!-- Pagination (Placeholder) -->
+            
+            <!-- Pagination -->
             <div style="display: flex; justify-content: center; margin-top: var(--spacing-8);">
-                <nav aria-label="Page navigation">
-                    <ul style="display: flex; list-style: none; gap: var(--spacing-2);">
-                        <li><a class="btn btn-outline" href="#" aria-label="Previous"><i class="fas fa-chevron-left"></i></a></li>
-                        <li><a class="btn btn-primary" href="#" aria-label="Page 1">1</a></li>
-                        <li><a class="btn btn-outline" href="#" aria-label="Page 2">2</a></li>
-                        <li><a class="btn btn-outline" href="#" aria-label="Page 3">3</a></li>
-                        <li><a class="btn btn-outline" href="#" aria-label="Next"><i class="fas fa-chevron-right"></i></a></li>
+                <nav aria-label="Gig pagination">
+                    <ul class="pagination" id="gigsPagination" style="display: flex; list-style: none; gap: var(--spacing-2);">
+                        <!-- Pagination buttons will be populated by JS -->
                     </ul>
                 </nav>
             </div>
@@ -267,45 +196,42 @@
     <!-- JavaScript Files -->
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
-    <!-- <script src="js/browse.js"></script> --> <!-- Optional dedicated JS file -->
+    <script src="js/browse.js"></script> <!-- Dedicated browse JS -->
     <script>
-        // Simple client-side filtering logic (placeholder)
         document.addEventListener('DOMContentLoaded', function () {
-            const searchForm = document.getElementById('searchForm');
-            const searchQuery = document.getElementById('searchQuery');
-            const categoryFilter = document.getElementById('categoryFilter');
-            const priceFilter = document.getElementById('priceFilter');
-            const sortFilter = document.getElementById('sortFilter');
-            const gigsContainer = document.getElementById('gigsContainer');
-            const resultsCount = document.getElementById('resultsCount');
+            console.log("Browse Page DOM loaded");
 
-            // In a real app, this data would come from Firestore
-            const allGigs = [
-                // ... (data for gig cards)
-                // This is just a placeholder, actual filtering would happen on the server/backend
-            ];
-
-            function filterGigs() {
-                const query = searchQuery.value.toLowerCase();
-                const category = categoryFilter.value;
-                const priceRange = priceFilter.value;
-                const sort = sortFilter.value;
-
-                console.log("Filtering with:", { query, category, priceRange, sort });
-                // Placeholder: In a real app, you would re-fetch data from Firestore
-                // based on these filters and update the DOM.
-                // For now, we just log the filters.
-                resultsCount.textContent = `Showing 6 services (filtered by: ${query || 'all'}, ${category || 'all categories'})`;
+            // Check if firebaseApp is available (from firebase-config.js)
+            if (typeof window.firebaseApp !== 'undefined') {
+                window.auth = window.firebaseApp.auth;
+                window.db = window.firebaseApp.db;
+                window.storage = window.firebaseApp.storage;
+                console.log("Firebase services available in browse.html");
+            } else {
+                console.warn("Firebase not initialized in browse.html.");
+                alert("Unable to connect to the database. Please try refreshing the page.");
+                return;
             }
 
-            if (searchForm) searchForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                filterGigs();
-            });
-            if (categoryFilter) categoryFilter.addEventListener('change', filterGigs);
-            if (priceFilter) priceFilter.addEventListener('change', filterGigs);
-            if (sortFilter) sortFilter.addEventListener('change', filterGigs);
-
+            // --- BROWSE PAGE SPECIFIC LOGIC ---
+            // This logic is now delegated to js/browse.js
+            // But we can initialize it here if needed
+            
+            // Initialize the browse page functionality
+            if (typeof window.initBrowsePage === 'function') {
+                window.initBrowsePage();
+            } else {
+                console.warn("initBrowsePage function not found. Is browse.js loaded correctly?");
+                // Fallback: Show an error message
+                const errorState = document.getElementById('errorState');
+                const errorMessage = document.getElementById('errorMessage');
+                if (errorState && errorMessage) {
+                    errorMessage.textContent = "Failed to initialize browse page functionality. Please try refreshing the page.";
+                    errorState.style.display = 'block';
+                }
+            }
+            
+            // --- END BROWSE PAGE SPECIFIC LOGIC ---
         });
     </script>
 </body>

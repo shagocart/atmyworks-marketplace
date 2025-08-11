@@ -53,106 +53,86 @@
                         </div>
                     </div>
 
-                    <!-- Job Post Form (Initially Hidden) -->
-                    <form id="jobPostForm" style="display: none;">
-                        <div class="form-group">
-                            <label for="jobTitle" class="form-label">Job Title *</label>
-                            <input type="text" id="jobTitle" name="title" class="form-control" placeholder="e.g., Senior Web Developer, Logo Designer, Content Writer" required>
-                        </div>
+                       <!-- Job Post Form -->
+    <form id="jobPostForm">
+        <div class="form-group">
+            <label for="jobTitle" class="form-label">Job Title *</label>
+            <input type="text" id="jobTitle" name="title" class="form-control" placeholder="e.g., Senior Web Developer, Logo Designer, Content Writer" required>
+            <!-- AI Assistant Button for Job Title will be added by JS -->
+        </div>
 
-                        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
-                            <div class="form-group">
-                                <label for="jobCategory" class="form-label">Category *</label>
-                                <select id="jobCategory" name="category" class="form-control" required>
-                                    <option value="">Select Category</option>
-                                    <option value="graphics-design">Graphics & Design</option>
-                                    <option value="digital-marketing">Digital Marketing</option>
-                                    <option value="programming-tech">Programming & Tech</option>
-                                    <option value="video-animation">Video & Animation</option>
-                                    <option value="writing-translation">Writing & Translation</option>
-                                    <option value="music-audio">Music & Audio</option>
-                                    <option value="business">Business</option>
-                                    <option value="lifestyle">Lifestyle</option>
-                                </select>
-                            </div>
+        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+            <div class="form-group">
+                <label for="jobCategory" class="form-label">Category *</label>
+                <select id="jobCategory" name="category" class="form-control" required>
+                    <option value="">Select Category</option>
+                    <option value="graphics-design">Graphics & Design</option>
+                    <option value="digital-marketing">Digital Marketing</option>
+                    <option value="programming-tech">Programming & Tech</option>
+                    <option value="video-animation">Video & Animation</option>
+                    <option value="writing-translation">Writing & Translation</option>
+                    <option value="music-audio">Music & Audio</option>
+                </select>
+            </div>
 
-                            <div class="form-group">
-                                <label for="jobType" class="form-label">Job Type *</label>
-                                <select id="jobType" name="type" class="form-control" required>
-                                    <option value="">Select Type</option>
-                                    <option value="freelance">Freelance</option>
-                                    <option value="part-time">Part-Time</option>
-                                    <option value="full-time">Full-Time</option>
-                                    <option value="contract">Contract</option>
-                                    <option value="internship">Internship</option>
-                                </select>
-                            </div>
-                        </div>
+            <div class="form-group">
+                <label for="jobType" class="form-label">Job Type *</label>
+                <select id="jobType" name="type" class="form-control" required>
+                    <option value="">Select Type</option>
+                    <option value="freelance">Freelance</option>
+                    <option value="part-time">Part-Time</option>
+                    <option value="full-time">Full-Time</option>
+                    <option value="contract">Contract</option>
+                    <option value="internship">Internship</option>
+                </select>
+            </div>
+        </div>
 
-                        <div class="form-group">
-                            <label for="jobDescription" class="form-label">Job Description *</label>
-                            <textarea id="jobDescription" name="description" rows="8" class="form-control" placeholder="Provide a detailed description of the job responsibilities, requirements, and expectations..." required></textarea>
-                            <div class="form-text">Clearly outline what the candidate will be doing and what skills/experience are required.</div>
-                        </div>
+        <div class="form-group">
+            <label for="jobDescription" class="form-label">Job Description *</label>
+            <textarea id="jobDescription" name="description" rows="8" class="form-control" placeholder="Provide a detailed description of the job responsibilities, requirements, and expectations..." required></textarea>
+            <!-- AI Assistant Button for Job Description will be added by JS -->
+            <div class="form-text">Clearly outline what the candidate will be doing and what skills/experience are required.</div>
+        </div>
 
-                        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
-                            <div class="form-group">
-                                <label for="jobBudget" class="form-label">Estimated Budget ($) *</label>
-                                <input type="number" id="jobBudget" name="budget" class="form-control" placeholder="2000" min="0" step="1" required>
-                                <div class="form-text">Enter the estimated total budget for the project or annual/monthly salary.</div>
-                            </div>
+        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+            <div class="form-group">
+                <label for="jobBudget" class="form-label">Estimated Budget ($) *</label>
+                <input type="number" id="jobBudget" name="budget" class="form-control" placeholder="2000" min="0" step="1" required>
+            </div>
 
-                            <div class="form-group">
-                                <label for="jobDuration" class="form-label">Estimated Duration *</label>
-                                <select id="jobDuration" name="duration" class="form-control" required>
-                                    <option value="">Select Duration</option>
-                                    <option value="less-than-1-week">Less than 1 week</option>
-                                    <option value="1-to-4-weeks">1 to 4 weeks</option>
-                                    <option value="1-to-3-months">1 to 3 months</option>
-                                    <option value="3-to-6-months">3 to 6 months</option>
-                                    <option value="more-than-6-months">More than 6 months</option>
-                                    <option value="ongoing">Ongoing</option>
-                                </select>
-                            </div>
-                        </div>
+            <div class="form-group">
+                <label for="jobDuration" class="form-label">Estimated Duration *</label>
+                <select id="jobDuration" name="duration" class="form-control" required>
+                    <option value="">Select Duration</option>
+                    <option value="less-than-1-week">Less than 1 week</option>
+                    <option value="1-to-4-weeks">1 to 4 weeks</option>
+                    <option value="1-to-3-months">1 to 3 months</option>
+                    <option value="3-to-6-months">3 to 6 months</option>
+                    <option value="more-than-6-months">More than 6 months</option>
+                    <option value="ongoing">Ongoing</option>
+                </select>
+            </div>
+        </div>
 
-                        <div class="form-group">
-                            <label for="jobExperience" class="form-label">Required Experience Level</label>
-                            <select id="jobExperience" name="experience" class="form-control">
-                                <option value="">Select Experience Level</option>
-                                <option value="entry">Entry Level</option>
-                                <option value="intermediate">Intermediate</option>
-                                <option value="expert">Expert</option>
-                            </select>
-                        </div>
+        <div class="form-group">
+            <label for="jobExperience" class="form-label">Required Experience Level</label>
+            <select id="jobExperience" name="experience" class="form-control">
+                <option value="">Select Experience Level</option>
+                <option value="entry">Entry Level</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="expert">Expert</option>
+            </select>
+        </div>
 
-                        <div class="form-group">
-                            <label for="jobSkills" class="form-label">Preferred Skills (Optional)</label>
-                            <input type="text" id="jobSkills" name="skills" class="form-control" placeholder="e.g., JavaScript, React, Adobe Photoshop, SEO">
-                            <div class="form-text">List preferred skills separated by commas.</div>
-                        </div>
+        <div class="form-group">
+            <label for="jobSkills" class="form-label">Preferred Skills (Optional)</label>
+            <input type="text" id="jobSkills" name="skills" class="form-control" placeholder="e.g., JavaScript, React, Adobe Photoshop, SEO">
+            <div class="form-text">List preferred skills separated by commas.</div>
+        </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Application Method</label>
-                            <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 0.5rem;">
-                                <label style="display: flex; align-items: center; cursor: pointer;">
-                                    <input type="radio" name="applicationMethod" value="platform" checked style="margin-right: 0.5rem;">
-                                    Apply through AtMyWorks platform
-                                </label>
-                                <label style="display: flex; align-items: center; cursor: pointer;">
-                                    <input type="radio" name="applicationMethod" value="external" style="margin-right: 0.5rem;">
-                                    External link/application
-                                </label>
-                            </div>
-                            <div id="externalLinkField" style="margin-top: 1rem; display: none;">
-                                <label for="externalLink" class="form-label">External Application Link</label>
-                                <input type="url" id="externalLink" name="externalLink" class="form-control" placeholder="https://yourcompany.com/careers/apply">
-                                <div class="form-text">Provide a direct link to your company's career page or application form.</div>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem; margin-top: 1rem;">Post Job</button>
-                    </form>
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem; margin-top: 1rem;">Post Job</button>
+    </form>
 
                     <!-- Success Message (Initially Hidden) -->
                     <div id="postSuccessMessage" style="display: none; text-align: center; padding: 2rem;">

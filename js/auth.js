@@ -1,10 +1,10 @@
-// js/auth.js - Enhanced Authentication related JavaScript for AtMyWorks
+// js/auth.js - Authentication related JavaScript for AtMyWorks
 
-console.log("Enhanced Auth module loaded");
+console.log("Auth module loaded");
 
 // Wait for the DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function () {
-    console.log("Enhanced Auth DOM loaded");
+    console.log("Auth DOM loaded");
 
     // --- GLOBAL AUTH STATE LISTENER ---
     // Listen for auth state changes (login/logout)
@@ -28,15 +28,18 @@ document.addEventListener('DOMContentLoaded', function () {
         console.warn("Firebase not initialized in auth.js. Some features might not work.");
         // Hide auth-dependent UI elements or show an error
         updateAuthUI(null); 
+        return;
     }
 
     // --- GENERIC AUTH UI UPDATER ---
     function updateAuthUI(user) {
-        const loginBtnNav = document.getElementById('loginBtnNav');
-        const signupBtnNav = document.getElementById('signupBtnNav');
-        const authButtonsNav = document.querySelector('.auth-buttons'); // Assuming this holds login/signup
-        const userMenuNav = document.getElementById('userMenuNav'); // Assuming you have a user menu element
-        const logoutBtnNav = document.getElementById('logoutBtnNav'); // Assuming logout button has this ID
+        const authButtonsNav = document.getElementById('authButtonsNav');
+        const userMenuNav = document.getElementById('userMenuNav');
+        const logoutBtnNav = document.getElementById('logoutBtnNav');
+        const userNameElement = document.getElementById('userName');
+        const dropdownUserNameElement = document.getElementById('dropdownUserName');
+        const dropdownUserEmailElement = document.getElementById('dropdownUserEmail');
+        const userAvatarElements = document.querySelectorAll('.user-avatar');
 
         if (user) {
             // User is signed in
@@ -44,16 +47,23 @@ document.addEventListener('DOMContentLoaded', function () {
             if (authButtonsNav) authButtonsNav.style.display = 'none';
             if (userMenuNav) {
                 userMenuNav.style.display = 'flex'; // Or 'block'
+
                 // Update user name/avatar in menu
-                const userNameElement = userMenuNav.querySelector('#userName');
+                const displayName = user.displayName || user.email?.split('@')[0] || 'User';
                 if (userNameElement) {
-                    userNameElement.textContent = user.displayName || user.email?.split('@')[0] || 'User';
+                    userNameElement.textContent = displayName;
                 }
+                if (dropdownUserNameElement) {
+                    dropdownUserNameElement.textContent = displayName;
+                }
+                if (dropdownUserEmailElement) {
+                    dropdownUserEmailElement.textContent = user.email || 'No email';
+                }
+
                 // Update user avatar initials
-                const userAvatarElements = userMenuNav.querySelectorAll('.user-avatar');
+                const initials = (displayName || 'U').charAt(0).toUpperCase();
                 userAvatarElements.forEach(avatar => {
                     if (avatar) {
-                        const initials = (user.displayName || user.email?.split('@')[0] || 'U').charAt(0).toUpperCase();
                         avatar.textContent = initials;
                     }
                 });
@@ -61,16 +71,14 @@ document.addEventListener('DOMContentLoaded', function () {
             if (logoutBtnNav) {
                 // Remove any existing listener to prevent duplicates
                 logoutBtnNav.removeEventListener('click', window.handleFirebaseLogout);
-                logoutBtnNav.addEventListener('click', function(e) {
-                    e.preventDefault(); // Prevent default link behavior if it's an <a> tag
-                    window.handleFirebaseLogout();
-                });
+                logoutBtnNav.addEventListener('click', window.handleFirebaseLogout);
             }
         } else {
             // User is signed out
             console.log("User is signed out");
             if (authButtonsNav) authButtonsNav.style.display = 'flex'; // Or 'block'
             if (userMenuNav) userMenuNav.style.display = 'none';
+
             // Remove logout listener if it was added previously (good practice)
             if (logoutBtnNav) {
                 logoutBtnNav.removeEventListener('click', window.handleFirebaseLogout);
@@ -94,12 +102,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 throw new Error("Firebase Auth is not initialized. Please check the console for Firebase loading errors.");
             }
 
+            // --- EMAIL VERIFICATION CHECK ---
+            // It's good practice to ensure the user has verified their email before logging in
+            // This requires checking the user's document in Firestore
+            let userDocData = null;
+            try {
+                const userDoc = await window.db.collection('users').doc(window.auth.currentUser?.uid || 'temp').get();
+                if (userDoc.exists) {
+                    userDocData = userDoc.data();
+                }
+            } catch (firestoreError) {
+                console.warn("Could not fetch user doc for verification check before login:", firestoreError);
+                // Proceed with login, but check after
+            }
+            
+            // Perform login
             const userCredential = await window.auth.signInWithEmailAndPassword(email, password);
             const user = userCredential.user;
             console.log("Firebase Login Successful:", user.uid);
             
-            // --- EMAIL VERIFICATION CHECK ---
-            // It's good practice to ensure the user has verified their email
+            // --- POST-LOGIN EMAIL VERIFICATION CHECK ---
             if (!user.emailVerified) {
                 console.warn("User email not verified:", user.email);
                 alert("Please verify your email address before logging in. A verification email has been sent.");
@@ -111,8 +133,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             // --- END EMAIL VERIFICATION CHECK ---
 
-            // Show success message
-            showMessage("Login successful! Welcome back.", "success");
+            alert("Login successful!");
 
             // --- ROLE-BASED REDIRECTION LOGIC ---
             // Fetch user role from Firestore to determine where to redirect
@@ -151,14 +172,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             } catch (firestoreError) {
                 console.error("Error fetching user role from Firestore:", firestoreError);
-                showMessage("Logged in, but there was an issue loading your profile. You will be redirected to the homepage.", "warning");
+                alert("Logged in, but there was an issue loading your profile. You will be redirected to the homepage.");
             }
 
             console.log(`Redirecting user to: ${redirectUrl}`);
-            // Use a slight delay to allow the success message to be seen
-            setTimeout(() => {
-                window.location.href = redirectUrl;
-            }, 1500); // 1.5 second delay
+            window.location.href = redirectUrl;
 
         } catch (error) {
             const errorCode = error.code;
@@ -178,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else if (errorCode === 'auth/email-not-verified') {
                  userMessage = "Please verify your email address before logging in.";
             }
-            showMessage(userMessage, "danger");
+            alert(userMessage);
             // Re-throw the error so the calling function knows it failed
             throw error; 
         }
@@ -218,8 +236,10 @@ document.addEventListener('DOMContentLoaded', function () {
             } catch (verificationError) {
                 console.error("Error sending verification email:", verificationError);
                 // Don't fail signup if email fails, just warn
-                showMessage("Account created, but email verification could not be sent. Please contact support.", "warning");
+                alert("Account created, but email verification could not be sent. Please contact support.");
             }
+
+            alert("Account created successfully! Please check your email for verification.");
 
             // After signup, save additional user data to Firestore
             if (window.db) {
@@ -263,23 +283,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.error("Error saving user data to Firestore:", firestoreError);
                     // Decide if signup should fail if Firestore write fails
                     // Or just log the error and proceed
-                    showMessage("Account created, but profile setup had an issue. Please contact support or update your profile later.", "danger");
+                    alert("Account created, but profile setup had an issue. Please contact support or update your profile later.");
                 }
             } else {
                 console.warn("Firestore 'db' object not found. Skipping user data save.");
-                showMessage("Account created, but profile setup could not be completed. Please contact support.", "danger");
+                alert("Account created, but profile setup could not be completed. Please contact support.");
             }
-
-            // Show success message
-            showMessage("Account created successfully! Please check your email for verification.", "success");
 
             // Redirect to a page indicating success or prompting login/verification
             // For simplicity, redirecting to index to prompt login after potential email verification
             // You might want a dedicated "welcome" or "verify email" page.
-            // Use a slight delay to allow the success message to be seen
-            setTimeout(() => {
-                window.location.href = '/index.html'; // Or /login.html
-            }, 2000); // 2 second delay
+            window.location.href = '/index.html'; // Or /login.html
 
         } catch (error) {
             const errorCode = error.code;
@@ -299,7 +313,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else if (errorCode === 'auth/network-request-failed') {
                  userMessage = "Network error. Please check your internet connection.";
             }
-            showMessage(userMessage, "danger");
+            alert(userMessage);
             // Re-throw the error so the calling function knows it failed
             throw error; 
         }
@@ -318,64 +332,17 @@ document.addEventListener('DOMContentLoaded', function () {
             
             await window.auth.signOut();
             console.log("Firebase Logout Successful");
-            showMessage("You have been logged out.", "info");
+            alert("You have been logged out.");
 
             // Redirect to homepage or login page
-            // Use a slight delay to allow the message to be seen
-            setTimeout(() => {
-                window.location.href = '/index.html';
-            }, 1000); // 1 second delay
+            window.location.href = '/index.html';
         } catch (error) {
             console.error("Firebase Logout Error:", error);
-            showMessage("Logout failed. Please try again.", "danger");
+            alert("Logout failed. Please try again.");
             // Re-throw the error so the calling function knows it failed
             throw error; 
         }
     }
-
-    /**
-     * Handles password reset requests.
-     * @param {string} email - The user's email address.
-     */
-    window.handleFirebasePasswordReset = async function(email) {
-        if (!email) {
-            showMessage("Please enter your email address.", "warning");
-            return;
-        }
-
-        // Basic email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            showMessage("Please enter a valid email address.", "warning");
-            return;
-        }
-
-        try {
-            // Ensure Firebase Auth is available
-            if (!window.auth) {
-                 throw new Error("Firebase Auth is not initialized.");
-            }
-
-            await window.auth.sendPasswordResetEmail(email);
-            console.log("Password reset email sent to:", email);
-            showMessage(`Password reset link sent to ${email}. Please check your inbox.`, "success");
-        } catch (error) {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.error("Firebase Password Reset Error:", errorCode, errorMessage);
-
-            let userMessage = "Failed to send password reset email. Please try again.";
-            if (errorCode === 'auth/user-not-found') {
-                userMessage = "No account found with that email address.";
-            } else if (errorCode === 'auth/invalid-email') {
-                userMessage = "Please enter a valid email address.";
-            } else if (errorCode === 'auth/too-many-requests') {
-                userMessage = "Too many requests. Please try again later.";
-            }
-            showMessage(userMessage, "danger");
-            throw error;
-        }
-    };
 
     /**
      * Checks if the current user has an active subscription.
@@ -398,7 +365,7 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             console.log(`Checking subscription for user: ${userId}`);
             // Query the 'users' collection for the document with the user's UID
-            const userDoc = await window.db.collection('users').doc(userId).get({ source: 'server' }); // Force server fetch
+            const userDoc = await window.db.collection('users').doc(userId).get();
 
             if (userDoc.exists) {
                 const userData = userDoc.data();
@@ -444,20 +411,25 @@ document.addEventListener('DOMContentLoaded', function () {
     /**
      * Checks if the current user is an admin.
      * This function queries Firestore to verify the user's role.
+     * @param {string} userId - The Firebase UID of the user.
      * @returns {Promise<boolean>} True if the user is an admin, false otherwise.
      */
-    window.checkIfUserIsAdmin = async function() {
-        const user = window.auth.currentUser;
-        if (!user) {
-            console.log("No user logged in for admin check.");
-            return false;
+    window.checkIfUserIsAdmin = async function(userId) {
+        // If no userId is provided, try to get it from the current user
+        let uidToCheck = userId;
+        if (!uidToCheck) {
+            const user = window.auth.currentUser;
+            if (!user) {
+                console.log("No user logged in for admin check.");
+                return false;
+            }
+            uidToCheck = user.uid;
         }
 
         try {
-            console.log(`Checking admin role for user: ${user.uid}`);
+            console.log(`Checking admin role for user: ${uidToCheck}`);
             // Query the 'users' collection for the document with the user's UID
-            // Force fetching from the server to bypass potential cache issues
-            const userDoc = await window.db.collection('users').doc(user.uid).get({ source: 'server' });
+            const userDoc = await window.db.collection('users').doc(uidToCheck).get();
 
             if (userDoc.exists) {
                 const userData = userDoc.data();
@@ -470,7 +442,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // --- END KEY CHECK ---
                 
             } else {
-                console.log("No user document found for UID:", user.uid);
+                console.log("No user document found for UID:", uidToCheck);
                 return false; // User doc doesn't exist, deny admin access
             }
         } catch (error) {
@@ -497,7 +469,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const password = formData.get('password');
 
         if (!email || !password) {
-            showMessage("Please enter both email and password.", "warning");
+            alert("Please enter both email and password.");
             return;
         }
 
@@ -558,34 +530,34 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // --- BASIC VALIDATION ---
         if (!email || !password || !fullName) {
-            showMessage("Email, password, and full name are required.", "warning");
+            alert("Email, password, and full name are required.");
             return;
         }
 
         if (password !== confirmPassword) {
-            showMessage("Passwords do not match.", "warning");
+            alert("Passwords do not match.");
             return;
         }
 
         if (password.length < 6) {
-            showMessage("Password must be at least 6 characters long.", "warning");
+            alert("Password must be at least 6 characters long.");
             return;
         }
 
         // Email validation regex (basic)
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            showMessage("Please enter a valid email address.", "warning");
+            alert("Please enter a valid email address.");
             return;
         }
 
         // Role-specific validation
         if (role === 'jobseeker' && (!username)) {
-            showMessage("Username is required for jobseekers.", "warning");
+            alert("Username is required for jobseekers.");
             return;
         }
         if (role === 'employer' && (!companyName)) {
-            showMessage("Company name is required for employers.", "warning");
+            alert("Company name is required for employers.");
             return;
         }
 
@@ -624,154 +596,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error("Signup failed in global handler:", error);
         }
     };
-
-    /**
-     * Generic handler for password reset forms.
-     * Expects form to have an input named 'email'.
-     */
-    window.handlePasswordResetFormSubmit = async function(event) {
-        event.preventDefault();
-        console.log("Password reset form submission triggered via global handler");
-
-        const form = event.target;
-        const formData = new FormData(form);
-        const email = formData.get('email')?.trim();
-
-        if (!email) {
-            showMessage("Please enter your email address.", "warning");
-            return;
-        }
-
-        const submitButton = form.querySelector('button[type="submit"]');
-        const originalContent = submitButton ? submitButton.innerHTML : '';
-        if (submitButton) {
-            submitButton.disabled = true;
-            submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending Reset Link...';
-        }
-
-        try {
-            await window.handleFirebasePasswordReset(email);
-            // Success message is shown in handleFirebasePasswordReset
-            // Optionally, clear the form or redirect
-            form.reset();
-        } catch (error) {
-            // Re-enable button on error
-            if (submitButton) {
-                submitButton.disabled = false;
-                submitButton.innerHTML = originalContent || 'Send Reset Link';
-            }
-            // Error message already shown in handleFirebasePasswordReset
-            console.error("Password reset failed in global handler:", error);
-        }
-    };
     // --- End Form Submission Handlers ---
-
-    // --- UTILITY FUNCTIONS ---
-    /**
-     * Displays a temporary message to the user.
-     * @param {string} message - The message to display.
-     * @param {string} type - The type of message ('success', 'danger', 'warning', 'info').
-     * @param {number} duration - How long to show the message in milliseconds (default 5000).
-     */
-    function showMessage(message, type = 'info', duration = 5000) {
-        // Remove any existing messages
-        const existingMessage = document.querySelector('.message-toast');
-        if (existingMessage) {
-            existingMessage.remove();
-        }
-
-        // Create message element
-        const messageElement = document.createElement('div');
-        messageElement.className = `message-toast message-toast-${type}`;
-        messageElement.textContent = message;
-        messageElement.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 1rem 1.5rem;
-            border-radius: var(--border-radius-md);
-            color: white;
-            font-weight: var(--font-weight-semibold);
-            box-shadow: var(--shadow-lg);
-            z-index: 10000;
-            cursor: pointer;
-            transition: opacity var(--transition-normal), transform var(--transition-normal);
-            opacity: 0;
-            transform: translateY(-20px);
-        `;
-
-        // Set background color based on type
-        switch (type) {
-            case 'success':
-                messageElement.style.backgroundColor = 'var(--success-500)';
-                break;
-            case 'danger':
-                messageElement.style.backgroundColor = 'var(--danger-500)';
-                break;
-            case 'warning':
-                messageElement.style.backgroundColor = 'var(--warning-500)';
-                break;
-            case 'info':
-            default:
-                messageElement.style.backgroundColor = 'var(--primary-500)';
-        }
-
-        // Append to body
-        document.body.appendChild(messageElement);
-
-        // Fade in
-        setTimeout(() => {
-            messageElement.style.opacity = '1';
-            messageElement.style.transform = 'translateY(0)';
-        }, 100);
-
-        // Auto-remove after duration
-        if (duration > 0) {
-            setTimeout(() => {
-                if (messageElement.parentNode) {
-                    messageElement.style.opacity = '0';
-                    messageElement.style.transform = 'translateY(-20px)';
-                    setTimeout(() => {
-                        if (messageElement.parentNode) {
-                            messageElement.remove();
-                        }
-                    }, 300); // Match transition duration
-                }
-            }, duration);
-        }
-
-        // Remove on click
-        messageElement.addEventListener('click', function() {
-            this.style.opacity = '0';
-            this.style.transform = 'translateY(-20px)';
-            setTimeout(() => {
-                if (this.parentNode) {
-                    this.remove();
-                }
-            }, 300); // Match transition duration
-        });
-    }
-
-    // Make showMessage globally available
-    window.showMessage = showMessage;
-
-    /**
-     * Utility function to escape HTML to prevent XSS.
-     * @param {string} str - The string to escape.
-     * @returns {string} The escaped string.
-     */
-    function escapeHtml(str) {
-        if (typeof str !== 'string') return str;
-        return str
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "<")
-            .replace(/>/g, ">")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-    }
-
-    // Make escapeHtml globally available
-    window.escapeHtml = escapeHtml;
 
     // --- ATTACH LISTENERS TO EXISTING FORMS ON PAGE LOAD ---
     // This part might be redundant now as we are attaching listeners directly in the HTML pages
@@ -798,14 +623,6 @@ document.addEventListener('DOMContentLoaded', function () {
         employerSignupForm.addEventListener('submit', window.handleSignupFormSubmit);
     } else {
         console.log("Employer signup form not found on this page");
-    }
-
-    const passwordResetForm = document.getElementById('passwordResetForm');
-    if (passwordResetForm) {
-        console.log("Found password reset form, attaching submit listener");
-        passwordResetForm.addEventListener('submit', window.handlePasswordResetFormSubmit);
-    } else {
-        console.log("Password reset form not found on this page");
     }
 
     // Logout Button (if present on the page, e.g., in dashboard)

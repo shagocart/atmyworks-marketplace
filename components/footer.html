@@ -1,14 +1,74 @@
 <!-- components/footer.html -->
 <footer class="footer">
     <div class="container">
-        <!-- Main Footer Content -->
         <div class="footer-content">
-            <!-- Company Info Column -->
+            <!-- AtMyWorks Info Column -->
             <div class="footer-column">
-                <h3 class="footer-column-title">AtMyWorks</h3>
-                <p class="footer-description mb-4" style="font-size: var(--font-size-sm); color: var(--gray-400);">
+                <h3>AtMyWorks</h3>
+                <p class="footer-description mb-3" style="font-size: var(--font-size-sm); color: var(--gray-400);">
                     Connecting talented freelancers with businesses worldwide to turn ideas into reality.
                 </p>
+                <ul>
+                    <li><a href="/about.html">About Us</a></li>
+                    <li><a href="/careers.html">Careers</a></li>
+                    <li><a href="/press.html">Press</a></li>
+                    <li><a href="/blog.html">Blog</a></li>
+                </ul>
+            </div>
+
+            <!-- Resources Column -->
+            <div class="footer-column">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="/help.html">Help & Support</a></li>
+                    <li><a href="/trust-safety.html">Trust & Safety</a></li>
+                    <li><a href="/selling.html">Selling on AtMyWorks</a></li>
+                    <li><a href="/buying.html">Buying on AtMyWorks</a></li>
+                    <li><a href="/community-guidelines.html">Community Guidelines</a></li>
+                    <li><a href="/success-stories.html">Success Stories</a></li>
+                </ul>
+            </div>
+
+            <!-- Legal Column -->
+            <div class="footer-column">
+                <h3>Legal</h3>
+                <ul>
+                    <li><a href="/terms.html">Terms of Service</a></li>
+                    <li><a href="/privacy.html">Privacy Policy</a></li>
+                    <li><a href="/cookies.html">Cookie Policy</a></li>
+                    <li><a href="/copyright.html">Copyright Policy</a></li>
+                </ul>
+            </div>
+
+            <!-- Stay Connected Column -->
+            <div class="footer-column">
+                <h3>Stay Connected</h3>
+                <p class="mb-3" style="font-size: var(--font-size-sm); color: var(--gray-400);">
+                    Subscribe to our newsletter for the latest updates and offers.
+                </p>
+
+                <!-- Newsletter Form -->
+                <form class="newsletter-form mb-4" id="footerNewsletterForm">
+                    <div class="form-group mb-2">
+                        <label for="footerNewsletterEmail" class="sr-only">Email Address</label>
+                        <div style="display: flex;">
+                            <input type="email" id="footerNewsletterEmail" class="form-control" placeholder="Your email address" required style="border-top-right-radius: 0; border-bottom-right-radius: 0; flex: 1;">
+                            <button type="submit" class="btn btn-primary" style="border-top-left-radius: 0; border-bottom-left-radius: 0; padding: 0 1rem;">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Success Message (Initially Hidden) -->
+                    <div id="newsletterSuccessMessageFooter" class="form-text text-success" style="display: none; text-align: center; font-weight: var(--font-weight-semibold);">
+                        <i class="fas fa-check-circle"></i> Thank you for subscribing!
+                    </div>
+                    <!-- Error Message (Initially Hidden) -->
+                    <div id="newsletterErrorMessageFooter" class="form-text text-danger" style="display: none; text-align: center;">
+                        Please enter a valid email address.
+                    </div>
+                </form>
+
+                <!-- Social Links -->
                 <div class="social-links mb-4">
                     <a href="https://twitter.com/AtMyWorks" aria-label="Twitter" target="_blank" rel="noopener noreferrer" class="social-link">
                         <i class="fab fa-twitter"></i>
@@ -26,79 +86,20 @@
                         <i class="fab fa-youtube"></i>
                     </a>
                 </div>
-                <div class="download-apps">
-                    <h4 class="mb-2" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); color: var(--white);">Download Our App</h4>
-                    <div style="display: flex; gap: 0.75rem;">
-                        <a href="#" aria-label="Download on the App Store" class="app-store-link">
-                            <img src="https://placehold.co/120x40/000000/white?text=App+Store" alt="Download on the App Store" style="height: 40px; border-radius: var(--border-radius-md);">
-                        </a>
-                        <a href="#" aria-label="Get it on Google Play" class="play-store-link">
-                            <img src="https://placehold.co/135x40/000000/white?text=Google+Play" alt="Get it on Google Play" style="height: 40px; border-radius: var(--border-radius-md);">
-                        </a>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Resources Column -->
-            <div class="footer-column">
-                <h3 class="footer-column-title">Resources</h3>
-                <ul class="footer-links">
-                    <li><a href="/help.html">Help & Support</a></li>
-                    <li><a href="/trust-safety.html">Trust & Safety</a></li>
-                    <li><a href="/selling.html">Selling on AtMyWorks</a></li>
-                    <li><a href="/buying.html">Buying on AtMyWorks</a></li>
-                    <li><a href="/community-guidelines.html">Community Guidelines</a></li>
-                    <li><a href="/success-stories.html">Success Stories</a></li>
-                </ul>
-            </div>
-
-            <!-- Categories Column -->
-            <div class="footer-column">
-                <h3 class="footer-column-title">Top Categories</h3>
-                <ul class="footer-links">
-                    <li><a href="/browse.html?category=graphics-design">Graphics & Design</a></li>
-                    <li><a href="/browse.html?category=digital-marketing">Digital Marketing</a></li>
-                    <li><a href="/browse.html?category=programming-tech">Programming & Tech</a></li>
-                    <li><a href="/browse.html?category=video-animation">Video & Animation</a></li>
-                    <li><a href="/browse.html?category=writing-translation">Writing & Translation</a></li>
-                    <li><a href="/browse.html?category=music-audio">Music & Audio</a></li>
-                </ul>
-            </div>
-
-            <!-- Legal & Newsletter Column -->
-            <div class="footer-column">
-                <h3 class="footer-column-title">Legal & Updates</h3>
-                <ul class="footer-links mb-6">
-                    <li><a href="/terms.html">Terms of Service</a></li>
-                    <li><a href="/privacy.html">Privacy Policy</a></li>
-                    <li><a href="/cookies.html">Cookie Policy</a></li>
-                    <li><a href="/copyright.html">Copyright Policy</a></li>
-                </ul>
-                <div class="newsletter-widget">
-                    <h4 class="mb-2" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); color: var(--white);">Stay Updated</h4>
-                    <p class="mb-3" style="font-size: var(--font-size-sm); color: var(--gray-400);">
-                        Subscribe to our newsletter for the latest updates and offers.
+                <!-- ========== AI ASSISTANT INTEGRATION ========== -->
+                <div class="ai-assistant-integration" style="background: rgba(255, 215, 0, 0.1); border-radius: var(--border-radius-lg); padding: 1rem; border: 1px solid rgba(255, 215, 0, 0.3);">
+                    <h4 style="margin-bottom: 0.75rem; color: var(--warning-600); display: flex; align-items: center;">
+                        <i class="fas fa-robot" style="margin-right: 0.5rem;"></i> AI Assistant
+                    </h4>
+                    <p style="font-size: var(--font-size-sm); color: var(--gray-600); margin-bottom: 1rem;">
+                        Get instant help with your questions about AtMyWorks.
                     </p>
-                    <form class="newsletter-form" id="footerNewsletterForm">
-                        <div class="form-group mb-2">
-                            <label for="footerNewsletterEmail" class="sr-only">Email Address</label>
-                            <div style="display: flex;">
-                                <input type="email" id="footerNewsletterEmail" class="form-control" placeholder="Your email address" required style="border-top-right-radius: 0; border-bottom-right-radius: 0; flex: 1;">
-                                <button type="submit" class="btn btn-primary" style="border-top-left-radius: 0; border-bottom-left-radius: 0; padding: 0 1rem;">
-                                    <i class="fas fa-paper-plane"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <!-- Success Message (Initially Hidden) -->
-                        <div id="newsletterSuccessMessageFooter" class="form-text text-success" style="display: none; text-align: center; font-weight: var(--font-weight-semibold);">
-                            <i class="fas fa-check-circle"></i> Thank you for subscribing!
-                        </div>
-                        <!-- Error Message (Initially Hidden) -->
-                        <div id="newsletterErrorMessageFooter" class="form-text text-danger" style="display: none; text-align: center;">
-                            Please enter a valid email address.
-                        </div>
-                    </form>
+                    <button class="btn btn-outline btn-sm" onclick="openAIAssistantModal()" style="width: 100%;">
+                        <i class="fas fa-comment-dots" style="margin-right: 0.5rem;"></i> Chat with AI Assistant
+                    </button>
                 </div>
+                <!-- ========== END AI ASSISTANT INTEGRATION ========== -->
             </div>
         </div>
 
@@ -114,6 +115,30 @@
         </div>
     </div>
 </footer>
+
+<!-- ========== AI ASSISTANT MODAL ========== -->
+<div id="aiAssistantModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+    <div class="modal-content" id="modal-ai-assistant" style="background: white; border-radius: var(--border-radius-lg); padding: 2rem; max-width: 600px; width: 90%; position: relative; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: var(--shadow-xl); transform: translateY(-50px); opacity: 0; animation: modalSlideIn 0.5s ease forwards;">
+        <span class="close-modal" onclick="closeAIAssistantModal()" style="float: right; cursor: pointer; font-size: 1.5rem;">&times;</span>
+        <h3 style="margin-bottom: 1.5rem; text-align: center; color: var(--primary-600);">🤖 AtMyWorks AI Assistant</h3>
+        <p style="text-align: center; margin-bottom: 2rem; color: var(--gray-600);">Ask me anything about AtMyWorks, freelancing, or finding work!</p>
+        
+        <div id="aiChatHistory" style="height: 300px; overflow-y: auto; background: var(--gray-50); border-radius: var(--border-radius-md); padding: 1rem; margin-bottom: 1rem; border: 1px solid var(--border-color);">
+            <div style="text-align: center; color: var(--gray-500); padding: 1rem;">
+                <i class="fas fa-robot" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                <p>Hello! I'm your AtMyWorks AI Assistant. How can I help you today?</p>
+            </div>
+        </div>
+        
+        <form id="aiChatForm" style="display: flex; gap: 0.5rem;">
+            <input type="text" id="aiChatInput" class="form-control" placeholder="Type your question..." required style="flex: 1;">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </form>
+    </div>
+</div>
+<!-- ========== END AI ASSISTANT MODAL ========== -->
 
 <!-- Inline JavaScript for Footer Interactivity -->
 <script>
@@ -171,5 +196,161 @@
                 }, 5000);
             });
         }
+
+        // Handle AI Chat Form Submission
+        const aiChatForm = document.getElementById('aiChatForm');
+        if (aiChatForm) {
+            aiChatForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const aiChatInput = document.getElementById('aiChatInput');
+                const question = aiChatInput.value.trim();
+                if (question) {
+                    sendAIQuestion(question);
+                    aiChatInput.value = '';
+                }
+            });
+        }
     });
+
+    // Function to open AI Assistant Modal
+    function openAIAssistantModal() {
+        const modal = document.getElementById('aiAssistantModal');
+        if (modal) {
+            modal.style.display = 'flex';
+            console.log("AI Assistant modal opened");
+        }
+    }
+
+    // Function to close AI Assistant Modal
+    function closeAIAssistantModal() {
+        const modal = document.getElementById('aiAssistantModal');
+        if (modal) {
+            modal.style.display = 'none';
+            console.log("AI Assistant modal closed");
+        }
+    }
+
+    // Function to send question to AI Assistant
+    function sendAIQuestion(question) {
+        const chatHistory = document.getElementById('aiChatHistory');
+        if (!chatHistory) return;
+
+        // Add user's question to chat history
+        const userMessageDiv = document.createElement('div');
+        userMessageDiv.style.cssText = `
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 1rem;
+        `;
+        userMessageDiv.innerHTML = `
+            <div style="background: var(--primary-500); color: white; border-radius: var(--border-radius-md); padding: 0.75rem 1rem; max-width: 80%;">
+                <p style="margin: 0;">${escapeHtml(question)}</p>
+            </div>
+        `;
+        chatHistory.appendChild(userMessageDiv);
+
+        // Scroll to bottom
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+
+        // Show loading indicator
+        const loadingDiv = document.createElement('div');
+        loadingDiv.id = 'aiLoadingIndicator';
+        loadingDiv.style.cssText = `
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 1rem;
+        `;
+        loadingDiv.innerHTML = `
+            <div style="background: white; border-radius: var(--border-radius-md); padding: 0.75rem 1rem; max-width: 80%; border: 1px solid var(--border-color);">
+                <div class="spinner-border spinner-border-sm" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <span style="margin-left: 0.5rem;">Thinking...</span>
+            </div>
+        `;
+        chatHistory.appendChild(loadingDiv);
+
+        // Scroll to bottom
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+
+        // Simulate AI response (in a real implementation, this would call your AI service)
+        setTimeout(() => {
+            // Remove loading indicator
+            const loadingIndicator = document.getElementById('aiLoadingIndicator');
+            if (loadingIndicator) {
+                loadingIndicator.remove();
+            }
+
+            // Generate AI response based on question
+            const aiResponse = generateAIResponse(question);
+
+            // Add AI's response to chat history
+            const aiMessageDiv = document.createElement('div');
+            aiMessageDiv.style.cssText = `
+                display: flex;
+                justify-content: flex-start;
+                margin-bottom: 1rem;
+            `;
+            aiMessageDiv.innerHTML = `
+                <div style="background: white; border-radius: var(--border-radius-md); padding: 0.75rem 1rem; max-width: 80%; border: 1px solid var(--border-color);">
+                    <p style="margin: 0;">${escapeHtml(aiResponse)}</p>
+                </div>
+            `;
+            chatHistory.appendChild(aiMessageDiv);
+
+            // Scroll to bottom
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }, 1500);
+    }
+
+    // Function to generate AI response (placeholder)
+    function generateAIResponse(question) {
+        // In a real implementation, this would call an AI service API
+        // For now, we'll simulate responses based on common questions
+        const lowerQuestion = question.toLowerCase();
+        
+        if (lowerQuestion.includes('how') && lowerQuestion.includes('work')) {
+            return "AtMyWorks connects businesses with skilled freelancers. Employers post jobs, and freelancers apply. We handle payments securely through our escrow system until work is completed to satisfaction.";
+        } else if (lowerQuestion.includes('find') && lowerQuestion.includes('work')) {
+            return "To find work, browse our job listings or search for specific skills. You can also create a profile showcasing your talents to attract employers directly.";
+        } else if (lowerQuestion.includes('post') && lowerQuestion.includes('job')) {
+            return "Employers can post jobs by logging into their dashboard and clicking 'Post a Job'. Fill out the form with job details, and we'll match you with qualified freelancers.";
+        } else if (lowerQuestion.includes('payment') || lowerQuestion.includes('escrow')) {
+            return "We use a secure escrow system. Payments are held until the work is completed and approved by the employer. This protects both parties.";
+        } else if (lowerQuestion.includes('fee') || lowerQuestion.includes('commission')) {
+            return "We charge a 10% commission on completed transactions. This helps us maintain the platform and provide support to both freelancers and employers.";
+        } else if (lowerQuestion.includes('kyc') || lowerQuestion.includes('verification')) {
+            return "KYC (Know Your Customer) verification is required for certain features. Upload your ID document and complete the verification process in your profile settings.";
+        } else if (lowerQuestion.includes('help') || lowerQuestion.includes('support')) {
+            return "Our support team is available 24/7. You can reach us via email at support@atmyworks.com or through the live chat feature on our website.";
+        } else if (lowerQuestion.includes('refund')) {
+            return "Refunds are handled on a case-by-case basis. If you're not satisfied with a service, please contact our support team with details of the issue.";
+        } else if (lowerQuestion.includes('dispute')) {
+            return "If you have a dispute with another user, please use our built-in dispute resolution system. Both parties can present their case, and our team will mediate.";
+        } else if (lowerQuestion.includes('subscription')) {
+            return "Employers need a subscription to post jobs and access premium features. Freelancers can use the platform for free. Check out our subscription plans for more details.";
+        } else {
+            // Default response
+            return "I'm here to help! You asked: '" + question + "'. This is a simulated response. In a real implementation, I would provide a more detailed answer based on our knowledge base.";
+        }
+    }
+
+    // Utility function to escape HTML to prevent XSS
+    function escapeHtml(str) {
+        if (typeof str !== 'string') return str;
+        return str
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "<")
+            .replace(/>/g, ">")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    // Close modals if clicked outside
+    window.onclick = function(event) {
+        const aiAssistantModal = document.getElementById('aiAssistantModal');
+        if (event.target === aiAssistantModal) {
+            closeAIAssistantModal();
+        }
+    };
 </script>

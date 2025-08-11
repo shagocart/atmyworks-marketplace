@@ -206,7 +206,7 @@ a:hover {
   top: 0;
   z-index: 100;
   padding: var(--spacing-3) 0;
-  border-bottom: 1px solid var(--gray-100);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .navbar {
@@ -312,17 +312,17 @@ a:hover {
 }
 
 .btn-secondary {
-  background: linear-gradient(to bottom, var(--secondary-400), var(--secondary-600));
+  background: linear-gradient(to bottom, var(--secondary-500), var(--secondary-700));
   color: var(--white);
-  border: 1px solid var(--secondary-600);
+  border: 1px solid var(--secondary-700);
 }
 .btn-secondary:hover {
-  background: linear-gradient(to bottom, var(--secondary-500), var(--secondary-700));
+  background: linear-gradient(to bottom, var(--secondary-600), var(--secondary-800));
   box-shadow: var(--shadow-md);
   transform: translateY(-1px);
 }
 .btn-secondary:active {
-  background: linear-gradient(to bottom, var(--secondary-600), var(--secondary-800));
+  background: linear-gradient(to bottom, var(--secondary-700), var(--secondary-900));
 }
 
 .btn-outline {
@@ -342,17 +342,17 @@ a:hover {
 }
 
 .btn-danger {
-  background: linear-gradient(to bottom, var(--danger-400), var(--danger-600));
+  background: linear-gradient(to bottom, var(--danger-500), var(--danger-700));
   color: var(--white);
-  border: 1px solid var(--danger-600);
+  border: 1px solid var(--danger-700);
 }
 .btn-danger:hover {
-  background: linear-gradient(to bottom, var(--danger-500), var(--danger-700));
+  background: linear-gradient(to bottom, var(--danger-600), var(--danger-800));
   box-shadow: var(--shadow-md);
   transform: translateY(-1px);
 }
 .btn-danger:active {
-  background: linear-gradient(to bottom, var(--danger-600), var(--danger-800));
+  background: linear-gradient(to bottom, var(--danger-700), var(--danger-900));
 }
 
 .btn-sm {
@@ -710,7 +710,7 @@ a:hover {
   color: var(--white);
 }
 .badge-info {
-  background-color: var(--primary-500);
+  background-color: var(--info-500);
   color: var(--white);
 }
 .badge-secondary {
@@ -961,6 +961,8 @@ a:hover {
   text-align: center;
   position: relative;
   overflow: hidden;
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-800));
+  color: var(--white);
 }
 .hero::after {
     content: "";
@@ -1156,248 +1158,100 @@ a:hover {
 }
 
 /* === HOMEPAGE SPECIFIC ENHANCEMENTS === */
-
-/* --- HERO TABS (Popular Categories) --- */
 .hero-tabs {
     margin-top: var(--spacing-8);
     text-align: center;
-    position: relative;
-    z-index: 1;
 }
-
 .hero-tabs-title {
     display: inline-block;
     margin: 0 var(--spacing-2) var(--spacing-3) 0;
     font-size: var(--font-size-base);
-    font-weight: var(--font-weight-semibold); /* Slightly bolder */
-    color: var(--white); /* Full white for better contrast */
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Subtle text shadow for depth */
+    font-weight: var(--font-weight-medium);
+    color: rgba(255, 255, 255, 0.9);
 }
-
 .hero-tab-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: var(--spacing-2);
-    position: relative;
-    z-index: 1;
 }
-
-/* --- KEY UPDATE: Make Hero Tab Links More Visible and Stylish --- */
 .hero-tab-link {
-    display: inline-flex; /* Use flex for better alignment */
-    align-items: center;
-    justify-content: center;
+    display: inline-block;
     padding: var(--spacing-2) var(--spacing-3);
-    /* --- ENHANCED STYLE --- */
-    background-color: rgba(255, 255, 255, 0.2); /* Slightly more opaque */
-    color: var(--white); /* Full white text */
+    background-color: rgba(255, 255, 255, 0.15);
+    color: var(--white);
     text-decoration: none;
     border-radius: var(--border-radius-full);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
-    transition: all var(--transition-normal); /* Smooth transitions */
-    backdrop-filter: blur(5px); /* Frosted glass effect */
-    /* --- NEW ENHANCEMENTS --- */
-    border: 1px solid rgba(255, 255, 255, 0.3); /* More visible border */
-    box-shadow: var(--shadow-xs); /* Subtle shadow for depth */
-    position: relative;
-    overflow: hidden;
-}
-.hero-tab-link::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    transform: translateX(-100%);
-    transition: transform 0.6s ease;
-    z-index: 0;
+    transition: all var(--transition-fast);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 .hero-tab-link:hover {
-    /* --- IMPROVED MICRO-INTERACTIONS --- */
-    background-color: rgba(255, 255, 255, 0.3); /* Lighter on hover */
-    transform: translateY(-2px) scale(1.05); /* Lift and slight zoom */
+    background-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
     text-decoration: none;
-    box-shadow: var(--shadow-md); /* Stronger shadow on hover */
-    border-color: rgba(255, 255, 255, 0.5); /* Brighter border on hover */
+    box-shadow: var(--shadow-sm);
 }
-.hero-tab-link:hover::before {
-    transform: translateX(100%);
-}
-.hero-tab-link:active {
-    transform: translateY(0) scale(0.98); /* Pressed effect */
-    box-shadow: var(--shadow-inner); /* Inner shadow for pressed effect */
-}
-
-/* --- DISTINCT "EXPLORE MORE" STYLE --- */
 .hero-tab-link-more {
-    /* --- ENHANCED DISTINCT STYLE --- */
-    background: linear-gradient(135deg, var(--secondary-500), var(--secondary-600)); /* Warm orange gradient */
-    border-color: rgba(249, 115, 22, 0.7); /* Orange border */
-    box-shadow: var(--shadow-md); /* Stronger base shadow */
-    color: var(--white); /* Ensure white text */
+    background-color: rgba(37, 99, 235, 0.3);
+    border-color: rgba(37, 99, 235, 0.5);
 }
 .hero-tab-link-more:hover {
-    background: linear-gradient(135deg, var(--secondary-600), var(--secondary-700)); /* Darker orange on hover */
-    transform: translateY(-2px) scale(1.05); /* Lift and slight zoom */
-    box-shadow: var(--shadow-lg); /* Even stronger shadow on hover */
-    border-color: rgba(234, 88, 12, 0.9); /* Darker orange border on hover */
+    background-color: rgba(37, 99, 235, 0.5);
 }
-.hero-tab-link-more:active {
-    transform: translateY(0) scale(0.98); /* Pressed effect */
-    box-shadow: var(--shadow-inner); /* Inner shadow for pressed effect */
-}
-/* --- END HERO TABS --- */
 
-
-/* --- TRUST STATS --- */
 .trust-stats {
     display: flex;
     justify-content: space-around;
     align-items: center;
     flex-wrap: wrap;
     gap: var(--spacing-4);
-    position: relative;
-    z-index: 1;
 }
-
 .trust-stat {
     text-align: center;
     flex: 1;
     min-width: 150px;
     padding: var(--spacing-2) var(--spacing-1);
-    position: relative;
-    z-index: 1;
 }
-
-/* --- KEY UPDATE: Enhanced Trust Stat Card --- */
-.stat-card {
-    background: linear-gradient(135deg, var(--white), var(--gray-50)); /* Subtle gradient */
-    border-radius: var(--border-radius-lg);
-    padding: var(--spacing-6);
-    /* --- NEW ENHANCEMENTS --- */
-    box-shadow: var(--shadow-md); /* Base shadow */
-    text-align: center;
-    border: 1px solid var(--border-color); /* Border for definition */
-    transition: all var(--transition-fast); /* Smooth transitions */
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-}
-.stat-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* Animated gradient background */
-    background: linear-gradient(120deg, transparent, rgba(59, 130, 246, 0.05), transparent);
-    transform: translateX(-100%);
-    transition: transform 0.6s ease;
-    z-index: -1;
-}
-.stat-card:hover {
-    /* --- IMPROVED DEPTH & SHADOWS --- */
-    transform: translateY(-3px); /* Lift on hover */
-    box-shadow: var(--shadow-lg); /* Stronger shadow on hover */
-    border-color: var(--primary-200); /* Border color change on hover */
-}
-.stat-card:hover::before {
-    transform: translateX(100%);
-}
-.stat-card-icon {
-    font-size: var(--font-size-4xl);
-    color: var(--primary-500);
-    margin-bottom: var(--spacing-4);
-    opacity: 0.9;
-}
-.stat-card-value {
-    font-size: var(--font-size-4xl);
+.trust-stat-number {
+    display: block;
+    font-size: var(--font-size-2xl);
     font-weight: var(--font-weight-extrabold);
-    color: var(--gray-900);
+    color: var(--primary-700);
     margin-bottom: var(--spacing-1);
-    letter-spacing: -0.05em;
 }
-.stat-card-label {
+.trust-stat-label {
+    display: block;
     font-size: var(--font-size-sm);
-    color: var(--gray-500);
-    text-transform: uppercase;
-    letter-spacing: 0.075em;
-    font-weight: var(--font-weight-semibold);
+    color: var(--gray-600);
+    font-weight: var(--font-weight-medium);
 }
-/* --- END TRUST STATS --- */
 
-
-/* --- HOW IT WORKS STEPS --- */
 .how-it-works-steps {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: var(--spacing-8);
     margin-top: var(--spacing-8);
-    position: relative;
-    z-index: 1;
 }
-
-/* --- KEY UPDATE: Enhanced HIW Step Card --- */
 .hiw-step {
     text-align: center;
     padding: var(--spacing-6);
     border-radius: var(--border-radius-lg);
     background-color: var(--white);
-    /* --- NEW ENHANCEMENTS --- */
-    box-shadow: var(--shadow-md); /* Base shadow */
-    border: 1px solid var(--border-color); /* Border for definition */
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast); /* Smooth transitions */
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-}
-.hiw-step::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* Animated gradient background */
-    background: linear-gradient(120deg, transparent, rgba(59, 130, 246, 0.03), transparent);
-    transform: translateX(-100%);
-    transition: transform 0.6s ease;
-    z-index: -1;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 .hiw-step:hover {
-    /* --- IMPROVED DEPTH & SHADOWS --- */
-    transform: translateY(-5px); /* Lift on hover */
-    box-shadow: var(--shadow-lg); /* Stronger shadow on hover */
-    border-color: var(--primary-300); /* Border color change on hover */
-}
-.hiw-step:hover::before {
-    transform: translateX(100%);
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
 }
 .hiw-step-icon {
-    font-size: var(--font-size-5xl); /* Slightly larger icon */
+    font-size: var(--font-size-4xl);
     color: var(--primary-500);
     margin-bottom: var(--spacing-4);
-    /* --- NEW ENHANCEMENT: Background Circle for Icon --- */
-    background-color: var(--primary-50);
-    border-radius: var(--border-radius-full);
-    padding: var(--spacing-4);
-    box-shadow: var(--shadow-xs);
-    width: 80px; /* Fixed size */
-    height: 80px; /* Fixed size */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto var(--spacing-4);
-    transition: transform var(--transition-fast), background-color var(--transition-fast);
-}
-.hiw-step:hover .hiw-step-icon {
-    transform: scale(1.15); /* Scale icon on card hover */
-    background-color: var(--primary-100);
 }
 .hiw-step-title {
     font-size: var(--font-size-lg);
@@ -1409,254 +1263,45 @@ a:hover {
     color: var(--gray-600);
     font-size: var(--font-size-sm);
 }
-/* --- END HOW IT WORKS STEPS --- */
 
-
-/* --- CATEGORIES GRID --- */
-.categories-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: var(--spacing-6);
-    position: relative;
-    z-index: 1;
-}
-
-/* --- KEY UPDATE: Enhanced Category Card Link --- */
 .category-card-link {
     text-decoration: none;
     color: inherit;
     display: block;
     transition: transform var(--transition-fast);
-    /* --- NEW ENHANCEMENTS --- */
-    border-radius: var(--border-radius-xl);
-    overflow: hidden;
-    box-shadow: var(--shadow-md); /* Base shadow */
-    border: 1px solid var(--border-color); /* Border for definition */
-    position: relative;
-    z-index: 1;
-}
-.category-card-link::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* Animated gradient background */
-    background: linear-gradient(120deg, transparent, rgba(59, 130, 246, 0.08), transparent);
-    transform: translateX(-100%);
-    transition: transform 0.6s ease;
-    z-index: -1;
 }
 .category-card-link:hover {
-    /* --- IMPROVED DEPTH & SHADOWS --- */
-    transform: translateY(-8px); /* Lift on hover */
-    box-shadow: var(--shadow-lg); /* Stronger shadow on hover */
-    border-color: var(--primary-300); /* Border color change on hover */
+    transform: translateY(-5px);
 }
-.category-card-link:hover::before {
-    transform: translateX(100%);
-}
-.category-card-link:active {
-    transform: translateY(-4px); /* Pressed effect */
-    box-shadow: var(--shadow-md); /* Return to base shadow */
+.category-card-link:hover .category-card {
+    border-color: var(--primary-300);
+    box-shadow: var(--shadow-lg);
 }
 
-/* --- KEY UPDATE: Enhanced Category Card --- */
-.category-card {
-    background: linear-gradient(135deg, var(--white), var(--gray-50)); /* Subtle gradient */
-    border-radius: var(--border-radius-xl);
-    padding: var(--spacing-6) var(--spacing-4);
-    text-align: center;
-    box-shadow: var(--shadow-md); /* Base shadow */
-    transition: all var(--transition-normal); /* Smooth transitions */
-    border: 1px solid var(--border-color); /* Border for definition */
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-}
-.category-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* Animated gradient background */
-    background: linear-gradient(120deg, transparent, rgba(59, 130, 246, 0.08), transparent);
-    transform: translateX(-100%);
-    transition: transform 0.6s ease;
-    z-index: -1;
-}
-.category-card:hover {
-    transform: translateY(-8px); /* Lift on hover */
-    box-shadow: var(--shadow-lg); /* Stronger shadow on hover */
-    border-color: var(--primary-300); /* Border color change on hover */
-}
-.category-card:hover::before {
-    transform: translateX(100%);
-}
-.category-card:active {
-    transform: translateY(-4px); /* Pressed effect */
-    box-shadow: var(--shadow-md); /* Return to base shadow */
-}
-
-.category-icon {
-    font-size: var(--font-size-4xl); /* Slightly larger icon */
-    margin-bottom: var(--spacing-4);
-    color: var(--primary-600);
-    width: 60px; /* Fixed size */
-    height: 60px; /* Fixed size */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: var(--border-radius-full);
-    background-color: var(--primary-50);
-    box-shadow: var(--shadow-xs);
-    transition: transform var(--transition-fast), background-color var(--transition-fast);
-    flex-shrink: 0;
-}
-.category-card:hover .category-icon {
-    transform: scale(1.15); /* Scale icon on card hover */
-    background-color: var(--primary-100);
-}
-
-.category-name {
-    font-weight: var(--font-weight-bold);
-    color: var(--gray-800);
-    font-size: var(--font-size-sm);
-}
-/* --- END CATEGORIES GRID --- */
-
-
-/* --- GIGS SECTION --- */
-.gigs-section {
-    padding: var(--spacing-14) 0;
-    background-color: var(--gray-50);
-    position: relative;
-    z-index: 1;
-}
-
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--spacing-10);
-    flex-wrap: wrap;
-    gap: var(--spacing-4);
-    position: relative;
-    z-index: 1;
-}
-
-.gigs-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: var(--spacing-7);
-    position: relative;
-    z-index: 1;
-}
-/* --- END GIGS SECTION --- */
-
-
-/* --- CTA BUTTONS --- */
 .cta-buttons .btn-lg {
     padding: var(--spacing-4) var(--spacing-6);
     font-size: var(--font-size-base);
-    /* --- NEW ENHANCEMENT: Shadow for CTA Buttons --- */
-    box-shadow: var(--shadow-md);
-    transition: all var(--transition-fast);
 }
-.cta-buttons .btn-lg:hover {
-    /* --- IMPROVED DEPTH & SHADOWS --- */
-    transform: translateY(-2px) scale(1.02); /* Lift and slight zoom */
-    box-shadow: var(--shadow-lg);
-}
-.cta-buttons .btn-lg:active {
-    transform: translateY(0) scale(0.98); /* Pressed effect */
-    box-shadow: var(--shadow-inner); /* Inner shadow for pressed effect */
-}
-
 .me-3 {
     margin-right: var(--spacing-3);
 }
-/* --- END CTA BUTTONS --- */
 
-
-/* --- NEWSLETTER FORM --- */
 .newsletter-form .form-control {
     margin-bottom: var(--spacing-3);
-    /* --- NEW ENHANCEMENT: Shadow for Newsletter Input --- */
-    box-shadow: var(--shadow-sm);
-    transition: all var(--transition-fast);
 }
-.newsletter-form .form-control:focus {
-    /* --- IMPROVED FOCUS STATE --- */
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25), var(--shadow-sm);
-    transform: translateY(-1px);
-}
-/* --- END NEWSLETTER FORM --- */
-
-
-/* --- SOCIAL LINKS --- */
 .social-links {
     display: flex;
     justify-content: center;
     gap: var(--spacing-4);
     font-size: var(--font-size-xl);
-    position: relative;
-    z-index: 1;
 }
-
 .social-links a {
     color: var(--gray-400);
     transition: color var(--transition-fast);
-    /* --- NEW ENHANCEMENT: Shadow for Social Icons --- */
-    box-shadow: var(--shadow-xs);
-    border-radius: var(--border-radius-full);
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--gray-800);
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-}
-.social-links a::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    transform: translateX(-100%);
-    transition: transform 0.6s ease;
-    z-index: -1;
 }
 .social-links a:hover {
     color: var(--white);
-    /* --- IMPROVED DEPTH & SHADOWS --- */
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-sm);
-    background-color: var(--primary-600);
 }
-.social-links a:hover::before {
-    transform: translateX(100%);
-}
-.social-links a:active {
-    transform: translateY(0);
-    box-shadow: var(--shadow-inner);
-}
-/* --- END SOCIAL LINKS --- */
-
-
-/* === END HOMEPAGE SPECIFIC ENHANCEMENTS === */
 
 /* === RESPONSIVE DESIGN === */
 @media (max-width: 1200px) {

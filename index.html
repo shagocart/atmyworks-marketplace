@@ -7,7 +7,7 @@
     <meta name="description" content="Find the perfect freelance services for your business or get hired for your skills on AtMyWorks, the world's largest freelance marketplace.">
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <!-- ========== FIREBASE SDK ========== -->
     <!-- Load Firebase SDK scripts -->
@@ -20,24 +20,20 @@
 </head>
 <body data-page="home">
     <!-- Header -->
+    <!-- Include content from components/header.html here -->             
     <header class="header">
         <div class="container">
             <nav class="navbar">
-                <a href="/index.html" class="logo">
-                    <i class="fas fa-briefcase logo-icon"></i> <!-- Optional icon -->
-                    AtMyWorks
-                </a>
+                <a href="/index.html" class="logo">AtMyWorks</a>
                 <ul class="nav-links">
                     <li><a href="/browse.html">Find Work</a></li>
                     <li><a href="/blog.html">Blog</a></li>
-                    <li><a href="#">How It Works</a></li>
+                    <li><a href="/how-it-works.html">How It Works</a></li>
                 </ul>
-                <!-- Auth Buttons (shown when not logged in) -->
                 <div class="auth-buttons" id="authButtons">
                     <a href="/login.html" class="btn btn-outline" id="loginBtnNav">Log In</a>
-                    <a href="/signup-options.html" class="btn btn-primary" id="signupBtnNav">Sign Up</a>
+                    <a href="/signup-jobseeker.html" class="btn btn-primary" id="signupBtnNav">Sign Up</a>
                 </div>
-                <!-- User Menu (shown when logged in) -->
                 <div class="user-menu" id="userMenu" style="display: none; position: relative;">
                     <button class="btn btn-outline user-menu-toggle" id="userMenuToggle" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-bell" style="margin-right: 0.5rem;"></i>
@@ -67,8 +63,7 @@
             </nav>
         </div>
     </header>
-
-       <!-- ========== HERO SECTION (Enhanced) ========== -->
+    <!-- Hero Section -->
     <section class="hero">
         <div class="container">
             <div class="hero-content">
@@ -80,21 +75,18 @@
                     <button id="heroSearchButton"><i class="fas fa-search"></i> Find Services</button>
                 </div>
 
-                                <!-- ========== ENHANCED HERO TABS (Popular Categories) ========== -->
+                <!-- ========== ENHANCED HERO TABS (Popular Categories) ========== -->
                 <div class="hero-tabs" style="
                     margin-top: var(--spacing-10);
                     text-align: center;
-                    position: relative;
-                    z-index: 1;
                 ">
                     <h3 class="hero-tabs-title" style="
                         display: inline-block;
                         margin: 0 var(--spacing-3) var(--spacing-4) 0;
                         font-size: var(--font-size-base);
                         font-weight: var(--font-weight-semibold);
-                        /* --- CHANGED TEXT COLOR TO BLUE --- */
-                        color: var(--primary-600); /* Use your primary blue */
-                        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle text shadow for depth */
+                        color: var(--white); /* Full white for better contrast */
+                        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Subtle text shadow */
                     ">Popular:</h3>
                     
                     <div class="hero-tab-list" style="
@@ -102,8 +94,6 @@
                         flex-wrap: wrap;
                         justify-content: center;
                         gap: var(--spacing-3); /* Increased gap for better separation */
-                        position: relative;
-                        z-index: 1;
                     ">
                         <!-- Tab Link 1 -->
                         <a href="/browse.html?category=graphics-design" class="hero-tab-link" style="
@@ -111,36 +101,18 @@
                             align-items: center;
                             justify-content: center;
                             padding: var(--spacing-3) var(--spacing-4); /* Adjusted padding */
-                            /* --- ENHANCED STYLE --- */
-                            background-color: rgba(255, 255, 255, 0.2); /* Slightly more opaque background */
-                            /* --- CHANGED TEXT COLOR TO BLUE --- */
-                            color: var(--primary-700); /* Use a slightly darker blue for better contrast */
+                            background-color: rgba(255, 255, 255, 0.15); /* Slightly more opaque background */
+                            color: var(--white); /* Full white text */
                             text-decoration: none;
                             border-radius: var(--border-radius-full); /* Fully rounded */
                             font-size: var(--font-size-sm); /* Slightly larger font */
                             font-weight: var(--font-weight-semibold); /* Bolder text */
                             transition: all var(--transition-normal); /* Smooth transitions */
                             backdrop-filter: blur(5px); /* Frosted glass effect */
-                            /* --- NEW ENHANCEMENTS --- */
-                            border: 1px solid rgba(59, 130, 246, 0.3); /* Blue border with transparency */
+                            border: 1px solid rgba(255, 255, 255, 0.25); /* More visible border */
                             box-shadow: var(--shadow-xs); /* Subtle shadow for depth */
-                            position: relative;
-                            overflow: hidden;
                         ">
-                            <!-- Glittering Effect Overlay -->
-                            <span class="hero-tab-glitter" style="
-                                position: absolute;
-                                top: 0;
-                                left: 0;
-                                width: 100%;
-                                height: 100%;
-                                background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-                                transform: translateX(-100%);
-                                transition: transform 0.6s ease;
-                                pointer-events: none;
-                                z-index: 0;
-                            "></span>
-                            <span style="position: relative; z-index: 1;">Logo Design</span>
+                            Logo Design
                         </a>
 
                         <!-- Tab Link 2 -->
@@ -149,32 +121,18 @@
                             align-items: center;
                             justify-content: center;
                             padding: var(--spacing-3) var(--spacing-4);
-                            background-color: rgba(255, 255, 255, 0.2);
-                            color: var(--primary-700);
+                            background-color: rgba(255, 255, 255, 0.15);
+                            color: var(--white);
                             text-decoration: none;
                             border-radius: var(--border-radius-full);
                             font-size: var(--font-size-sm);
                             font-weight: var(--font-weight-semibold);
                             transition: all var(--transition-normal);
                             backdrop-filter: blur(5px);
-                            border: 1px solid rgba(59, 130, 246, 0.3);
+                            border: 1px solid rgba(255, 255, 255, 0.25);
                             box-shadow: var(--shadow-xs);
-                            position: relative;
-                            overflow: hidden;
                         ">
-                            <span class="hero-tab-glitter" style="
-                                position: absolute;
-                                top: 0;
-                                left: 0;
-                                width: 100%;
-                                height: 100%;
-                                background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-                                transform: translateX(-100%);
-                                transition: transform 0.6s ease;
-                                pointer-events: none;
-                                z-index: 0;
-                            "></span>
-                            <span style="position: relative; z-index: 1;">Web Development</span>
+                            Web Development
                         </a>
 
                         <!-- Tab Link 3 -->
@@ -183,32 +141,18 @@
                             align-items: center;
                             justify-content: center;
                             padding: var(--spacing-3) var(--spacing-4);
-                            background-color: rgba(255, 255, 255, 0.2);
-                            color: var(--primary-700);
+                            background-color: rgba(255, 255, 255, 0.15);
+                            color: var(--white);
                             text-decoration: none;
                             border-radius: var(--border-radius-full);
                             font-size: var(--font-size-sm);
                             font-weight: var(--font-weight-semibold);
                             transition: all var(--transition-normal);
                             backdrop-filter: blur(5px);
-                            border: 1px solid rgba(59, 130, 246, 0.3);
+                            border: 1px solid rgba(255, 255, 255, 0.25);
                             box-shadow: var(--shadow-xs);
-                            position: relative;
-                            overflow: hidden;
                         ">
-                            <span class="hero-tab-glitter" style="
-                                position: absolute;
-                                top: 0;
-                                left: 0;
-                                width: 100%;
-                                height: 100%;
-                                background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-                                transform: translateX(-100%);
-                                transition: transform 0.6s ease;
-                                pointer-events: none;
-                                z-index: 0;
-                            "></span>
-                            <span style="position: relative; z-index: 1;">Social Media</span>
+                            Social Media
                         </a>
 
                         <!-- Tab Link 4 -->
@@ -217,32 +161,18 @@
                             align-items: center;
                             justify-content: center;
                             padding: var(--spacing-3) var(--spacing-4);
-                            background-color: rgba(255, 255, 255, 0.2);
-                            color: var(--primary-700);
+                            background-color: rgba(255, 255, 255, 0.15);
+                            color: var(--white);
                             text-decoration: none;
                             border-radius: var(--border-radius-full);
                             font-size: var(--font-size-sm);
                             font-weight: var(--font-weight-semibold);
                             transition: all var(--transition-normal);
                             backdrop-filter: blur(5px);
-                            border: 1px solid rgba(59, 130, 246, 0.3);
+                            border: 1px solid rgba(255, 255, 255, 0.25);
                             box-shadow: var(--shadow-xs);
-                            position: relative;
-                            overflow: hidden;
                         ">
-                            <span class="hero-tab-glitter" style="
-                                position: absolute;
-                                top: 0;
-                                left: 0;
-                                width: 100%;
-                                height: 100%;
-                                background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-                                transform: translateX(-100%);
-                                transition: transform 0.6s ease;
-                                pointer-events: none;
-                                z-index: 0;
-                            "></span>
-                            <span style="position: relative; z-index: 1;">Video Editing</span>
+                            Video Editing
                         </a>
 
                         <!-- Tab Link 5 (Explore More - Distinct Style) -->
@@ -261,25 +191,8 @@
                             transition: all var(--transition-normal);
                             border: none; /* No border for solid button */
                             box-shadow: var(--shadow-md); /* Stronger shadow */
-                            position: relative;
-                            overflow: hidden;
                         ">
-                            <!-- Glittering Effect Overlay for Explore More -->
-                            <span class="hero-tab-glitter" style="
-                                position: absolute;
-                                top: 0;
-                                left: 0;
-                                width: 100%;
-                                height: 100%;
-                                background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-                                transform: translateX(-100%);
-                                transition: transform 0.6s ease;
-                                pointer-events: none;
-                                z-index: 0;
-                            "></span>
-                            <span style="position: relative; z-index: 1;">
-                                Explore More <i class="fas fa-arrow-right" style="margin-left: var(--spacing-2); font-size: var(--font-size-xs);"></i>
-                            </span>
+                            Explore More <i class="fas fa-arrow-right" style="margin-left: var(--spacing-2); font-size: var(--font-size-xs);"></i>
                         </a>
                     </div>
                 </div>
@@ -287,7 +200,6 @@
             </div>
         </div>
     </section>
-    <!-- ========== END HERO SECTION ========== -->
 
     <!-- Trust Indicators / Stats Bar -->
     <section class="section section-gray py-5">
@@ -313,38 +225,43 @@
         </div>
     </section>
 
-    <!-- How It Works -->
-    <section class="section section-light">
-        <div class="container">
-            <div class="section-header text-center">
-                <h2>Get Work Done in 3 Easy Steps</h2>
-                <p class="text-muted">Simple process to connect with talent or find work.</p>
-            </div>
-            <div class="how-it-works-steps">
-                <div class="hiw-step">
-                    <div class="hiw-step-icon">
-                        <i class="fas fa-search"></i>
+<!-- ========== HOW IT WORKS (from components/how-it-works.html) ========== -->
+                <!-- Include content from components/how-it-works.html here -->
+                <section class="how-it-works section section-light">
+                    <div class="container">
+                        <div class="section-header text-center">
+                            <h2>Get Work Done in 3 Easy Steps</h2>
+                            <p class="text-muted">Simple process to connect with talent or find work.</p>
+                        </div>
+                        <div class="how-it-works-steps">
+                            <div class="hiw-step">
+                                <div class="hiw-step-icon">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <h3 class="hiw-step-title">1. Find Talent or Work</h3>
+                                <p class="hiw-step-desc">Browse our vast marketplace of skilled freelancers or explore job opportunities that match your skills.</p>
+                            </div>
+                            <div class="hiw-step">
+                                <div class="hiw-step-icon">
+                                    <i class="fas fa-handshake"></i>
+                                </div>
+                                <h3 class="hiw-step-title">2. Collaborate & Pay</h3>
+                                <p class="hiw-step-desc">Use our platform to communicate, share files, and securely pay for work through our protection program.</p>
+                            </div>
+                            <div class="hiw-step">
+                                <div class="hiw-step-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <h3 class="hiw-step-title">3. Approve & Review</h3>
+                                <p class="hiw-step-desc">Get your work delivered, approve the results, and leave a review to help build the freelancer's reputation.</p>
+                            </div>
+                        </div>
+                        <div class="text-center mt-8">
+                            <a href="/how-it-works.html" class="btn btn-outline">Learn More</a>
+                        </div>
                     </div>
-                    <h3 class="hiw-step-title">1. Find Talent or Work</h3>
-                    <p class="hiw-step-desc">Browse our vast marketplace of skilled freelancers or explore job opportunities that match your skills.</p>
-                </div>
-                <div class="hiw-step">
-                    <div class="hiw-step-icon">
-                        <i class="fas fa-handshake"></i>
-                    </div>
-                    <h3 class="hiw-step-title">2. Collaborate & Pay</h3>
-                    <p class="hiw-step-desc">Use our platform to communicate, share files, and securely pay for work through our protection program.</p>
-                </div>
-                <div class="hiw-step">
-                    <div class="hiw-step-icon">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <h3 class="hiw-step-title">3. Approve & Review</h3>
-                    <p class="hiw-step-desc">Get your work delivered, approve the results, and leave a review to help build the freelancer's reputation.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+                </section>
+                <!-- ========== END HOW IT WORKS ========== -->
 
     <!-- Categories -->
     <section class="categories section-gray">
@@ -419,68 +336,11 @@
                 </div>
                 <a href="/browse.html" class="btn btn-outline">View All Services</a>
             </div>
-            <div class="gigs-grid">
-                <!-- Gig Card 1 -->
-                <div class="gig-card">
-                    <div class="gig-image">
-                        <img src="https://placehold.co/600x400/3b82f6/white?text=Brand+Logo+Design" alt="Professional Brand Logo Design">
-                    </div>
-                    <div class="gig-content">
-                        <div class="gig-seller">
-                            <div class="gig-seller-avatar">AJ</div>
-                            <span class="gig-seller-name">Alex Johnson</span>
-                        </div>
-                        <h3 class="gig-title card-title">I will design a professional brand logo for your business</h3>
-                        <div class="gig-rating">
-                            <i class="fas fa-star gig-rating-icon"></i>
-                            <span class="gig-rating-value">4.9</span>
-                            <span>(128)</span>
-                        </div>
-                        <div class="gig-price">From $50</div>
-                        <a href="/gig-detail.html" class="btn btn-primary mt-3">View Details</a>
-                    </div>
-                </div>
-
-                <!-- Gig Card 2 -->
-                <div class="gig-card">
-                    <div class="gig-image">
-                        <img src="https://placehold.co/600x400/ef4444/white?text=Responsive+Website" alt="Build a Responsive Website">
-                    </div>
-                    <div class="gig-content">
-                        <div class="gig-seller">
-                            <div class="gig-seller-avatar">TS</div>
-                            <span class="gig-seller-name">Tech Solutions</span>
-                        </div>
-                        <h3 class="gig-title card-title">I will build a fully responsive website for your business</h3>
-                        <div class="gig-rating">
-                            <i class="fas fa-star gig-rating-icon"></i>
-                            <span class="gig-rating-value">4.8</span>
-                            <span>(86)</span>
-                        </div>
-                        <div class="gig-price">From $250</div>
-                        <a href="/gig-detail.html" class="btn btn-primary mt-3">View Details</a>
-                    </div>
-                </div>
-
-                <!-- Gig Card 3 -->
-                <div class="gig-card">
-                    <div class="gig-image">
-                        <img src="https://placehold.co/600x400/10b981/white?text=Social+Media+Strategy" alt="Social Media Marketing Strategy">
-                    </div>
-                    <div class="gig-content">
-                        <div class="gig-seller">
-                            <div class="gig-seller-avatar">MP</div>
-                            <span class="gig-seller-name">Marketing Pro</span>
-                        </div>
-                        <h3 class="gig-title card-title">I will create a 30-day social media marketing strategy</h3>
-                        <div class="gig-rating">
-                            <i class="fas fa-star gig-rating-icon"></i>
-                            <span class="gig-rating-value">4.7</span>
-                            <span>(42)</span>
-                        </div>
-                        <div class="gig-price">From $150</div>
-                        <a href="/gig-detail.html" class="btn btn-primary mt-3">View Details</a>
-                    </div>
+            <div class="gigs-grid" id="featuredGigsContainer">
+                <!-- Loading state -->
+                <div style="text-align: center; padding: var(--spacing-10); grid-column: 1 / -1;">
+                    <div class="spinner" style="width: 3rem; height: 3rem; border: 4px solid rgba(0, 0, 0, 0.1); border-left-color: var(--primary-600); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem;"></div>
+                    <p>Loading featured services...</p>
                 </div>
             </div>
         </div>
@@ -499,6 +359,7 @@
     </section>
 
     <!-- Footer -->
+     <!-- Include content from components/footer.html here -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -529,23 +390,6 @@
                         <li><a href="#">Copyright Policy</a></li>
                     </ul>
                 </div>
-                <div class="footer-column">
-                    <h3>Stay Connected</h3>
-                    <p class="mb-3">Subscribe to our newsletter for the latest updates and offers.</p>
-                    <form class="newsletter-form mb-4">
-                        <div class="form-group">
-                            <label for="footerNewsletterEmail" class="sr-only">Email Address</label>
-                            <input type="email" id="footerNewsletterEmail" class="form-control" placeholder="Your email address" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block">Subscribe</button>
-                    </form>
-                    <div class="social-links">
-                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2023 AtMyWorks. All rights reserved.</p>
@@ -569,8 +413,7 @@
                 console.log("Firebase services available in index.html");
             } else {
                 console.warn("Firebase not initialized in index.html.");
-                // Hide auth-dependent UI elements or show an error
-                updateAuthUI(null);
+                alert("Unable to connect to the database. Please try refreshing the page.");
                 return;
             }
 
@@ -596,71 +439,69 @@
                     // User is signed in
                     console.log("User is signed in on index.html:", user.email);
                     if (authButtons) authButtons.style.display = 'none';
-                    if (userMenu) userMenu.style.display = 'flex'; // Or 'block'
+                    if (userMenu) {
+                        userMenu.style.display = 'flex'; // Or 'block'
 
-                    // Update user name/avatar in menu
-                    const displayName = user.displayName || user.email?.split('@')[0] || 'User';
-                    if (userNameElement) {
-                        userNameElement.textContent = displayName;
-                    }
-                    if (dropdownUserNameElement) {
-                        dropdownUserNameElement.textContent = displayName;
-                    }
-                    if (dropdownUserEmailElement) {
-                        dropdownUserEmailElement.textContent = user.email || 'No email';
-                    }
-
-                    // Update user avatar initials
-                    const initials = displayName.charAt(0).toUpperCase();
-                    userAvatarElements.forEach(avatar => {
-                        if (avatar) {
-                            avatar.textContent = initials;
+                        // Update user name/avatar in menu
+                        const displayName = user.displayName || user.email?.split('@')[0] || 'User';
+                        if (userNameElement) {
+                            userNameElement.textContent = displayName;
                         }
-                    });
-
-                    // Determine user role and update dashboard link
-                    // In a real app, you'd fetch this from Firestore
-                    // For now, we'll simulate based on email or UID prefix
-                    let userRole = 'client'; // Default assumption
-                    if (user.email && (user.email.includes('admin') || user.email.includes('support'))) {
-                        userRole = 'admin';
-                    } else if (user.email && user.email.includes('freelancer')) {
-                        userRole = 'freelancer';
-                    }
-                    console.log("Simulated user role on index.html:", userRole);
-
-                    if (dashboardMenuLink) {
-                        if (userRole === 'freelancer') {
-                            dashboardMenuLink.href = '/dashboard-freelancer.html';
-                            dashboardMenuLink.innerHTML = '<i class="fas fa-briefcase" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> My Gigs';
-                        } else if (userRole === 'admin') {
-                            dashboardMenuLink.href = '/dashboard-admin.html';
-                            dashboardMenuLink.innerHTML = '<i class="fas fa-cog" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Admin Panel';
-                        } else {
-                            dashboardMenuLink.href = '/dashboard-client.html';
-                            dashboardMenuLink.innerHTML = '<i class="fas fa-tachometer-alt" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> My Projects';
+                        if (dropdownUserNameElement) {
+                            dropdownUserNameElement.textContent = displayName;
                         }
-                    }
+                        if (dropdownUserEmailElement) {
+                            dropdownUserEmailElement.textContent = user.email || 'No email';
+                        }
 
-                    if (logoutBtnInMenu) {
-                        logoutBtnInMenu.addEventListener('click', function(e) {
-                            e.preventDefault();
-                            console.log("Logout button clicked in user menu on index.html");
-                            if (typeof window.handleFirebaseLogout === 'function') {
-                                window.handleFirebaseLogout();
-                            } else {
-                                alert("Logout functionality not available. Please refresh the page.");
+                        // Update user avatar initials
+                        const initials = (displayName || 'U').charAt(0).toUpperCase();
+                        userAvatarElements.forEach(avatar => {
+                            if (avatar) {
+                                avatar.textContent = initials;
                             }
                         });
-                    }
 
+                        // Determine user role and update dashboard link
+                        // In a real app, you'd fetch this from Firestore
+                        // For now, we'll simulate based on email or UID prefix
+                        let userRole = 'client'; // Default assumption
+                        if (user.email && (user.email.includes('admin') || user.email.includes('support'))) {
+                            userRole = 'admin';
+                        } else if (user.email && user.email.includes('freelancer')) {
+                            userRole = 'freelancer';
+                        }
+                        console.log("Simulated user role on index.html:", userRole);
+
+                        if (dashboardMenuLink) {
+                            if (userRole === 'freelancer') {
+                                dashboardMenuLink.href = '/dashboard-freelancer.html';
+                                dashboardMenuLink.innerHTML = '<i class="fas fa-briefcase" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> My Gigs';
+                            } else if (userRole === 'admin') {
+                                dashboardMenuLink.href = '/dashboard-admin.html';
+                                dashboardMenuLink.innerHTML = '<i class="fas fa-cog" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Admin Panel';
+                            } else {
+                                dashboardMenuLink.href = '/dashboard-client.html';
+                                dashboardMenuLink.innerHTML = '<i class="fas fa-tachometer-alt" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> My Projects';
+                            }
+                        }
+
+                        if (logoutBtnInMenu) {
+                            // Remove any existing listener to prevent duplicates
+                            logoutBtnInMenu.removeEventListener('click', window.handleFirebaseLogout);
+                            logoutBtnInMenu.addEventListener('click', function(e) {
+                                e.preventDefault(); // Prevent default link behavior if it's an <a> tag
+                                window.handleFirebaseLogout();
+                            });
+                        }
+                    }
                 } else {
                     // User is signed out
                     console.log("User is signed out on index.html");
                     if (authButtons) authButtons.style.display = 'flex'; // Or 'block'
                     if (userMenu) userMenu.style.display = 'none';
 
-                    // Remove logout listener if it was added previously
+                    // Remove logout listener if it was added previously (good practice)
                     if (logoutBtnInMenu) {
                         logoutBtnInMenu.removeEventListener('click', window.handleFirebaseLogout);
                     }
@@ -731,11 +572,116 @@
                         return;
                     }
 
-                    console.log("Subscribing email:", email);
+                    console.log("Subscribing footer email:", email);
                     // In a full implementation, send this to your backend or Firebase
                     alert(`Thank you for subscribing with ${email}!`);
                     emailInput.value = '';
                 });
+            }
+
+            // --- LOAD FEATURED GIGS DYNAMICALLY ---
+            loadFeaturedGigs();
+
+            async function loadFeaturedGigs() {
+                const gigsContainer = document.getElementById('featuredGigsContainer');
+                if (!gigsContainer) {
+                    console.warn("Featured gigs container (#featuredGigsContainer) not found.");
+                    return;
+                }
+
+                // Show loading state
+                gigsContainer.innerHTML = `
+                    <div style="text-align: center; padding: var(--spacing-10); grid-column: 1 / -1;">
+                        <div class="spinner" style="width: 3rem; height: 3rem; border: 4px solid rgba(0, 0, 0, 0.1); border-left-color: var(--primary-600); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem;"></div>
+                        <p>Loading featured services...</p>
+                    </div>
+                `;
+
+                try {
+                    // Query Firestore for featured gigs
+                    // For now, we'll just load the first 3 gigs ordered by creation date
+                    // In a real app, you'd have a 'featured' boolean field or similar
+                    const querySnapshot = await window.db.collection('gigs')
+                        .orderBy('createdAt', 'desc')
+                        .limit(3)
+                        .get();
+
+                    if (querySnapshot.empty) {
+                        gigsContainer.innerHTML = `
+                            <div style="text-align: center; padding: var(--spacing-10); grid-column: 1 / -1;">
+                                <p>No featured services available yet.</p>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    let gigsHtml = '';
+                    querySnapshot.forEach(doc => {
+                        const gigData = doc.data();
+                        const gigId = doc.id;
+
+                        // Format creation date
+                        let formattedDate = 'N/A';
+                        if (gigData.createdAt) {
+                            const dateObj = gigData.createdAt.toDate();
+                            formattedDate = dateObj.toLocaleDateString(); // e.g., 10/27/2023
+                        }
+
+                        // Determine seller info (could be username or company name)
+                        let sellerName = gigData.sellerName || 'Unknown Seller';
+                        let sellerAvatarText = sellerName.charAt(0).toUpperCase();
+                        
+                        // Format rating
+                        const ratingValue = gigData.rating?.toFixed(1) || 'N/A';
+                        const ratingCount = gigData.reviews?.length || 0; // Simplified count
+                        
+                        // Format price
+                        const price = gigData.startingPrice ? `From $${gigData.startingPrice}` : 'Price N/A';
+
+                        gigsHtml += `
+                            <div class="gig-card">
+                                <div class="gig-image">
+                                    <img src="${gigData.imageUrl || 'https://placehold.co/600x400/3b82f6/white?text=Service+Image'}" alt="${escapeHtml(gigData.title || 'Service Title')}">
+                                </div>
+                                <div class="gig-content">
+                                    <div class="gig-seller">
+                                        <div class="gig-seller-avatar">${sellerAvatarText}</div>
+                                        <span class="gig-seller-name">${escapeHtml(sellerName)}</span>
+                                    </div>
+                                    <h3 class="gig-title card-title"><a href="/gig-detail.html?id=${gigId}" style="text-decoration: none; color: inherit;">${escapeHtml(gigData.title || 'Untitled Gig')}</a></h3>
+                                    <div class="gig-rating">
+                                        <i class="fas fa-star gig-rating-icon"></i>
+                                        <span class="gig-rating-value">${ratingValue}</span>
+                                        <span>(${ratingCount})</span>
+                                    </div>
+                                    <div class="gig-price">From $${price}</div>
+                                    <a href="/gig-detail.html?id=${gigId}" class="btn btn-primary mt-3">View Details</a>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    gigsContainer.innerHTML = gigsHtml;
+
+                } catch (error) {
+                    console.error("Error loading featured gigs:", error);
+                    gigsContainer.innerHTML = `
+                        <div style="text-align: center; padding: var(--spacing-10); grid-column: 1 / -1; color: var(--danger-500);">
+                            <p>Error loading featured services: ${error.message}. Please try refreshing the page.</p>
+                        </div>
+                    `;
+                }
+            }
+
+            // Utility function to escape HTML to prevent XSS
+            function escapeHtml(str) {
+                if (typeof str !== 'string') return str;
+                return str
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "<")
+                    .replace(/>/g, ">")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
             }
         });
     </script>
