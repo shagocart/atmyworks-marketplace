@@ -18,6 +18,10 @@
   --primary-800: #1e40af;
   --primary-900: #1e3a8a;
 
+.logo {
+    background-image: url('../images/logos/atmyworks-logo.png');
+}
+
   /* Secondary (Accent) - Warmer Orange */
   --secondary-50: #fff7ed;
   --secondary-100: #ffedd5;

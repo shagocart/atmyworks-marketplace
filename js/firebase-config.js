@@ -3,7 +3,6 @@
 console.log("Firebase Config Script Loading...");
 
 // !!! REPLACE WITH YOUR ACTUAL FIREBASE CONFIG FROM FIREBASE CONSOLE !!!
-// This configuration object is specific to YOUR Firebase project (atmyworks-cd97c)
 const firebaseConfig = {
   apiKey: "AIzaSyCNRX6gKVVp9UbqSFHrNC4TvPUflBvEAl8",
   authDomain: "atmyworks-cd97c.firebaseapp.com",
@@ -65,12 +64,12 @@ function initializeFirebaseApp() {
       console.error("Firebase Firestore service not available. Ensure firebase-firestore-compat.js is loaded in your HTML <head> before this script.");
     }
 
-    // Initialize Storage (Optional)
+    // Initialize Storage (Optional but now required)
     if (typeof firebase.storage !== 'undefined') {
         storageInstance = firebase.storage();
         console.log("Firebase Storage instance (Compat) created.");
     } else {
-        console.warn("Firebase Storage service not available. Ensure firebase-storage-compat.js is loaded in your HTML <head> before this script if needed.");
+        console.error("Firebase Storage service not available. Ensure firebase-storage-compat.js is loaded in your HTML <head> before this script.");
     }
 
     // --- MAKE SERVICES GLOBALLY ACCESSIBLE ---
@@ -82,7 +81,7 @@ function initializeFirebaseApp() {
       storage: storageInstance
     };
 
-    console.log("Firebase services successfully attached to window.firebaseApp");
+    console.log("Firebase services (auth, db, storage) attached to window.firebaseApp");
     return window.firebaseApp;
 
   } catch (error) {
@@ -133,3 +132,4 @@ if (initializedApp && !initializedApp.error) {
 window.initializeFirebaseApp = initializeFirebaseApp;
 
 console.log("Firebase Config Script Loaded and Executed");
+// (DUPLICATE REMOVED)

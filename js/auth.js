@@ -6,15 +6,15 @@ console.log("Auth module loaded");
 document.addEventListener('DOMContentLoaded', function () {
     console.log("Auth DOM loaded");
 
-    // --- GLOBAL AUTH STATE LISTENER ---
-    // Listen for auth state changes (login/logout)
-    if (typeof window.firebaseApp !== 'undefined' && window.firebaseApp.auth) {
+    // Check if firebaseApp is available (from firebase-config.js)
+    if (typeof window.firebaseApp !== 'undefined' && window.firebaseApp.auth && window.firebaseApp.db) {
         window.auth = window.firebaseApp.auth;
-        window.db = window.firebaseApp.db; // Assuming Firestore is initialized in firebase-config.js
-        window.storage = window.firebaseApp.storage; // Assuming Storage is initialized
-        console.log("Firebase Auth, DB, and Storage services available in auth.js");
+        window.db = window.firebaseApp.db;
+        window.storage = window.firebaseApp.storage;
+        console.log("Firebase Auth and DB services available in auth.js");
 
-        // This listener triggers whenever the user's auth state changes
+        // --- AUTH STATE LISTENER ---
+        // Listen for auth state changes (login/logout)
         window.auth.onAuthStateChanged(user => {
             console.log("Auth state changed. Current user:", user ? user.uid : "None");
             
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
         console.warn("Firebase not initialized in auth.js. Some features might not work.");
         // Hide auth-dependent UI elements or show an error
-        updateAuthUI(null); 
+        updateAuthUI(null);
         return;
     }
 
@@ -36,10 +36,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const authButtonsNav = document.getElementById('authButtonsNav');
         const userMenuNav = document.getElementById('userMenuNav');
         const logoutBtnNav = document.getElementById('logoutBtnNav');
-        const userNameElement = document.getElementById('userName');
-        const dropdownUserNameElement = document.getElementById('dropdownUserName');
-        const dropdownUserEmailElement = document.getElementById('dropdownUserEmail');
-        const userAvatarElements = document.querySelectorAll('.user-avatar');
+        const userNameElementNav = document.getElementById('userNameNav');
+        const dropdownUserNameElementNav = document.getElementById('dropdownUserNameNav');
+        const dropdownUserEmailElementNav = document.getElementById('dropdownUserEmailNav');
+        const userAvatarElementsNav = document.querySelectorAll('.user-avatar');
 
         if (user) {
             // User is signed in
@@ -50,28 +50,57 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Update user name/avatar in menu
                 const displayName = user.displayName || user.email?.split('@')[0] || 'User';
-                if (userNameElement) {
-                    userNameElement.textContent = displayName;
+                if (userNameElementNav) {
+                    userNameElementNav.textContent = displayName;
                 }
-                if (dropdownUserNameElement) {
-                    dropdownUserNameElement.textContent = displayName;
+                if (dropdownUserNameElementNav) {
+                    dropdownUserNameElementNav.textContent = displayName;
                 }
-                if (dropdownUserEmailElement) {
-                    dropdownUserEmailElement.textContent = user.email || 'No email';
+                if (dropdownUserEmailElementNav) {
+                    dropdownUserEmailElementNav.textContent = user.email || 'No email';
                 }
 
                 // Update user avatar initials
                 const initials = (displayName || 'U').charAt(0).toUpperCase();
-                userAvatarElements.forEach(avatar => {
+                userAvatarElementsNav.forEach(avatar => {
                     if (avatar) {
                         avatar.textContent = initials;
                     }
                 });
-            }
-            if (logoutBtnNav) {
-                // Remove any existing listener to prevent duplicates
-                logoutBtnNav.removeEventListener('click', window.handleFirebaseLogout);
-                logoutBtnNav.addEventListener('click', window.handleFirebaseLogout);
+
+                // Determine user role and update dashboard link
+                // In a real app, you'd fetch this from Firestore
+                // For now, we'll simulate based on email or UID prefix
+                let userRole = 'client'; // Default assumption
+                if (user.email && (user.email.includes('admin') || user.email.includes('support'))) {
+                    userRole = 'admin';
+                } else if (user.email && user.email.includes('freelancer')) {
+                    userRole = 'freelancer';
+                }
+                console.log("Simulated user role:", userRole);
+
+                if (dashboardMenuLinkNav) {
+                    if (userRole === 'freelancer') {
+                        dashboardMenuLinkNav.href = '/dashboard-freelancer.html';
+                        dashboardMenuLinkNav.innerHTML = '<i class="fas fa-briefcase" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> My Gigs';
+                    } else if (userRole === 'admin') {
+                        dashboardMenuLinkNav.href = '/dashboard-admin.html';
+                        dashboardMenuLinkNav.innerHTML = '<i class="fas fa-cog" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> Admin Panel';
+                    } else {
+                        dashboardMenuLinkNav.href = '/dashboard-client.html';
+                        dashboardMenuLinkNav.innerHTML = '<i class="fas fa-tachometer-alt" style="margin-right: 0.75rem; width: 20px; text-align: center;"></i> My Projects';
+                    }
+                }
+
+                if (logoutBtnNav) {
+                    // Remove any existing listener to prevent duplicates
+                    logoutBtnNav.removeEventListener('click', window.handleFirebaseLogout);
+                    logoutBtnNav.addEventListener('click', function(e) {
+                        e.preventDefault(); // Prevent default link behavior if it's an <a> tag
+                        window.handleFirebaseLogout();
+                    });
+                }
+
             }
         } else {
             // User is signed out
@@ -89,118 +118,120 @@ document.addEventListener('DOMContentLoaded', function () {
     // --- FIREBASE AUTH INTEGRATION USING COMPAT SDK ---
     // These functions assume `auth` and `db` are globally available from your Firebase initialization
 
-    /**
-     * Handles user login using email and password with Firebase Authentication.
-     * @param {string} email - The user's email address.
-     * @param {string} password - The user's password.
-     */
-    window.handleFirebaseLogin = async function(email, password) {
-        console.log("Attempting Firebase Login...");
-        try {
-            // Ensure Firebase Auth is available
-            if (!window.auth) {
-                throw new Error("Firebase Auth is not initialized. Please check the console for Firebase loading errors.");
-            }
 
-            // --- EMAIL VERIFICATION CHECK ---
-            // It's good practice to ensure the user has verified their email before logging in
-            // This requires checking the user's document in Firestore
-            let userDocData = null;
-            try {
-                const userDoc = await window.db.collection('users').doc(window.auth.currentUser?.uid || 'temp').get();
-                if (userDoc.exists) {
-                    userDocData = userDoc.data();
-                }
-            } catch (firestoreError) {
-                console.warn("Could not fetch user doc for verification check before login:", firestoreError);
-                // Proceed with login, but check after
-            }
-            
-            // Perform login
-            const userCredential = await window.auth.signInWithEmailAndPassword(email, password);
-            const user = userCredential.user;
-            console.log("Firebase Login Successful:", user.uid);
-            
-            // --- POST-LOGIN EMAIL VERIFICATION CHECK ---
-            if (!user.emailVerified) {
-                console.warn("User email not verified:", user.email);
-                alert("Please verify your email address before logging in. A verification email has been sent.");
-                // Sign them out and prompt verification
-                await window.auth.signOut();
-                // Optionally, resend verification email
-                // await user.sendEmailVerification();
-                return; // Stop login process
-            }
-            // --- END EMAIL VERIFICATION CHECK ---
-
-            alert("Login successful!");
-
-            // --- ROLE-BASED REDIRECTION LOGIC ---
-            // Fetch user role from Firestore to determine where to redirect
-            let redirectUrl = '/index.html'; // Default fallback
-
-            try {
-                // Query the 'users' collection for the document with the user's UID
-                const userDoc = await window.db.collection('users').doc(user.uid).get();
-
-                if (userDoc.exists) {
-                    const userData = userDoc.data();
-                    const role = userData.role;
-
-                    console.log(`User role identified as: ${role}`);
-
-                    // Determine redirect URL based on role
-                    switch (role) {
-                        case 'jobseeker':
-                            redirectUrl = '/dashboard-freelancer.html';
-                            break;
-                        case 'employer':
-                            redirectUrl = '/dashboard-client.html';
-                            break;
-                        case 'admin':
-                            redirectUrl = '/dashboard-admin.html';
-                            break;
-                        default:
-                            console.warn(`Unknown role '${role}', redirecting to default.`);
-                            // Optionally, redirect to a profile completion page
-                            // redirectUrl = '/profile.html'; 
-                    }
-                } else {
-                    console.warn("User document not found in Firestore, redirecting to profile setup or default.");
-                    // Potentially redirect to a profile completion page
-                    // redirectUrl = '/profile.html'; // Example
-                }
-            } catch (firestoreError) {
-                console.error("Error fetching user role from Firestore:", firestoreError);
-                alert("Logged in, but there was an issue loading your profile. You will be redirected to the homepage.");
-            }
-
-            console.log(`Redirecting user to: ${redirectUrl}`);
-            window.location.href = redirectUrl;
-
-        } catch (error) {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.error("Firebase Login Error:", errorCode, errorMessage);
-
-            // Provide user-friendly error messages
-            let userMessage = "Login failed. Please try again.";
-            if (errorCode === 'auth/user-not-found' || errorCode === 'auth/wrong-password' || errorCode === 'auth/invalid-email') {
-                userMessage = "Invalid email or password.";
-            } else if (errorCode === 'auth/too-many-requests') {
-                userMessage = "Too many failed login attempts. Please try again later or reset your password.";
-            } else if (errorCode === 'auth/network-request-failed') {
-                 userMessage = "Network error. Please check your internet connection.";
-            } else if (errorCode === 'auth/user-disabled') {
-                userMessage = "This account has been disabled. Please contact support.";
-            } else if (errorCode === 'auth/email-not-verified') {
-                 userMessage = "Please verify your email address before logging in.";
-            }
-            alert(userMessage);
-            // Re-throw the error so the calling function knows it failed
-            throw error; 
+/**
+ * Handles user login using email and password with Firebase Authentication.
+ * @param {string} email - The user's email address.
+ * @param {string} password - The user's password.
+ */
+window.handleFirebaseLogin = async function(email, password) {
+    console.log("Attempting Firebase Login...");
+    try {
+        // Ensure Firebase Auth is available
+        if (!window.auth) {
+            throw new Error("Firebase Auth is not initialized. Please check the console for Firebase loading errors.");
         }
+
+        // --- EMAIL VERIFICATION CHECK ---
+        // It's good practice to ensure the user has verified their email before logging in
+        // This requires checking the user's document in Firestore
+        let userDocData = null;
+        try {
+            // Query Firestore for the user's document
+            const userDoc = await window.db.collection('users').doc(window.auth.currentUser?.uid || 'temp').get();
+            if (userDoc.exists) {
+                userDocData = userDoc.data();
+            }
+        } catch (firestoreError) {
+            console.warn("Could not fetch user doc for verification check before login:", firestoreError);
+            // Proceed with login, but check after
+        }
+        
+        // Perform login
+        const userCredential = await window.auth.signInWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+        console.log("Firebase Login Successful:", user.uid);
+        
+        // --- POST-LOGIN EMAIL VERIFICATION CHECK ---
+        if (!user.emailVerified) {
+            console.warn("User email not verified:", user.email);
+            alert("Please verify your email address before logging in. A verification email has been sent.");
+            // Sign them out and prompt verification
+            await window.auth.signOut();
+            // Optionally, resend verification email
+            // await user.sendEmailVerification();
+            return; // Stop login process
+        }
+        // --- END EMAIL VERIFICATION CHECK ---
+
+        alert("Login successful!");
+
+        // --- ROLE-BASED REDIRECTION LOGIC ---
+        // Fetch user role from Firestore to determine where to redirect
+        let redirectUrl = '/index.html'; // Default fallback
+
+        try {
+            // Query the 'users' collection for the document with the user's UID
+            const userDoc = await window.db.collection('users').doc(user.uid).get();
+
+            if (userDoc.exists) {
+                const userData = userDoc.data();
+                const role = userData.role;
+
+                console.log(`User role identified as: ${role}`);
+
+                // Determine redirect URL based on role
+                switch (role) {
+                    case 'jobseeker':
+                        redirectUrl = '/dashboard-freelancer.html';
+                        break;
+                    case 'employer':
+                        redirectUrl = '/dashboard-client.html';
+                        break;
+                    case 'admin':
+                        redirectUrl = '/dashboard-admin.html';
+                        break;
+                    default:
+                        console.warn(`Unknown role '${role}', redirecting to default.`);
+                        // Optionally, redirect to a profile completion page
+                        // redirectUrl = '/profile.html'; 
+                }
+            } else {
+                console.warn("User document not found in Firestore, redirecting to profile setup or default.");
+                // Potentially redirect to a profile completion page
+                // redirectUrl = '/profile.html'; // Example
+            }
+        } catch (firestoreError) {
+            console.error("Error fetching user role from Firestore:", firestoreError);
+            alert("Logged in, but there was an issue loading your profile. You will be redirected to the homepage.");
+        }
+
+        console.log(`Redirecting user to: ${redirectUrl}`);
+        window.location.href = redirectUrl;
+
+    } catch (error) {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error("Firebase Login Error:", errorCode, errorMessage);
+
+        // Provide user-friendly error messages
+        let userMessage = "Login failed. Please try again.";
+        if (errorCode === 'auth/user-not-found' || errorCode === 'auth/wrong-password' || errorCode === 'auth/invalid-email') {
+            userMessage = "Invalid email or password.";
+        } else if (errorCode === 'auth/too-many-requests') {
+            userMessage = "Too many failed login attempts. Please try again later or reset your password.";
+        } else if (errorCode === 'auth/network-request-failed') {
+             userMessage = "Network error. Please check your internet connection.";
+        } else if (errorCode === 'auth/user-disabled') {
+            userMessage = "This account has been disabled. Please contact support.";
+        } else if (errorCode === 'auth/email-not-verified') {
+             userMessage = "Please verify your email address before logging in.";
+        }
+        alert(userMessage);
+        // Re-throw the error so the calling function knows it failed
+        throw error; 
     }
+}
 
     /**
      * Handles user signup using email and password with Firebase Authentication.
@@ -228,18 +259,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const userCredential = await window.auth.createUserWithEmailAndPassword(email, password);
             const user = userCredential.user;
             console.log("Firebase Signup Successful for new user:", user.uid);
-            
-            // Immediately send email verification
-            try {
-                await user.sendEmailVerification();
-                console.log("Email verification sent to:", user.email);
-            } catch (verificationError) {
-                console.error("Error sending verification email:", verificationError);
-                // Don't fail signup if email fails, just warn
-                alert("Account created, but email verification could not be sent. Please contact support.");
-            }
-
-            alert("Account created successfully! Please check your email for verification.");
+            alert("Account created successfully!");
 
             // After signup, save additional user data to Firestore
             if (window.db) {
@@ -408,51 +428,45 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
-    /**
-     * Checks if the current user is an admin.
-     * This function queries Firestore to verify the user's role.
-     * @param {string} userId - The Firebase UID of the user.
-     * @returns {Promise<boolean>} True if the user is an admin, false otherwise.
-     */
-    window.checkIfUserIsAdmin = async function(userId) {
-        // If no userId is provided, try to get it from the current user
-        let uidToCheck = userId;
-        if (!uidToCheck) {
-            const user = window.auth.currentUser;
-            if (!user) {
-                console.log("No user logged in for admin check.");
-                return false;
-            }
-            uidToCheck = user.uid;
+// Inside js/auth.js
+
+/**
+ * Checks if the current user is an admin.
+ * This function queries Firestore to verify the user's role.
+ * @returns {Promise<boolean>} True if the user is an admin, false otherwise.
+ */
+window.checkIfUserIsAdmin = async function() {
+    const user = window.auth.currentUser;
+    if (!user) {
+        console.log("No user logged in for admin check.");
+        return false;
+    }
+
+    try {
+        console.log(`Checking admin role for user: ${user.uid}`);
+        // Query the 'users' collection for the document with the user's UID
+        const userDoc = await window.db.collection('users').doc(user.uid).get({ source: 'server' }); // Force server fetch
+
+        if (userDoc.exists) {
+            const userData = userDoc.data();
+            console.log("User data found for admin check:", userData);
+
+            // --- KEY CHECK: Is the user's role 'admin'? ---
+            const isAdmin = userData.role === 'admin'; // Exact string comparison
+            console.log(`Admin check result: ${isAdmin} (User role: '${userData.role}')`);
+            return isAdmin;
+            // --- END KEY CHECK ---
+            
+        } else {
+            console.log("No user document found for UID:", user.uid);
+            return false; // User doc doesn't exist, deny admin access
         }
-
-        try {
-            console.log(`Checking admin role for user: ${uidToCheck}`);
-            // Query the 'users' collection for the document with the user's UID
-            const userDoc = await window.db.collection('users').doc(uidToCheck).get();
-
-            if (userDoc.exists) {
-                const userData = userDoc.data();
-                console.log("User data found for admin check:", userData);
-
-                // --- KEY CHECK: Is the user's role 'admin'? ---
-                const isAdmin = userData.role === 'admin';
-                console.log(`Admin check result: ${isAdmin}`);
-                return isAdmin;
-                // --- END KEY CHECK ---
-                
-            } else {
-                console.log("No user document found for UID:", uidToCheck);
-                return false; // User doc doesn't exist, deny admin access
-            }
-        } catch (error) {
-            console.error("Error checking admin role:", error);
-            // In case of an error (e.g., network issue, permission denied), deny access for security
-            return false;
-        }
-    };
-
-    // --- FORM SUBMISSION HANDLERS ---
+    } catch (error) {
+        console.error("Error checking admin role:", error);
+        // In case of an error (e.g., network issue, permission denied), deny access for security
+        return false;
+    }
+};    // --- FORM SUBMISSION HANDLERS ---
     // These are more robust ways to handle forms, called by page-specific scripts
 
     /**
@@ -623,6 +637,14 @@ document.addEventListener('DOMContentLoaded', function () {
         employerSignupForm.addEventListener('submit', window.handleSignupFormSubmit);
     } else {
         console.log("Employer signup form not found on this page");
+    }
+
+    const passwordResetForm = document.getElementById('passwordResetForm');
+    if (passwordResetForm) {
+        console.log("Found password reset form, attaching submit listener");
+        passwordResetForm.addEventListener('submit', window.handlePasswordResetFormSubmit);
+    } else {
+        console.log("Password reset form not found on this page");
     }
 
     // Logout Button (if present on the page, e.g., in dashboard)
